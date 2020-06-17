@@ -13,6 +13,16 @@
                 .HasKey(u => u.Id);
 
             builder
+                .Property(u => u.FirstName)
+                .HasMaxLength(DataConstants.UserFirstNameMaxLength)
+                .IsRequired();
+
+            builder
+                .Property(u => u.LastName)
+                .HasMaxLength(DataConstants.UserLastNameMaxLength)
+                .IsRequired();
+
+            builder
                 .Property(u => u.Address)
                 .IsRequired()
                 .HasMaxLength(DataConstants.UserAddressMaxLength);
