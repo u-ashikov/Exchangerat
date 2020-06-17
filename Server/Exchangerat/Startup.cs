@@ -2,6 +2,7 @@ namespace Exchangerat
 {
     using Data;
     using Data.Models;
+    using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -40,6 +41,8 @@ namespace Exchangerat
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.Initialize();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
