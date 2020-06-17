@@ -4,14 +4,16 @@ using Exchangerat.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Exchangerat.Data.Migrations
 {
     [DbContext(typeof(ExchangeratDbContext))]
-    partial class ExchangeratDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200617205131_AddedExchangeAccountIsActiveFlag")]
+    partial class AddedExchangeAccountIsActiveFlag
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,9 +56,6 @@ namespace Exchangerat.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IdentityNumber")
-                        .IsUnique();
 
                     b.HasIndex("OwnerId");
 

@@ -17,6 +17,8 @@
         public int TypeId { get; set; }
         public virtual ExchangeAccountType Type { get; set; }
 
+        public bool IsActive { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public DateTime? ClosedAt { get; set; }

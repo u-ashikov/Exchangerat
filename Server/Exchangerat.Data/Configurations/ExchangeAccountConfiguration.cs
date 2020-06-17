@@ -19,6 +19,15 @@
                 .IsFixedLength();
 
             builder
+                .HasIndex(ea => ea.IdentityNumber)
+                .IsUnique();
+
+            builder
+                .Property(ea => ea.IsActive)
+                .HasDefaultValue(true)
+                .IsRequired();
+
+            builder
                 .HasOne(ea => ea.Owner)
                 .WithMany(o => o.ExchangeAccounts)
                 .HasForeignKey(ea => ea.OwnerId)
