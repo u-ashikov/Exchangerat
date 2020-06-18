@@ -5,10 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>
@@ -18,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Exchangerat.Data\Exchangerat.Data.csproj" />
+    <ProjectReference Include="..\Exchangerat.Services\Exchangerat.Services.csproj" />
   </ItemGroup>
 
 
