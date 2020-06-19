@@ -2,6 +2,8 @@
 {
     public static class DataConstants
     {
+        public const string DbName = "ExchangeratDbConnection";
+
         public const int ExchangeAccountIdentifierMaxLength = 10;
 
         public const int ExchangeAccountTypeNameMaxLength = 30;

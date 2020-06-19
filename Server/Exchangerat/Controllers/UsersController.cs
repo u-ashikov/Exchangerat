@@ -3,7 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models;
-    using Services.Contracts;
+    using Services.Contracts.Identity;
     using System.Threading.Tasks;
 
     [Authorize]
@@ -11,9 +11,9 @@
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService userService;
+        private readonly IIdentityService userService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IIdentityService userService)
         {
             this.userService = userService;
         }
