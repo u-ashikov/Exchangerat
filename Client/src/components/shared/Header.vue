@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Exchangerat</a>
+    <router-link tag="a" class="navbar-brand" to="/">Exchangerat</router-link>
     <button
       class="navbar-toggler"
       type="button"
@@ -15,12 +15,15 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Home<span class="sr-only">(current)</span>
-          </a>
+          <router-link tag="a" class="nav-link" to="/">Home</router-link>
         </li>
 
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Register</a>
+        <li class="nav-item">
+            <router-link tag="a" class="nav-link" :to="{ name: 'login' }">Login</router-link>
+        </li>
+
+        <li class="nav-item">
+          <router-link tag="a" class="nav-link" :to="{ name: 'register' }">Register</router-link>
         </li>
       </ul>
     </div>
