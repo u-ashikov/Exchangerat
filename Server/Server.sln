@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Data", "Exchang
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Common", "Exchangerat.Common\Exchangerat.Common.csproj", "{4CDC6DEA-136E-4FA7-9EC0-46B327A1EC50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Services", "Exchangerat.Services\Exchangerat.Services.csproj", "{86DB422D-66C6-4EF8-B40D-681BAC64E701}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Services", "Exchangerat.Services\Exchangerat.Services.csproj", "{86DB422D-66C6-4EF8-B40D-681BAC64E701}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Models", "Exchangerat.Models\Exchangerat.Models.csproj", "{10E0C59E-52D0-4FB4-94A3-DC8EF90AEC68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{86DB422D-66C6-4EF8-B40D-681BAC64E701}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86DB422D-66C6-4EF8-B40D-681BAC64E701}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86DB422D-66C6-4EF8-B40D-681BAC64E701}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10E0C59E-52D0-4FB4-94A3-DC8EF90AEC68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10E0C59E-52D0-4FB4-94A3-DC8EF90AEC68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10E0C59E-52D0-4FB4-94A3-DC8EF90AEC68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10E0C59E-52D0-4FB4-94A3-DC8EF90AEC68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
