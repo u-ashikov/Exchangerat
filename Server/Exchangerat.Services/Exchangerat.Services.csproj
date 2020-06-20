@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Exchangerat.Data\Exchangerat.Data.csproj" />
+    <ProjectReference Include="..\Exchangerat.Models\Exchangerat.Models.csproj" />
   </ItemGroup>
 
 </Project>

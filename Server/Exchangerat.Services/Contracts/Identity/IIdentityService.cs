@@ -1,14 +1,11 @@
 ﻿namespace Exchangerat.Services.Contracts.Identity
 {
-    using Data.Models;
-    using Models;
-    using System.Collections.Generic;
+    using Exchangerat.Models.Identity;
+    using Microsoft.AspNetCore.Identity;
     using System.Threading.Tasks;
 
     public interface IIdentityService
     {
-        IEnumerable<User> GetAll();
-
-        Task<UserServiceModel> Authenticate(string username, string password);
+        Task<IdentityResult> Register(RegisterUserInputModel model);
     }
 }

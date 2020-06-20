@@ -2,11 +2,9 @@
 {
     using Data;
     using Exchangerat.Data.Models;
+    using Exchangerat.Models.Identity;
     using Exchangerat.Services.Contracts.Identity;
     using Microsoft.AspNetCore.Identity;
-    using Models;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     public class IdentityService : IIdentityService
@@ -24,28 +22,20 @@
             this.jwtTokenGenerator = jwtTokenGenerator;
         }
 
-
-        public IEnumerable<User> GetAll() => this.dbContext.Users.ToList();
-
-        public async Task<UserServiceModel> Authenticate(string username, string password)
+        public async Task<IdentityResult> Register(RegisterUserInputModel model)
         {
-            var user = await this.userManager.FindByEmailAsync(username);
-
-            if (user == null)
+            var user = new User()
             {
-                return null;
-            }
+                UserName = model.Username,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Address = model.Address
+            };
 
-            var passwordMatches = await this.userManager.CheckPasswordAsync(user, password);
+            var identityResult = await this.userManager.CreateAsync(user, model.Password);
 
-            if (!passwordMatches)
-            {
-                return null;
-            }
-
-            var token = this.jwtTokenGenerator.GenerateJwtToken(user);
-
-            return new UserServiceModel(user, token);
+            return identityResult;
         }
     }
 }
