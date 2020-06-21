@@ -18,12 +18,16 @@
           <router-link tag="a" class="nav-link" to="/">Home</router-link>
         </li>
 
-        <li class="nav-item">
-            <router-link tag="a" class="nav-link" :to="{ name: 'login' }">Login</router-link>
+        <li class="nav-item" v-if="!isAuthenticated">
+          <router-link tag="a" class="nav-link" :to="{ name: 'login' }">Login</router-link>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item" v-if="!isAuthenticated">
           <router-link tag="a" class="nav-link" :to="{ name: 'register' }">Register</router-link>
+        </li>
+
+        <li class="nav-item" v-if="isAuthenticated">
+          <a v-if="isAuthenticated" href="/" class="nav-item nav-link ml-auto" v-on:click="logout">Logout</a>
         </li>
       </ul>
     </div>
@@ -31,5 +35,16 @@
 </template>
 
 <script>
-export default {};
+export default {
+  computed: {
+    isAuthenticated: function() {
+      return this.$store.getters.isAuthenticated;
+    }
+  },
+  methods: {
+    logout: function() {
+      this.$store.dispatch('logout');
+    }
+  }
+};
 </script>
