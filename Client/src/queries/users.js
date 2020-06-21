@@ -5,10 +5,15 @@ const axiosInstance = axios.create({
     // timeout: 1000
 });
 
-function register(username, email, password, confirmPassword, firstName, lastName, address) {
-    return axiosInstance.post('/api/identity/register', { username, email, password, confirmPassword, firstName, lastName, address });
+function login(userData) {
+    return axiosInstance.post('/api/identity/login', userData);
+}
+
+function register(userData) {
+    return axiosInstance.post('/api/identity/register', userData);
 }
 
 export default {
+    login,
     register
 }
