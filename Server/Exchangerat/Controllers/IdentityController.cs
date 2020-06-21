@@ -27,7 +27,22 @@
                 return this.BadRequest(result.Errors);
             }
 
-            return this.Ok();
+            return await this.Login(new LoginUserInputModel() {Password = model.Password, UserName = model.Username});
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route(nameof(Login))]
+        public async Task<IActionResult> Login([FromBody] LoginUserInputModel model)
+        {
+            var result = await this.identityService.Login(model);
+
+            if (!result.Succeeded)
+            {
+                return this.BadRequest(result.Errors);
+            }
+
+            return this.Ok(result.Data);
         }
     }
 }
