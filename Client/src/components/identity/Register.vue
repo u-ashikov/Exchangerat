@@ -44,8 +44,6 @@
 </template>
 
 <script>
-import users from "../../queries/users";
-
 export default {
   data: function() {
     return {
@@ -60,22 +58,21 @@ export default {
   },
   methods: {
     register: function() {
-      users
-        .register(
-          this.username,
-          this.email,
-          this.password,
-          this.confirmPassword,
-          this.firstName,
-          this.lastName,
-          this.address
-        )
-        .then(function(response) {
-          console.log(response);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      this.$store.dispatch("register", {
+        username: this.username,
+        email: this.email,
+        password: this.password,
+        confirmPassword: this.confirmPassword,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        address: this.address
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log('There is an error', error);
+      });
     }
   }
 };
