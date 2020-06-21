@@ -5,30 +5,34 @@ import users from '../../queries/users.js'
 Vue.use(Vuex);
 
 const state = {
-    user: null,
+    userId: null,
+    username: null,
     token: null
 };
 
 const getters = {
-    user: function (state) {
-        return state.user;
+    username: function (state) {
+        return state.username;
     },
     isAuthenticated: function (state) {
-        return state.user !== null;
+        return state.username !== null;
     }
 };
 
 const mutations = {
     login: function (state, userData) {
-        state.user = userData;
+        state.userId = userData.id;
+        state.username = userData.username;
         state.token = userData.token;
     },
     register: function (state, userData) {
-        state.user = userData.user;
+        state.userId = userData.id;
+        state.username = userData.username;
         state.token = userData.token;
     },
     clearUserData: function (state) {
-        state.user = null;
+        state.userId = null;
+        state.username = null;
         state.token = null;
     }
 };
@@ -47,6 +51,26 @@ const actions = {
             .catch(function (error) {
                 console.log(error);
             });
+    },
+    tryAutoLogin: function (context) {
+        var token = localStorage.getItem('token');
+
+        if (!token) {
+            return;
+        }
+
+        // TODO: Check if the token has expired.
+
+        var userId = localStorage.getItem('userId');
+        var username = localStorage.getItem('username');
+
+        var userData = {
+            userId: userId,
+            username: username,
+            token: token
+        };
+
+        context.commit('login', userData);
     },
     register: function (context, userData) {
         users.register(userData)
@@ -78,6 +102,7 @@ const actions = {
         // var expirationDate = new Date(now.getTime() + )
 
         localStorage.setItem('userId', userData.id);
+        localStorage.setItem('username', userData.username);
         localStorage.setItem('token', userData.token);
 
         // TODO: Store also the expiration.

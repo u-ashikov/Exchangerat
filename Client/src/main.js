@@ -11,6 +11,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 Vue.use(VueRouter);
 Vue.use(Vuelidate);
 
+store.dispatch('tryAutoLogin');
+
 new Vue({
   el: '#app',
   router,
