@@ -4,6 +4,8 @@
 
     public class LoginUserInputModel
     {
+        public LoginUserInputModel() { }
+
         public LoginUserInputModel(string username, string password)
         {
             this.UserName = username;
