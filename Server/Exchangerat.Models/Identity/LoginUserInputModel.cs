@@ -4,6 +4,12 @@
 
     public class LoginUserInputModel
     {
+        public LoginUserInputModel(string username, string password)
+        {
+            this.UserName = username;
+            this.Password = password;
+        }
+
         [Required]
         public string UserName { get; set; }
 

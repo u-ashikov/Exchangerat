@@ -27,7 +27,7 @@
                 return this.BadRequest(result.Errors);
             }
 
-            return await this.Login(new LoginUserInputModel() {Password = model.Password, UserName = model.Username});
+            return await this.Login(new LoginUserInputModel(model.Username, model.Password));
         }
 
         [HttpPost]
