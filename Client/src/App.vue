@@ -8,19 +8,27 @@
 </template>
 
 <script>
-import Header from './components/shared/Header'
-import Footer from './components/shared/Footer'
+import Header from "./components/shared/Header";
+import Footer from "./components/shared/Footer";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     appHeader: Header,
     appFooter: Footer
   },
-  data: function () {
+  data: function() {
     return {
-      msg: 'Welcome to the Exchangerat'
-    }
+      msg: "Welcome to the Exchangerat"
+    };
   }
-}
+};
 </script>
+
+<style>
+    input.invalid,
+    textarea.invalid {
+        border: 1px solid #fd4864;
+        background-color: #FFEEEE;
+    }
+</style>

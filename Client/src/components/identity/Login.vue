@@ -6,12 +6,14 @@
     <form method="post" v-on:submit.prevent="login">
       <div class="form-group">
         <label for="username" class="h6">Username</label>
-        <input type="text" class="form-control" id="username" v-model="username" />
+        <input type="text" class="form-control" id="username" v-model.lazy="username" v-bind:class="{ invalid: $v.username.$error }" v-on:blur="$v.username.$touch()" />
+        <p class="text-danger" v-if="$v.username.$error && !$v.username.required">The Username is required.</p>
       </div>
 
       <div class="form-group">
         <label for="password" class="h6">Password</label>
-        <input type="password" class="form-control" id="password" v-model="password" />
+        <input type="password" class="form-control" id="password" v-model.lazy="password" v-bind:class="{ invalid: $v.password.$error }" v-on:blur="$v.password.$touch()" />
+        <p class="text-danger" v-if="$v.password.$error && !$v.password.required">The Password field is required.</p>
       </div>
 
       <input type="submit" class="btn btn-success" value="Login" />
@@ -22,6 +24,7 @@
 <script>
 import ValidationError from "../shared/ValidationError";
 import errorHandler from '../../helpers/error-handler';
+import { validations } from '../../validations/identity/login';
 
 export default {
   components: {
@@ -34,10 +37,17 @@ export default {
       errors: []
     };
   },
+  validations: validations,
   methods: {
     login: function() {
       var self = this;
       self.errors = [];
+
+      this.$v.$touch();
+
+      if (this.$v.$invalid) {
+        return;
+      }
 
       this.$store
         .dispatch("login", { username: this.username, password: this.password })
