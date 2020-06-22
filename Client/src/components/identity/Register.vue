@@ -1,6 +1,7 @@
 <template>
-  <div class="col-md-6 mx-auto">
+  <div class="col-md-4 mx-auto">
     <h1 class="text-center">Register</h1>
+    <validation-error v-bind:errors="errors"></validation-error>
     <hr />
     <form method="post" v-on:submit.prevent="register">
       <div class="form-group">
@@ -44,7 +45,13 @@
 </template>
 
 <script>
+import ValidationError from "../shared/ValidationError";
+import errorHandler from "../../helpers/error-handler";
+
 export default {
+  components: {
+    validationError: ValidationError
+  },
   data: function() {
     return {
       username: "",
@@ -53,26 +60,32 @@ export default {
       confirmPassword: "",
       firstName: "",
       lastName: "",
-      address: ""
+      address: "",
+      errors: []
     };
   },
   methods: {
     register: function() {
-      this.$store.dispatch("register", {
-        username: this.username,
-        email: this.email,
-        password: this.password,
-        confirmPassword: this.confirmPassword,
-        firstName: this.firstName,
-        lastName: this.lastName,
-        address: this.address
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log('There is an error', error);
-      });
+      var self = this;
+      self.errors = [];
+
+      this.$store
+        .dispatch("register", {
+          username: this.username,
+          email: this.email,
+          password: this.password,
+          confirmPassword: this.confirmPassword,
+          firstName: this.firstName,
+          lastName: this.lastName,
+          address: this.address
+        })
+        .then(function(response) {
+          self.errors = [];
+          self.$router.push("/");
+        })
+        .catch(function(error) {
+          self.errors = errorHandler.extractErrorsFromResponse(error.response);
+        });
     }
   }
 };

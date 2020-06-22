@@ -39,18 +39,21 @@ const mutations = {
 
 const actions = {
     login: function (context, userData) {
-        users.login(userData)
-            .then(function (response) {
-                if (response && response.status == 200) {
-                    console.log(response.data);
-                    context.commit('login', response.data);
+        return new Promise(function (resolve, reject) {
+            users.login(userData)
+                .then(function (response) {
+                    if (response && response.status == 200) {
+                        context.commit('login', response.data);
 
-                    context.dispatch('setLocalStorageUserData', response.data);
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+                        context.dispatch('setLocalStorageUserData', response.data);
+                    }
+
+                    resolve(response);
+                })
+                .catch(function (error) {
+                    reject(error);
+                });
+        });
     },
     tryAutoLogin: function (context) {
         var token = localStorage.getItem('token');
@@ -73,19 +76,21 @@ const actions = {
         context.commit('login', userData);
     },
     register: function (context, userData) {
-        users.register(userData)
-            .then(function (response) {
-                if (response && response.status == 200) {
-                    console.log(response.data);
-                    context.commit('register', response.data);
-
-                    context.dispatch('setLocalStorageUserData', response.data);
-                }
-            })
-            .catch(function (error) {
-                // TODO: Display general error.
-                console.log(error);
-            });
+        return new Promise(function (resolve, reject) {
+            users.register(userData)
+                .then(function (response) {
+                    if (response && response.status == 200) {
+                        context.commit('register', response.data);
+                    
+                        context.dispatch('setLocalStorageUserData', response.data);
+                    }
+                
+                    resolve(response);
+                })
+                .catch(function (error) {
+                    reject(error);
+                });
+        });
     },
     logout: function (context) {
         if (context.state.user === null) {

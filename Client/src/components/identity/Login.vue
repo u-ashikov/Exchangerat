@@ -1,6 +1,7 @@
 <template>
-    <div class="col-md-6 mx-auto">
+  <div class="col-md-4 mx-auto">
     <h1 class="text-center">Login</h1>
+    <validation-error v-bind:errors="errors"></validation-error>
     <hr />
     <form method="post" v-on:submit.prevent="login">
       <div class="form-group">
@@ -19,22 +20,35 @@
 </template>
 
 <script>
+import ValidationError from "../shared/ValidationError";
+import errorHandler from '../../helpers/error-handler';
+
 export default {
-    data: function () {
-        return {
-            username: '',
-            password: ''
-        }
-    },
-    methods: {
-        login: function () {
-            this.$store.dispatch('login', { username: this.username, password: this.password });
+  components: {
+    validationError: ValidationError
+  },
+  data: function() {
+    return {
+      username: "",
+      password: "",
+      errors: []
+    };
+  },
+  methods: {
+    login: function() {
+      var self = this;
+      self.errors = [];
 
-            this.username = '';
-            this.password = '';
-
-            this.$router.push('/');
-        }
+      this.$store
+        .dispatch("login", { username: this.username, password: this.password })
+        .then(function(response) {
+          self.errors = [];
+          self.$router.push("/");
+        })
+        .catch(function(error) {
+            self.errors = errorHandler.extractErrorsFromResponse(error.response);
+        });
     }
-}
+  }
+};
 </script>
