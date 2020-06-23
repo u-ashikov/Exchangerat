@@ -1,6 +1,9 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <router-link tag="a" class="navbar-brand" to="/">Exchangerat</router-link>
+    <router-link tag="a" class="navbar-brand" to="/">
+      <img width="45" height="30" class="d-inline-block align-top" alt="" loading="lazy" src="../../assets/only-logo.png"/>
+      Exchangerat
+    </router-link>
     <button
       class="navbar-toggler"
       type="button"
