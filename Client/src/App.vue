@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <app-header></app-header>
-    <h1 class="text-center mt-4">{{msg}}</h1>
     <router-view></router-view>
     <app-footer></app-footer>
   </div>
