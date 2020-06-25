@@ -12,7 +12,9 @@ namespace Exchangerat
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Services.Contracts.ExchangeAccounts;
     using Services.Contracts.Identity;
+    using Services.Implementations.ExchangeAccounts;
     using Services.Implementations.Identity;
     using System.Text;
 
@@ -50,8 +52,11 @@ namespace Exchangerat
 
             services.AddAuthenticationWithJwtBearer(key);
 
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<IJwtTokenGeneratorService, JwtTokenGeneratorService>();
+            services.AddTransient<IExchangeAccountService, ExchangeAccountService>();
 
             services.AddControllers();
         }
