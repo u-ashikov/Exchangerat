@@ -30,6 +30,10 @@
         </li>
 
         <li class="nav-item" v-if="isAuthenticated">
+            <router-link tag="a" class="nav-link" :to="{ name: 'myAccounts' }">My Accounts</router-link>
+        </li>
+
+        <li class="nav-item" v-if="isAuthenticated">
           <a v-if="isAuthenticated" href="/" class="nav-item nav-link ml-auto" v-on:click="logout">Logout</a>
         </li>
       </ul>
