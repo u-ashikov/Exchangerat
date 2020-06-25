@@ -38,6 +38,7 @@ namespace Exchangerat
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequiredLength = DataConstants.PasswordMinLength;
+                    options.User.RequireUniqueEmail = true;
                 })
                 .AddEntityFrameworkStores<ExchangeratDbContext>();
 

@@ -54,7 +54,10 @@
         public static Result<TData> SuccessWith(TData data)
             => new Result<TData>(true, data, new List<string>());
 
-        public static Result<TData> Failure(IEnumerable<string> errors)
+        public new static Result<TData> Failure(string error)
+            => Result<TData>.Failure(new List<string>() {error});
+
+        public new static Result<TData> Failure(IEnumerable<string> errors)
             => new Result<TData>(false, errors.ToList());
     }
 }
