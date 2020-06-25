@@ -6,7 +6,7 @@
     using Services.Contracts.Identity;
     using System.Threading.Tasks;
 
-    public class IdentityController : ApiController
+    public class IdentityController : BaseApiController
     {
         private readonly IIdentityService identityService;
 
