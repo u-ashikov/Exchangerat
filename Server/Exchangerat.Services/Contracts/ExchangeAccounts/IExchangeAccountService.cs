@@ -8,5 +8,7 @@
     public interface IExchangeAccountService
     {
         Task<Result<ICollection<UserExchangeAccountOutputModel>>> GetByUserId(string userId);
+
+        Task<Result<ExchangeAccountInfoOutputModel>> GetDetailsByUserId(string userId, int accountId);
     }
 }

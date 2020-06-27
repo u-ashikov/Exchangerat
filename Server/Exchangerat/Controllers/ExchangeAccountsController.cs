@@ -25,5 +25,19 @@
 
             return this.Ok(userAccounts);
         }
+
+        [HttpGet]
+        [Route(nameof(GetAccountTransactions))]
+        public async Task<IActionResult> GetAccountTransactions(int accountId)
+        {
+            var result = await this.exchangeAccounts.GetDetailsByUserId(this.currentUser.Id, accountId);
+
+            if (!result.Succeeded)
+            {
+                return this.BadRequest(result.Errors);
+            }
+
+            return this.Ok(result.Data);
+        }
     }
 }
