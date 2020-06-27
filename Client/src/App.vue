@@ -25,6 +25,10 @@ export default {
 </script>
 
 <style>
+    [v-cloak] {
+      display: none;
+    }
+
     input.invalid,
     textarea.invalid {
         border: 1px solid #fd4864;
