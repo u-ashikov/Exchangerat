@@ -23,6 +23,8 @@
         public const int UserAddressMaxLength = 100;
 
         public const int TransactionDescriptionMaxLength = 300;
+        public const double TransactionMinAmount = 1d;
+        public const double TransactionMaxAmount = 10000d;
 
         public const string AdminUserName = "exchangerat";
         public const string AdminPass = "asddsa";
