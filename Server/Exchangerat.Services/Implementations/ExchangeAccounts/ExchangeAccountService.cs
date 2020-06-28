@@ -39,6 +39,24 @@
             return Result<ICollection<UserExchangeAccountOutputModel>>.SuccessWith(userAccounts);
         }
 
+        public async Task<Result<ICollection<UserExchangeAccountBaseInfoOutputModel>>> GetActiveByUserForTransaction(
+            string userId)
+        {
+            var activeUserAccounts = await this.dbContext
+                .ExchangeAccounts
+                .Where(ea => ea.OwnerId == userId && ea.IsActive)
+                .AsNoTracking()
+                .Select(ea => new UserExchangeAccountBaseInfoOutputModel()
+                {
+                    Id = ea.Id,
+                    IdentityNumber = ea.IdentityNumber,
+                    Balance = ea.Balance
+                })
+                .ToListAsync();
+
+            return Result<ICollection<UserExchangeAccountBaseInfoOutputModel>>.SuccessWith(activeUserAccounts);
+        }
+
         public async Task<Result<ExchangeAccountInfoOutputModel>> GetDetailsByUserId(string userId, int accountId)
         {
             var exchangeAccount =
