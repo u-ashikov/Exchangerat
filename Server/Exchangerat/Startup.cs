@@ -1,3 +1,6 @@
+using Exchangerat.Services.Contracts.Transactions;
+using Exchangerat.Services.Implementations.Transactions;
+
 namespace Exchangerat
 {
     using Common.Constants;
@@ -57,6 +60,7 @@ namespace Exchangerat
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<IJwtTokenGeneratorService, JwtTokenGeneratorService>();
             services.AddTransient<IExchangeAccountService, ExchangeAccountService>();
+            services.AddTransient<ITransactionService, TransactionService>();
 
             services.AddControllers();
         }
