@@ -1,4 +1,4 @@
-import { required } from 'vuelidate/lib/validators'
+import { required, between, maxLength } from 'vuelidate/lib/validators'
 
 export const validations = {
     senderAccount: {
@@ -8,9 +8,11 @@ export const validations = {
         required: required
     },
     amount: {
-        required: required
+        required: required,
+        between: between(1, 10000)
     },
     description: {
-        required: required
+        required: required,
+        maxLength: maxLength(300)
     }
 }
