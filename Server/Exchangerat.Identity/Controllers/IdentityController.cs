@@ -19,7 +19,7 @@
         [HttpPost]
         [AllowAnonymous]
         [Route(nameof(Login))]
-        public async Task<IActionResult> Login([FromBody]UserInputModel model)
+        public async Task<IActionResult> Login([FromBody]LoginUserInputModel model)
         {
             var result = await this.identityService.Login(model);
 
@@ -34,7 +34,7 @@
         [HttpPost]
         [AllowAnonymous]
         [Route(nameof(Register))]
-        public async Task<IActionResult> Register([FromBody]UserInputModel model)
+        public async Task<IActionResult> Register([FromBody]RegisterUserInputModel model)
         {
             var result = await this.identityService.Register(model);
 
@@ -43,7 +43,18 @@
                 return this.BadRequest(result.Errors);
             }
 
-            return await this.Login(new UserInputModel(model.UserName, model.Password));
+            return await this.Login(new LoginUserInputModel(model.UserName, model.Password));
+        }
+
+        // TODO: Only for seeding purposes. It must be deleted after successful seed.
+        [HttpGet]
+        [AllowAnonymous]
+        [Route(nameof(GetRegisteredUsersIds))]
+        public async Task<IActionResult> GetRegisteredUsersIds()
+        {
+            var userIds = await this.identityService.GetRegisterUsersIds();
+
+            return this.Ok(userIds);
         }
     }
 }

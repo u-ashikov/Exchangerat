@@ -4,6 +4,7 @@
     using Data.Models;
     using Infrastructure;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
     using Models;
     using System.Collections.Generic;
     using System.Linq;
@@ -24,7 +25,7 @@
             this.jwtTokenGenerator = jwtTokenGenerator;
         }
 
-        public async Task<Result<UserOutputModel>> Login(UserInputModel model)
+        public async Task<Result<UserOutputModel>> Login(LoginUserInputModel model)
         {
             var existingUser = await this.userManager.FindByNameAsync(model.UserName);
 
@@ -45,7 +46,7 @@
             return Result<UserOutputModel>.SuccessWith(new UserOutputModel(existingUser, token));
         }
 
-        public async Task<Result<User>> Register(UserInputModel model)
+        public async Task<Result<User>> Register(RegisterUserInputModel model)
         {
             var user = new User()
             {
@@ -61,5 +62,8 @@
                 ? Result<User>.SuccessWith(user)
                 : Result<User>.Failure(errors);
         }
+
+        public async Task<IEnumerable<string>> GetRegisterUsersIds()
+         => await this.userManager.Users.OrderBy(u => u.UserName).Select(u => u.Id).ToListAsync();
     }
 }

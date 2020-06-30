@@ -7,6 +7,8 @@ namespace Exchangerat.Identity
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Services.Contracts;
+    using Services.Implementations;
 
     public class Startup
     {
@@ -22,6 +24,9 @@ namespace Exchangerat.Identity
         {
             services.AddWebService<IdentityDbContext>(this.Configuration);
             services.AddUsers();
+
+            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IJwtTokenGeneratorService, JwtTokenGeneratorService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

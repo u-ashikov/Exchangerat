@@ -5,11 +5,11 @@
     using static Constants.DataConstants;
     using static Exchangerat.Identity.Common.Constants.DataConstants;
 
-    public class UserInputModel
+    public class RegisterUserInputModel
     {
-        public UserInputModel() { }
+        public RegisterUserInputModel() { }
 
-        public UserInputModel(string username, string password)
+        public RegisterUserInputModel(string username, string password)
         {
             this.UserName = username;
             this.Password = password;
