@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.7.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Exchangerat.Identity.Data\Exchangerat.Identity.Data.csproj" />
+    <ProjectReference Include="..\Exchangerat.Identity.Models\Exchangerat.Identity.Models.csproj" />
+    <ProjectReference Include="..\Exchangerat\Exchangerat.csproj" />
+  </ItemGroup>
+
+</Project>
