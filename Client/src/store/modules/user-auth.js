@@ -5,7 +5,6 @@ import users from '../../queries/users.js'
 Vue.use(Vuex);
 
 const state = {
-    userId: null,
     username: null,
     token: null
 };
@@ -21,17 +20,14 @@ const getters = {
 
 const mutations = {
     login: function (state, userData) {
-        state.userId = userData.id;
         state.username = userData.username;
         state.token = userData.token;
     },
     register: function (state, userData) {
-        state.userId = userData.id;
         state.username = userData.username;
         state.token = userData.token;
     },
     clearUserData: function (state) {
-        state.userId = null;
         state.username = null;
         state.token = null;
     }
@@ -64,11 +60,9 @@ const actions = {
 
         // TODO: Check if the token has expired.
 
-        var userId = localStorage.getItem('userId');
         var username = localStorage.getItem('username');
 
         var userData = {
-            userId: userId,
             username: username,
             token: token
         };
@@ -106,7 +100,6 @@ const actions = {
         // var now = new Date();
         // var expirationDate = new Date(now.getTime() + )
 
-        localStorage.setItem('userId', userData.id);
         localStorage.setItem('username', userData.username);
         localStorage.setItem('token', userData.token);
 
