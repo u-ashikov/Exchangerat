@@ -1,5 +1,12 @@
 <template>
-  <div class="col-md-4 mx-auto">
+<div class="row">
+    <div class="col-4">
+      <img class="col-12" width="40" height="50" src="../../assets/logo.png" />
+      <p>
+        Send money easily.
+      </p>
+    </div>
+    <div class="col-md-4 mx-auto">
     <h1 class="text-center">Login</h1>
     <validation-error v-bind:errors="errors"></validation-error>
     <hr />
@@ -19,12 +26,14 @@
       <input type="submit" class="btn btn-success" value="Login" />
     </form>
   </div>
+</div>
 </template>
 
 <script>
-import ValidationError from "../shared/ValidationError";
-import errorHandler from '../../helpers/error-handler';
-import { validations } from '../../validations/identity/login';
+import ValidationError from "../shared/ValidationError"
+import errorHandler from '../../helpers/error-handler'
+import { validations } from '../../validations/identity/login'
+import clients from '../../queries/clients.js'
 
 export default {
   components: {
@@ -53,6 +62,17 @@ export default {
         .dispatch("login", { username: this.username, password: this.password })
         .then(function(response) {
           self.errors = [];
+
+          if (response && response.status == 200) {
+              clients.getIdByUserId()
+              .then(function (response) {
+                  if (response && response.status == 200) {
+                    self.$store.commit('setClientData', response.data);
+                    self.$store.dispatch('setLocalStorageClientData', response.data);
+                  }
+              })
+          }
+
           self.$router.push("/");
         })
         .catch(function(error) {

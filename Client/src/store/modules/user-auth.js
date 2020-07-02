@@ -5,6 +5,7 @@ import users from '../../queries/users.js'
 Vue.use(Vuex);
 
 const state = {
+    clientId: null,
     username: null,
     token: null
 };
@@ -12,6 +13,9 @@ const state = {
 const getters = {
     username: function (state) {
         return state.username;
+    },
+    clientId: function (state) {
+        return state.clientId;
     },
     isAuthenticated: function (state) {
         return state.username !== null;
@@ -30,6 +34,12 @@ const mutations = {
     clearUserData: function (state) {
         state.username = null;
         state.token = null;
+    },
+    clearClientData: function (state) {
+        state.clientId = null;
+    },
+    setClientData: function (state, clientId) {
+        state.clientId = clientId;
     }
 };
 
@@ -40,7 +50,6 @@ const actions = {
                 .then(function (response) {
                     if (response && response.status == 200) {
                         context.commit('login', response.data);
-
                         context.dispatch('setLocalStorageUserData', response.data);
                     }
 
@@ -61,6 +70,7 @@ const actions = {
         // TODO: Check if the token has expired.
 
         var username = localStorage.getItem('username');
+        var clientId = localStorage.getItem('clientId');
 
         var userData = {
             username: username,
@@ -68,14 +78,14 @@ const actions = {
         };
 
         context.commit('login', userData);
+        context.commit('setClientData', { id: clientId });
     },
     register: function (context, userData) {
         return new Promise(function (resolve, reject) {
             users.register(userData)
                 .then(function (response) {
                     if (response && response.status == 200) {
-                        context.commit('register', response.data);
-                    
+                        context.commit('register', response.data);              
                         context.dispatch('setLocalStorageUserData', response.data);
                     }
                 
@@ -92,6 +102,7 @@ const actions = {
         }
 
         context.commit('clearUserData');
+        context.commit('clearClientData');
 
         localStorage.clear();
     },
@@ -105,6 +116,9 @@ const actions = {
 
         // TODO: Store also the expiration.
         // localStorage.setItem('userId', response.data.id);
+    },
+    setLocalStorageClientData: function (context, clientId) {
+        localStorage.setItem('clientId', clientId);
     }
 };
 

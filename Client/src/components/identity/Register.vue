@@ -69,6 +69,7 @@
 import ValidationError from "../shared/ValidationError";
 import errorHandler from "../../helpers/error-handler";
 import { validations } from '../../validations/identity/register';
+import clients from '../../queries/clients.js'
 
 export default {
   components: {
@@ -110,6 +111,17 @@ export default {
         })
         .then(function(response) {
           self.errors = [];
+
+          if (response && response.status == 200) {
+            clients.create({ firstName: self.firstName, lastName: self.lastName, address: self.address})
+              .then(function (response) {
+                if (response && response.status == 200) {
+                  self.$store.commit('setClientData', response.data);
+                  self.$store.dispatch('setLocalStorageClientData', response.data);
+                }
+              });
+          }
+
           self.$router.push("/");
         })
         .catch(function(error) {
