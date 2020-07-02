@@ -16,8 +16,8 @@ function getMy() {
     return axiosInstance.get('/api/exchangeAccounts/getMy');
 }
 
-function getDetailsById(accountId) {
-    return axiosInstance.get('/api/exchangeAccounts/getAccountTransactions', { params:  { accountId: accountId } });
+function getAccountDetailsById(accountId) {
+    return axiosInstance.get('/api/exchangeAccounts/getAccountTransactions', { params:  { accountId } });
 }
 
 function getUserActiveAccountsForTransaction() {
@@ -26,6 +26,6 @@ function getUserActiveAccountsForTransaction() {
 
 export default {
     getMy: getMy,
-    getDetailsById: getDetailsById,
+    getAccountDetailsById: getAccountDetailsById,
     getUserActiveAccountsForTransaction: getUserActiveAccountsForTransaction
 }

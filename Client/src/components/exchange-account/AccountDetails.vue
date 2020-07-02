@@ -1,6 +1,5 @@
 <template>
     <div>
-      <validation-error v-bind:errors="errors" v-cloak></validation-error>
       <div v-show="accountInfo && accountInfo.transactions && accountInfo.transactions.length > 0">
         <h1 class="display-4 text-center mt-3 mb-5">Account Transactions</h1>
         <div class="container row mx-auto my-3">
@@ -39,8 +38,8 @@
             </tbody>
         </table>
       </div>
-      <div class="container alert alert-danger" role="alert" v-show="errors.length !== 0" v-cloak>
-          Sorry, something went wrong!
+      <div class="container alert alert-danger my-3" role="alert" v-show="errors.length !== 0" v-cloak>
+          <p class="my-0" v-for="error in errors" v-bind:key="error">{{ error }}</p>
       </div>
   </div>
 </template>
@@ -49,7 +48,7 @@
 import ValidationError from '../../components/shared/ValidationError';
 
 import exchangeAccounts from "../../queries/exchangeAccounts";
-import { errorHandler } from '../../helpers/error-handler';
+import errorHandler from "../../helpers/error-handler";
 
 import moment from 'moment';
 import numeral from 'numeral';
@@ -80,7 +79,7 @@ export default {
     var self = this;
 
     exchangeAccounts
-      .getDetailsById(this.$route.params.accountId)
+      .getAccountDetailsById(this.$route.params.accountId)
       .then(function(response) {
         if (response && response.data) {
             self.accountInfo = response.data;
