@@ -64,9 +64,9 @@ export default {
             this.errors = [];
 
             this.$v.$touch();
-
-            if (this.$v.invalid) {
-                return;
+        
+            if (this.$v.$invalid) {
+              return;
             }
 
             transactions.create({ senderAccount: this.senderAccount, receiverAccount: this.receiverAccount, amount: parseFloat(this.amount), description: this.description })
@@ -91,10 +91,10 @@ export default {
     mounted: function () {
         var self = this;
 
-        exchangeAccounts.getUserActiveAccountsForTransaction()
+        exchangeAccounts.getActiveByClientForTransaction()
             .then(function (response) {
                 if (response && response.data) {
-                    self.userActiveAccounts = response.data.data;
+                    self.userActiveAccounts = response.data;
                 }
             })
             .catch(function (error) {

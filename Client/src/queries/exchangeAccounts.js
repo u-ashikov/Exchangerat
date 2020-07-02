@@ -20,12 +20,12 @@ function getAccountDetailsById(accountId) {
     return axiosInstance.get('/api/exchangeAccounts/getAccountTransactions', { params:  { accountId } });
 }
 
-function getUserActiveAccountsForTransaction() {
-    return axiosInstance.get('/api/exchangeAccounts/GetActiveByUserForTransaction');
+function getActiveByClientForTransaction() {
+    return axiosInstance.get('/api/exchangeAccounts/GetActiveByClientForTransaction');
 }
 
 export default {
-    getMy: getMy,
-    getAccountDetailsById: getAccountDetailsById,
-    getUserActiveAccountsForTransaction: getUserActiveAccountsForTransaction
+    getMy,
+    getAccountDetailsById,
+    getActiveByClientForTransaction
 }
