@@ -10,7 +10,7 @@
                 <p class="card-text">
                     <i class="fas fa-money-check-alt"></i> {{ account.type }} 
                     <span class="d-block"><i class="fas fa-dollar-sign"></i> {{ account.balance | money }}</span>
-                    <span class="d-block"><i class="fas fa-calendar-week"></i> {{ account.createdAt }}</span>
+                    <span class="d-block"><i class="fas fa-calendar-week"></i> {{ account.createdAt | date }}</span>
                     <span v-if="account.isActive" class="d-block"><i class="fas fa-check text-success"></i> Active</span>
                     <span v-else class="d-block"><i class="fas fa-times text-danger"></i> Inactive</span>
                 </p>
@@ -29,14 +29,12 @@
 </template>
 
 <script>
-import ValidationError from '../../components/shared/ValidationError';
+import ValidationError from '../../components/shared/ValidationError'
+import exchangeAccounts from '../../queries/exchangeAccounts.js'
+import { errorHandler } from '../../helpers/error-handler'
 
-import exchangeAccounts from '../../queries/exchangeAccounts.js';
-
-import { authHeader } from '../../helpers/auth-header.js';
-import { errorHandler } from '../../helpers/error-handler';
-
-import numeral from 'numeral';
+import moment from 'moment'
+import numeral from 'numeral'
 
 export default {
     components: {
@@ -55,15 +53,20 @@ export default {
             }
 
             return numeral(value).format('0,0');
+        },
+        date: function (value) {
+            if (!value) { return ''; }
+
+            return moment(value).format("MMM Do YYYY"); 
         }
     },
     mounted: function() {
         var self = this;
 
-        exchangeAccounts.getByUser()
+        exchangeAccounts.getMy()
             .then(function (response) {
-                if (response && response.data && response.data.data) {
-                    self.accounts = response.data.data;
+                if (response && response.data && response.data) {
+                    self.accounts = response.data;
                 }
             })
             .catch(function (error) {

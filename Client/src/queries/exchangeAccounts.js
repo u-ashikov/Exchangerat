@@ -1,25 +1,31 @@
 import axios from 'axios'
-import { authHeader } from '../helpers/auth-header'
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:57765',
+    baseURL: 'http://localhost:5000'
     // timeout: 1000
 });
 
-function getByUser() {
-    return axiosInstance.get('/api/exchangeAccounts/getByUser', { headers: authHeader() });
+axiosInstance.interceptors.request.use(function (config) {
+    const token = localStorage.getItem('token');
+    config.headers.Authorization =  token ? `Bearer ${token}` : '';
+
+    return config;
+});
+
+function getMy() {
+    return axiosInstance.get('/api/exchangeAccounts/getMy');
 }
 
 function getDetailsById(accountId) {
-    return axiosInstance.get('/api/exchangeAccounts/getAccountTransactions', { params:  { accountId: accountId }, headers: authHeader() });
+    return axiosInstance.get('/api/exchangeAccounts/getAccountTransactions', { params:  { accountId: accountId } });
 }
 
 function getUserActiveAccountsForTransaction() {
-    return axiosInstance.get('/api/exchangeAccounts/GetActiveByUserForTransaction', { headers: authHeader() });
+    return axiosInstance.get('/api/exchangeAccounts/GetActiveByUserForTransaction');
 }
 
 export default {
-    getByUser: getByUser,
+    getMy: getMy,
     getDetailsById: getDetailsById,
     getUserActiveAccountsForTransaction: getUserActiveAccountsForTransaction
 }
