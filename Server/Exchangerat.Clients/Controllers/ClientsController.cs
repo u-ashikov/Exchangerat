@@ -3,7 +3,6 @@
     using Exchangerat.Clients.Models.Clients;
     using Exchangerat.Clients.Services.Contracts.Clients;
     using Exchangerat.Controllers;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
 
@@ -17,7 +16,6 @@
         }
 
         [HttpPost]
-        [Authorize]
         [Route(nameof(Create))]
         public async Task<IActionResult> Create([FromBody]ClientInputModel model)
         {
@@ -28,14 +26,21 @@
                 return this.BadRequest(result.Errors);
             }
 
-            return this.Ok();
+            return this.Ok(result.Data);
         }
 
         [HttpGet]
-        [Authorize]
+        [Route(nameof(GetClientId))]
         public async Task<IActionResult> GetClientId()
         {
-            return this.Ok(10);
+            var result = await this.clients.GetIdByUserId();
+
+            if (!result.Succeeded)
+            {
+                return this.BadRequest(result.Errors);
+            }
+
+            return this.Ok(result.Data);
         }
     }
 }

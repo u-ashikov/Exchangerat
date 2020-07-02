@@ -6,6 +6,8 @@
 
     public interface IClientService
     {
-        Task<Result> Create(ClientInputModel model);
+        Task<Result<int>> Create(ClientInputModel model);
+
+        Task<Result<int>> GetIdByUserId();
     }
 }

@@ -6,6 +6,7 @@
     using Exchangerat.Clients.Services.Contracts.Clients;
     using Exchangerat.Services.Identity;
     using Infrastructure;
+    using Microsoft.EntityFrameworkCore;
     using System.Threading.Tasks;
 
     public class ClientService : IClientService
@@ -20,7 +21,7 @@
             this.currentUser = currentUser;
         }
 
-        public async Task<Result> Create(ClientInputModel model)
+        public async Task<Result<int>> Create(ClientInputModel model)
         {
             var userId = this.currentUser.Id;
 
@@ -36,7 +37,21 @@
 
             await this.dbContext.SaveChangesAsync();
 
-            return Result.Success;
+            return Result<int>.SuccessWith(client.Id);
+        }
+
+        public async Task<Result<int>> GetIdByUserId()
+        {
+            var client = await this.dbContext
+                .Clients
+                .FirstOrDefaultAsync(c => c.UserId == this.currentUser.Id);
+
+            if (client == null)
+            {
+                return Result<int>.Failure("Sorry, this user is not a client.");
+            }
+
+            return Result<int>.SuccessWith(client.Id);
         }
     }
 }
