@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import users from '../../queries/users.js'
+import userService from '../../services/userService.js'
 
 Vue.use(Vuex);
 
@@ -46,7 +46,7 @@ const mutations = {
 const actions = {
     login: function (context, userData) {
         return new Promise(function (resolve, reject) {
-            users.login(userData)
+            userService.login(userData)
                 .then(function (response) {
                     if (response && response.status == 200) {
                         context.commit('login', response.data);
@@ -56,6 +56,7 @@ const actions = {
                     resolve(response);
                 })
                 .catch(function (error) {
+                    console.log(error);
                     reject(error);
                 });
         });
@@ -82,7 +83,7 @@ const actions = {
     },
     register: function (context, userData) {
         return new Promise(function (resolve, reject) {
-            users.register(userData)
+            userService.register(userData)
                 .then(function (response) {
                     if (response && response.status == 200) {
                         context.commit('register', response.data);              

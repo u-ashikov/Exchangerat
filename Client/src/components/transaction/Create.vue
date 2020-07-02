@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import exchangeAccounts from '../../queries/exchangeAccounts.js'
-import transactions from '../../queries/transactions.js'
+import exchangeAccountService from '../../services/exchangeAccountService'
+import transactionService from '../../services/transactionService'
 import { validations } from '../../validations/transactions/create'
 import errorHandler from '../../helpers/error-handler'
 import numeral from 'numeral'
@@ -64,12 +64,12 @@ export default {
             this.errors = [];
 
             this.$v.$touch();
-        
+
             if (this.$v.$invalid) {
               return;
             }
 
-            transactions.create({ senderAccount: this.senderAccount, receiverAccount: this.receiverAccount, amount: parseFloat(this.amount), description: this.description })
+            transactionService.create({ senderAccount: this.senderAccount, receiverAccount: this.receiverAccount, amount: parseFloat(this.amount), description: this.description })
                 .then(function (response) {
                     if (response && response.status === 200) {
                         self.errors = [];
@@ -91,7 +91,7 @@ export default {
     mounted: function () {
         var self = this;
 
-        exchangeAccounts.getActiveByClientForTransaction()
+        exchangeAccountService.getActiveByClientForTransaction()
             .then(function (response) {
                 if (response && response.data) {
                     self.userActiveAccounts = response.data;

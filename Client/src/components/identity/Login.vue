@@ -33,7 +33,7 @@
 import ValidationError from "../shared/ValidationError"
 import errorHandler from '../../helpers/error-handler'
 import { validations } from '../../validations/identity/login'
-import clients from '../../queries/clients.js'
+import clientService from '../../services/clientService'
 
 export default {
   components: {
@@ -64,7 +64,7 @@ export default {
           self.errors = [];
 
           if (response && response.status == 200) {
-              clients.getIdByUserId()
+              clientService.getIdByUserId()
               .then(function (response) {
                   if (response && response.status == 200) {
                     self.$store.commit('setClientData', response.data);
