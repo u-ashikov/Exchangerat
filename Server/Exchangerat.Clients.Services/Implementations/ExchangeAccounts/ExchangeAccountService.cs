@@ -66,9 +66,14 @@
             return Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>.SuccessWith(activeUserAccounts);
         }
 
-        public async Task<Result<ExchangeAccountInfoOutputModel>> GetDetailsByUserId(string userId, int accountId)
+        public async Task<Result<ExchangeAccountInfoOutputModel>> GetAccountDetails(string userId, int accountId)
         {
-            var ownerId = this.dbContext.Clients.FirstOrDefault(c => c.UserId == userId).Id;
+            var owner = this.dbContext.Clients.FirstOrDefault(c => c.UserId == userId);
+
+            if (owner == null)
+            {
+                return Result<ExchangeAccountInfoOutputModel>.Failure("Exchange account not found.");
+            }
 
             var exchangeAccount =
                 await this.dbContext.ExchangeAccounts
@@ -77,7 +82,7 @@
                     .ThenInclude(st => st.ReceiverAccount)
                     .Include(ea => ea.ReceivedTransactions)
                     .ThenInclude(rt => rt.SenderAccount)
-                    .FirstOrDefaultAsync(ea => ea.Id == accountId && ea.OwnerId == ownerId);
+                    .FirstOrDefaultAsync(ea => ea.Id == accountId && ea.OwnerId == owner.Id);
 
             if (exchangeAccount == null)
             {

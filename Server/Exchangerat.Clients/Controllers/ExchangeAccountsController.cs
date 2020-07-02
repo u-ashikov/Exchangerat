@@ -33,19 +33,10 @@
         }
 
         [HttpGet]
-        [Route(nameof(GetActiveByUserForTransaction))]
-        public async Task<IActionResult> GetActiveByUserForTransaction()
-        {
-            var userActiveExchangeAccounts = await this.exchangeAccounts.GetActiveByUserForTransaction(this.currentUser.Id);
-
-            return this.Ok(userActiveExchangeAccounts);
-        }
-
-        [HttpGet]
         [Route(nameof(GetAccountTransactions))]
         public async Task<IActionResult> GetAccountTransactions(int accountId)
         {
-            var result = await this.exchangeAccounts.GetDetailsByUserId(this.currentUser.Id, accountId);
+            var result = await this.exchangeAccounts.GetAccountDetails(this.currentUser.Id, accountId);
 
             if (!result.Succeeded)
             {
@@ -53,6 +44,15 @@
             }
 
             return this.Ok(result.Data);
+        }
+
+        [HttpGet]
+        [Route(nameof(GetActiveByUserForTransaction))]
+        public async Task<IActionResult> GetActiveByUserForTransaction()
+        {
+            var userActiveExchangeAccounts = await this.exchangeAccounts.GetActiveByUserForTransaction(this.currentUser.Id);
+
+            return this.Ok(userActiveExchangeAccounts);
         }
     }
 }

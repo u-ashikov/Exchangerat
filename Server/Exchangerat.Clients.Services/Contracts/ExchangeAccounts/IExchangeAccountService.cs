@@ -11,6 +11,6 @@
 
         Task<Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>> GetActiveByUserForTransaction(string userId);
 
-        Task<Result<ExchangeAccountInfoOutputModel>> GetDetailsByUserId(string userId, int accountId);
+        Task<Result<ExchangeAccountInfoOutputModel>> GetAccountDetails(string userId, int accountId);
     }
 }
