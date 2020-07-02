@@ -31,7 +31,7 @@
 <script>
 import ValidationError from '../../components/shared/ValidationError'
 import exchangeAccounts from '../../queries/exchangeAccounts.js'
-import { errorHandler } from '../../helpers/error-handler'
+import errorHandler from '../../helpers/error-handler'
 
 import moment from 'moment'
 import numeral from 'numeral'
