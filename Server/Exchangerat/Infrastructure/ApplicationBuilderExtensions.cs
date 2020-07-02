@@ -12,22 +12,17 @@
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-
-            app.UseCors(policy =>
-            {
-                policy.AllowAnyHeader();
-                policy.AllowAnyMethod();
-                policy.AllowAnyOrigin();
-            });
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app
+                //.UseHttpsRedirection()
+                .UseRouting()
+                .UseCors(options => options
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod())
+                .UseAuthentication()
+                .UseAuthorization()
+                .UseEndpoints(endpoints => endpoints
+                    .MapControllers());
 
             return app;
         }
