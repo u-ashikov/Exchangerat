@@ -6,6 +6,6 @@
 
     public interface ITransactionService
     {
-        Task<Result> Create(TransactionInputModel model);
+        Task<Result> Create(TransactionInputModel model, string userId);
     }
 }

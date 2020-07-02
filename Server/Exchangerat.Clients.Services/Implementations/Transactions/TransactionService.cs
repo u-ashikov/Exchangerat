@@ -1,4 +1,6 @@
-﻿namespace Exchangerat.Clients.Services.Implementations.Transactions
+﻿using Microsoft.AspNetCore.Connections.Features;
+
+namespace Exchangerat.Clients.Services.Implementations.Transactions
 {
     using Data;
     using Exchangerat.Clients.Data.Models;
@@ -16,20 +18,22 @@
     {
         private readonly ClientsDbContext dbContext;
 
-        private readonly ICurrentUserService currentUser;
-
-        public TransactionService(ClientsDbContext dbContext, ICurrentUserService currentUser)
+        public TransactionService(ClientsDbContext dbContext)
         {
             this.dbContext = dbContext;
-            this.currentUser = currentUser;
         }
 
-        public async Task<Result> Create(TransactionInputModel model)
+        public async Task<Result> Create(TransactionInputModel model, string userId)
         {
-            var clientId = this.dbContext.Clients.FirstOrDefault(c => c.UserId == this.currentUser.Id).Id;
+            var client = this.dbContext.Clients.FirstOrDefault(c => c.UserId == userId);
+
+            if (client == null)
+            {
+                return Result.Failure("Transaction cannot be finished.");
+            }
 
             var senderAccount = await this.dbContext.ExchangeAccounts.FirstOrDefaultAsync(sa =>
-                sa.IdentityNumber == model.SenderAccount && sa.OwnerId == clientId);
+                sa.IdentityNumber == model.SenderAccount && sa.OwnerId == client.Id);
 
             var errors = new List<string>();
 

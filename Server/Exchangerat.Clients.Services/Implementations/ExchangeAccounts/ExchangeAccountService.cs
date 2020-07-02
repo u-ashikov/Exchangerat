@@ -46,14 +46,19 @@
             return Result<ICollection<ClientExchangeAccountOutputModel>>.SuccessWith(userAccounts);
         }
 
-        public async Task<Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>> GetActiveByUserForTransaction(
+        public async Task<Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>> GetActiveByClientForTransaction(
             string userId)
         {
-            var ownerId = this.dbContext.Clients.FirstOrDefault(c => c.UserId == userId).Id;
+            var owner = this.dbContext.Clients.FirstOrDefault(c => c.UserId == userId);
+
+            if (owner == null)
+            {
+                return Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>.Failure("The are no accounts found.");
+            }
 
             var activeUserAccounts = await this.dbContext
                 .ExchangeAccounts
-                .Where(ea => ea.OwnerId == ownerId && ea.IsActive)
+                .Where(ea => ea.OwnerId == owner.Id && ea.IsActive)
                 .AsNoTracking()
                 .Select(ea => new ClientExchangeAccountBaseInfoOutputModel()
                 {

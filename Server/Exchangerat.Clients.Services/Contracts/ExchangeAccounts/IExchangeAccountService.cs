@@ -9,7 +9,7 @@
     {
         Task<Result<ICollection<ClientExchangeAccountOutputModel>>> GetMy(string userId);
 
-        Task<Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>> GetActiveByUserForTransaction(string userId);
+        Task<Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>> GetActiveByClientForTransaction(string userId);
 
         Task<Result<ExchangeAccountInfoOutputModel>> GetAccountDetails(string userId, int accountId);
     }
