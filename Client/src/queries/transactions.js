@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { authHeader } from '../helpers/auth-header'
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:57765'

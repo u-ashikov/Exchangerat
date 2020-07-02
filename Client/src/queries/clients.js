@@ -9,7 +9,7 @@ axiosInstance.interceptors.request.use(function (config) {
     config.headers.Authorization =  token ? `Bearer ${token}` : '';
 
     return config;
-  });
+});
 
 function create(clientData) {
     return axiosInstance.post('/api/clients/create', clientData);
