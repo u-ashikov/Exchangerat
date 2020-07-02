@@ -7,9 +7,9 @@
 
     public interface IExchangeAccountService
     {
-        Task<Result<ICollection<UserExchangeAccountOutputModel>>> GetByUserId(string userId);
+        Task<Result<ICollection<ClientExchangeAccountOutputModel>>> GetMy(string userId);
 
-        Task<Result<ICollection<UserExchangeAccountBaseInfoOutputModel>>> GetActiveByUserForTransaction(string userId);
+        Task<Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>> GetActiveByUserForTransaction(string userId);
 
         Task<Result<ExchangeAccountInfoOutputModel>> GetDetailsByUserId(string userId, int accountId);
     }

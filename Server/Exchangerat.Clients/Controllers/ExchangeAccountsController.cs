@@ -19,12 +19,17 @@
         }
 
         [HttpGet]
-        [Route(nameof(GetByUser))]
-        public async Task<IActionResult> GetByUser()
+        [Route(nameof(GetMy))]
+        public async Task<IActionResult> GetMy()
         {
-            var userAccounts = await this.exchangeAccounts.GetByUserId(this.currentUser.Id);
+            var result = await this.exchangeAccounts.GetMy(this.currentUser.Id);
 
-            return this.Ok(userAccounts);
+            if (!result.Succeeded)
+            {
+                return this.BadRequest(result.Errors);
+            }
+
+            return this.Ok(result.Data);
         }
 
         [HttpGet]

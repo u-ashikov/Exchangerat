@@ -19,15 +19,20 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<Result<ICollection<UserExchangeAccountOutputModel>>> GetByUserId(string userId)
+        public async Task<Result<ICollection<ClientExchangeAccountOutputModel>>> GetMy(string userId)
         {
-            var ownerId = this.dbContext.Clients.FirstOrDefault(c => c.UserId == userId).Id;
+            var owner = this.dbContext.Clients.FirstOrDefault(c => c.UserId == userId);
+
+            if (owner == null)
+            {
+                return Result<ICollection<ClientExchangeAccountOutputModel>>.Failure("You don't have any exchange accounts!");
+            }
 
             var userAccounts = await this.dbContext
                 .ExchangeAccounts
-                .Where(ea => ea.OwnerId == ownerId)
+                .Where(ea => ea.OwnerId == owner.Id)
                 .AsNoTracking()
-                .Select(ea => new UserExchangeAccountOutputModel()
+                .Select(ea => new ClientExchangeAccountOutputModel()
                 {
                     Id = ea.Id,
                     Balance = ea.Balance,
@@ -38,10 +43,10 @@
                 })
                 .ToListAsync();
 
-            return Result<ICollection<UserExchangeAccountOutputModel>>.SuccessWith(userAccounts);
+            return Result<ICollection<ClientExchangeAccountOutputModel>>.SuccessWith(userAccounts);
         }
 
-        public async Task<Result<ICollection<UserExchangeAccountBaseInfoOutputModel>>> GetActiveByUserForTransaction(
+        public async Task<Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>> GetActiveByUserForTransaction(
             string userId)
         {
             var ownerId = this.dbContext.Clients.FirstOrDefault(c => c.UserId == userId).Id;
@@ -50,7 +55,7 @@
                 .ExchangeAccounts
                 .Where(ea => ea.OwnerId == ownerId && ea.IsActive)
                 .AsNoTracking()
-                .Select(ea => new UserExchangeAccountBaseInfoOutputModel()
+                .Select(ea => new ClientExchangeAccountBaseInfoOutputModel()
                 {
                     Id = ea.Id,
                     IdentityNumber = ea.IdentityNumber,
@@ -58,7 +63,7 @@
                 })
                 .ToListAsync();
 
-            return Result<ICollection<UserExchangeAccountBaseInfoOutputModel>>.SuccessWith(activeUserAccounts);
+            return Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>.SuccessWith(activeUserAccounts);
         }
 
         public async Task<Result<ExchangeAccountInfoOutputModel>> GetDetailsByUserId(string userId, int accountId)
