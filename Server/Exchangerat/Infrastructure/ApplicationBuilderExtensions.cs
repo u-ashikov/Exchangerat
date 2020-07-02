@@ -13,7 +13,6 @@
             }
 
             app
-                //.UseHttpsRedirection()
                 .UseRouting()
                 .UseCors(options => options
                     .AllowAnyOrigin()

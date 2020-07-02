@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class UserExchangeAccountOutputModel
+    public class ClientExchangeAccountOutputModel
     {
         public int Id { get; set; }
 

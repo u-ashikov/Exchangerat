@@ -1,6 +1,6 @@
 ﻿namespace Exchangerat.Clients.Models.ExchangeAccounts
 {
-    public class UserExchangeAccountBaseInfoOutputModel
+    public class ClientExchangeAccountBaseInfoOutputModel
     {
         public int Id { get; set; }
 
