@@ -14,7 +14,8 @@
 
             builder
                 .Property(rt => rt.Type)
-                .HasMaxLength(DataConstants.RequestTypeNameMaxLength);
+                .HasMaxLength(DataConstants.RequestTypeNameMaxLength)
+                .IsRequired();
         }
     }
 }

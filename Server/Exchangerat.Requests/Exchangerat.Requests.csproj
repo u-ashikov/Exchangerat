@@ -7,10 +7,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
+    <PackageReference Include="refit" Version="5.1.67" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="5.1.67" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Exchangerat.Requests.Data\Exchangerat.Requests.Data.csproj" />
+    <ProjectReference Include="..\Exchangerat.Requests.Services\Exchangerat.Requests.Services.csproj" />
     <ProjectReference Include="..\Exchangerat\Exchangerat.csproj" />
   </ItemGroup>
 
