@@ -3,10 +3,13 @@ namespace Exchangerat.Requests
     using Exchangerat.Infrastructure;
     using Exchangerat.Requests.Data;
     using Exchangerat.Requests.Infrastructure.Extensions;
+    using Exchangerat.Requests.Services.Contracts.Identity;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Refit;
+    using System;
 
     public class Startup
     {
@@ -21,6 +24,13 @@ namespace Exchangerat.Requests
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddWebService<RequestsDbContext>(this.Configuration);
+
+            services
+                .AddRefitClient<IIdentityService>()
+                .ConfigureHttpClient(builder =>
+                {
+                    builder.BaseAddress = new Uri("http://localhost:5001/api/Identity");
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -28,7 +38,8 @@ namespace Exchangerat.Requests
         {
             app
               .UseWebService(env)
-              .Initialize();
+              .Initialize()
+              .SeedData();
         }
     }
 }
