@@ -8,7 +8,6 @@
     using Services.Identity;
     using System.Text;
 
-
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddApplicationSettings(this IServiceCollection services,
