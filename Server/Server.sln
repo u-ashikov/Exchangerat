@@ -33,15 +33,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Clients.Models"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Requests", "Requests", "{9B800D9B-AC25-4743-8AA0-236FB623A8AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Requests", "Exchangerat.Requests\Exchangerat.Requests.csproj", "{5C728952-49CF-4EBD-BB33-00FAE4FF648C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Requests", "Exchangerat.Requests\Exchangerat.Requests.csproj", "{5C728952-49CF-4EBD-BB33-00FAE4FF648C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Requests.Services", "Exchangerat.Requests.Services\Exchangerat.Requests.Services.csproj", "{148E5FAF-CB22-4272-A81E-AC00DE0737C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Requests.Services", "Exchangerat.Requests.Services\Exchangerat.Requests.Services.csproj", "{148E5FAF-CB22-4272-A81E-AC00DE0737C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Requests.Models", "Exchangerat.Requests.Models\Exchangerat.Requests.Models.csproj", "{EC058F4F-97FB-43BD-911F-7358A8084E7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Requests.Models", "Exchangerat.Requests.Models\Exchangerat.Requests.Models.csproj", "{EC058F4F-97FB-43BD-911F-7358A8084E7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Requests.Data", "Exchangerat.Requests.Data\Exchangerat.Requests.Data.csproj", "{5E908BE1-70D6-404B-9796-C634D679B241}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Requests.Data", "Exchangerat.Requests.Data\Exchangerat.Requests.Data.csproj", "{5E908BE1-70D6-404B-9796-C634D679B241}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Requests.Common", "Exchangerat.Requests.Common\Exchangerat.Requests.Common.csproj", "{6ACBAB8E-5C09-405F-BC53-3F7C7DBE0FEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Requests.Common", "Exchangerat.Requests.Common\Exchangerat.Requests.Common.csproj", "{6ACBAB8E-5C09-405F-BC53-3F7C7DBE0FEB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{67335EBD-64D3-4A18-9455-9BD3116D95BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Admin", "Exchangerat.Admin\Exchangerat.Admin.csproj", "{72BDAB47-FA78-47B4-9E23-0259CCC9381E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +117,10 @@ Global
 		{6ACBAB8E-5C09-405F-BC53-3F7C7DBE0FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6ACBAB8E-5C09-405F-BC53-3F7C7DBE0FEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6ACBAB8E-5C09-405F-BC53-3F7C7DBE0FEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72BDAB47-FA78-47B4-9E23-0259CCC9381E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72BDAB47-FA78-47B4-9E23-0259CCC9381E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72BDAB47-FA78-47B4-9E23-0259CCC9381E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72BDAB47-FA78-47B4-9E23-0259CCC9381E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -134,6 +142,7 @@ Global
 		{EC058F4F-97FB-43BD-911F-7358A8084E7D} = {9B800D9B-AC25-4743-8AA0-236FB623A8AC}
 		{5E908BE1-70D6-404B-9796-C634D679B241} = {9B800D9B-AC25-4743-8AA0-236FB623A8AC}
 		{6ACBAB8E-5C09-405F-BC53-3F7C7DBE0FEB} = {9B800D9B-AC25-4743-8AA0-236FB623A8AC}
+		{72BDAB47-FA78-47B4-9E23-0259CCC9381E} = {67335EBD-64D3-4A18-9455-9BD3116D95BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6AF09391-F961-452D-9163-F1A938D9CE18}
