@@ -41,7 +41,9 @@
                 return Result<UserOutputModel>.Failure(new List<string>() { "Incorrect username or password." });
             }
 
-            var token = this.jwtTokenGenerator.GenerateJwtToken(existingUser);
+            var userRoles = await this.userManager.GetRolesAsync(existingUser);
+
+            var token = this.jwtTokenGenerator.GenerateJwtToken(existingUser, userRoles);
 
             return Result<UserOutputModel>.SuccessWith(new UserOutputModel(existingUser, token));
         }
