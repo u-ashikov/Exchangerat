@@ -19,9 +19,9 @@
         [HttpPost]
         [AllowAnonymous]
         [Route(nameof(Login))]
-        public async Task<IActionResult> Login([FromBody]LoginUserInputModel model)
+        public async Task<IActionResult> Login([FromBody]LoginUserInputModel model, [FromQuery]bool adminLogin = false)
         {
-            var result = await this.identityService.Login(model);
+            var result = await this.identityService.Login(model, adminLogin);
 
             if (!result.Succeeded)
             {

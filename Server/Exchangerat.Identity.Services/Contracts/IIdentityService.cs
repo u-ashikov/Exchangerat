@@ -10,7 +10,7 @@
     {
         Task<Result<User>> Register(RegisterUserInputModel model);
 
-        Task<Result<UserOutputModel>> Login(LoginUserInputModel model);
+        Task<Result<UserOutputModel>> Login(LoginUserInputModel model, bool adminLogin = false);
 
         Task<IEnumerable<string>> GetRegisterUsersIds();
     }

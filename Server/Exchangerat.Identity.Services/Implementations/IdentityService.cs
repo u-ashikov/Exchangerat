@@ -25,7 +25,7 @@
             this.jwtTokenGenerator = jwtTokenGenerator;
         }
 
-        public async Task<Result<UserOutputModel>> Login(LoginUserInputModel model)
+        public async Task<Result<UserOutputModel>> Login(LoginUserInputModel model, bool adminLogin = false)
         {
             var existingUser = await this.userManager.FindByNameAsync(model.UserName);
 
@@ -42,6 +42,11 @@
             }
 
             var userRoles = await this.userManager.GetRolesAsync(existingUser);
+
+            if (adminLogin && (userRoles == null || !userRoles.Contains("Administrator")))
+            {
+                return Result<UserOutputModel>.Failure(new List<string>() { "Incorrect username or password." });
+            }
 
             var token = this.jwtTokenGenerator.GenerateJwtToken(existingUser, userRoles);
 
