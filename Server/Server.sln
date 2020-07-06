@@ -45,11 +45,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Requests.Common
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{67335EBD-64D3-4A18-9455-9BD3116D95BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Admin", "Exchangerat.Admin\Exchangerat.Admin.csproj", "{72BDAB47-FA78-47B4-9E23-0259CCC9381E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Admin", "Exchangerat.Admin\Exchangerat.Admin.csproj", "{72BDAB47-FA78-47B4-9E23-0259CCC9381E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Admin.Models", "Exchangerat.Admin.Models\Exchangerat.Admin.Models.csproj", "{3EA3461F-1278-4400-A356-3F918E2FA35E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Admin.Models", "Exchangerat.Admin.Models\Exchangerat.Admin.Models.csproj", "{3EA3461F-1278-4400-A356-3F918E2FA35E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Admin.Services", "Exchangerat.Admin.Services\Exchangerat.Admin.Services.csproj", "{37237799-BED2-4BD3-8FD2-CC8E8C50EBD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Admin.Services", "Exchangerat.Admin.Services\Exchangerat.Admin.Services.csproj", "{37237799-BED2-4BD3-8FD2-CC8E8C50EBD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Admin.Common", "Exchangerat.Admin.Common\Exchangerat.Admin.Common.csproj", "{44DFAC7C-EA71-4F58-91DD-E0C0C5268389}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,6 +135,10 @@ Global
 		{37237799-BED2-4BD3-8FD2-CC8E8C50EBD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37237799-BED2-4BD3-8FD2-CC8E8C50EBD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37237799-BED2-4BD3-8FD2-CC8E8C50EBD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44DFAC7C-EA71-4F58-91DD-E0C0C5268389}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44DFAC7C-EA71-4F58-91DD-E0C0C5268389}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44DFAC7C-EA71-4F58-91DD-E0C0C5268389}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44DFAC7C-EA71-4F58-91DD-E0C0C5268389}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,6 +163,7 @@ Global
 		{72BDAB47-FA78-47B4-9E23-0259CCC9381E} = {67335EBD-64D3-4A18-9455-9BD3116D95BD}
 		{3EA3461F-1278-4400-A356-3F918E2FA35E} = {67335EBD-64D3-4A18-9455-9BD3116D95BD}
 		{37237799-BED2-4BD3-8FD2-CC8E8C50EBD5} = {67335EBD-64D3-4A18-9455-9BD3116D95BD}
+		{44DFAC7C-EA71-4F58-91DD-E0C0C5268389} = {67335EBD-64D3-4A18-9455-9BD3116D95BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6AF09391-F961-452D-9163-F1A938D9CE18}
