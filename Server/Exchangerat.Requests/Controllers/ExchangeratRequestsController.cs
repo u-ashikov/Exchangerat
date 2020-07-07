@@ -2,6 +2,7 @@
 {
     using Exchangerat.Controllers;
     using Exchangerat.Requests.Services.Contracts.Requests;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
 
@@ -15,12 +16,13 @@
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         [Route(nameof(GetAll))]
         public async Task<IActionResult> GetAll()
         {
             var result = await this.requests.GetAll();
 
-            return this.Ok(result);
+            return this.Ok(result.Data);
         }
     }
 }
