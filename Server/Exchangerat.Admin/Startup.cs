@@ -6,6 +6,7 @@ namespace Exchangerat.Admin
     using Exchangerat.Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -37,6 +38,19 @@ namespace Exchangerat.Admin
                 .ConfigureHttpClient(builder =>
                 {
                     builder.BaseAddress = new Uri("http://localhost:5001/api/Identity");
+                });
+
+            services
+                .AddRefitClient<IRequestService>()
+                .ConfigureHttpClient((serviceProvider, builder) =>
+                {
+                    builder.BaseAddress = new Uri("http://localhost:5002/api");
+
+                    var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
+
+                    var currentTokenService = httpContextAccessor.HttpContext.RequestServices.GetService<ICurrentTokenService>();
+
+                    builder.DefaultRequestHeaders.Add("Authorization", $"Bearer {currentTokenService.Get()}");
                 });
         }
 
