@@ -23,7 +23,7 @@
             {
                 this.currentTokenService.Set(token);
 
-                context.Request.Headers.Append("Authorization", $"Bearer {token}");
+                context.Request.Headers.Append(WebConstants.AuthorizationHeader, $"{WebConstants.AuthenticatioScheme} {token}");
             }
 
             await next.Invoke(context);

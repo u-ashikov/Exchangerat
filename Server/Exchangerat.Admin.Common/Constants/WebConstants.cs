@@ -3,6 +3,8 @@
     public static class WebConstants
     {
         public const string AuthCookieKey = "ExchangeRatAuthCookie";
+        public const string AuthorizationHeader = "Authorization";
+        public const string AuthenticatioScheme = "Bearer";
 
         public static class Controllers
         {
