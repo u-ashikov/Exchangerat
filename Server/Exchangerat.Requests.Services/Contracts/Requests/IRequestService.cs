@@ -1,5 +1,6 @@
 ﻿namespace Exchangerat.Requests.Services.Contracts.Requests
 {
+    using Data.Enums;
     using Exchangerat.Requests.Models.Models.Requests;
     using Infrastructure;
     using System.Threading.Tasks;
@@ -10,6 +11,6 @@
 
         Task<Result> Create(CreateRequestFormModel model, string userId);
 
-        Task Approve(int requestId);
+        Task UpdateStatus(int requestId, Status status);
     }
 }

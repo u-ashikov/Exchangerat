@@ -90,7 +90,7 @@
             return Result.Success;
         }
 
-        public async Task Approve(int requestId)
+        public async Task UpdateStatus(int requestId, Status status)
         {
             var request = await this.dbContext.ExchangeratRequests.FirstOrDefaultAsync(r => r.Id == requestId);
 
@@ -99,7 +99,7 @@
                 return;
             }
 
-            request.Status = Status.Approved;
+            request.Status = status;
 
             await this.dbContext.SaveChangesAsync();
         }

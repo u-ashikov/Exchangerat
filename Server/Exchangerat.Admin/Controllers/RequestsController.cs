@@ -34,5 +34,13 @@
 
             return this.RedirectToAction(nameof(GetAll));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Cancel(int requestId)
+        {
+            await this.publisher.Publish(new RequestCancelledMessage() { RequestId = requestId });
+
+            return this.RedirectToAction(nameof(GetAll));
+        }
     }
 }

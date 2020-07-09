@@ -1,6 +1,6 @@
 ﻿namespace Exchangerat.Messages.Admin
 {
-    public class RequestApprovedMessage : BaseRequestStatusUpdatedMessage
+    public class RequestCancelledMessage : BaseRequestStatusUpdatedMessage
     {
         public int? AccountId { get; set; }
     }

@@ -1,5 +1,6 @@
 ﻿namespace Exchangerat.Requests.Messages
 {
+    using Data.Enums;
     using Exchangerat.Messages.Admin;
     using Exchangerat.Requests.Services.Contracts.Requests;
     using MassTransit;
@@ -21,7 +22,7 @@
         {
             var message = context.Message;
 
-            await this.requests.Approve(message.RequestId);
+            await this.requests.UpdateStatus(message.RequestId, Status.Approved);
 
             await this.publisher.Publish(new AccountCreatedMessage() { UserId = message.UserId });
         }

@@ -55,10 +55,7 @@ namespace Exchangerat.Requests
                 {
                     builder.BaseAddress = new Uri("http://localhost:5000/api");
 
-                    var httpContext = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext;
-                    var token = httpContext.Request.Headers[WebConstants.AuthorizationHeaderName];
-
-                    var requestServices = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext.RequestServices;
+                    var requestServices = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext?.RequestServices;
 
                     var currentToken = requestServices?.GetService<ICurrentTokenService>()?.Get();
 
@@ -76,6 +73,7 @@ namespace Exchangerat.Requests
                 .AddMassTransit(mt =>
                 {
                     mt.AddConsumer<CreateAccountApprovedConsumer>();
+                    mt.AddConsumer<RequestCancelledConsumer>();
 
                     mt.AddBus(bus => Bus.Factory.CreateUsingRabbitMq(rmq =>
                     {
@@ -84,6 +82,11 @@ namespace Exchangerat.Requests
                         rmq.ReceiveEndpoint(nameof(CreateAccountApprovedConsumer), endPoint =>
                         {
                             endPoint.ConfigureConsumer<CreateAccountApprovedConsumer>(bus);
+                        });
+
+                        rmq.ReceiveEndpoint(nameof(RequestCancelledConsumer), endPoint =>
+                        {
+                            endPoint.ConfigureConsumer<RequestCancelledConsumer>(bus);
                         });
                     }));
                 })
