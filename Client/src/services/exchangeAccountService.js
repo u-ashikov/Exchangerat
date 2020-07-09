@@ -10,12 +10,12 @@ function getAccountDetailsById(accountId) {
     return exchangeAccountService.get('/api/exchangeAccounts/getAccountTransactions', { params:  { accountId } });
 }
 
-function getActiveByClientForTransaction() {
-    return exchangeAccountService.get('/api/exchangeAccounts/GetActiveByClientForTransaction');
+function getActiveByClient() {
+    return exchangeAccountService.get('/api/exchangeAccounts/getActiveByClient');
 }
 
 export default {
     getMy,
     getAccountDetailsById,
-    getActiveByClientForTransaction
+    getActiveByClient
 }
