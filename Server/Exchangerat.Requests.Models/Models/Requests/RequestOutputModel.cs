@@ -1,4 +1,4 @@
-﻿namespace Exchangerat.Requests.Models.Requests
+﻿namespace Exchangerat.Requests.Models.Models.Requests
 {
     using System;
 
@@ -7,6 +7,10 @@
         public int Id { get; set; }
 
         public string RequestType { get; set; }
+
+        public string UserId { get; set; }
+
+        public int? AccountId { get; set; }
 
         public string Status { get; set; }
 

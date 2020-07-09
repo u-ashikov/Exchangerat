@@ -1,4 +1,4 @@
-﻿namespace Exchangerat.Requests.Models.RequestTypes
+﻿namespace Exchangerat.Requests.Models.Models.RequestTypes
 {
     public class RequestTypeBaseInfoModel
     {

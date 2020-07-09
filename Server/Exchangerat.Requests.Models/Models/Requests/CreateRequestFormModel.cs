@@ -1,4 +1,4 @@
-﻿namespace Exchangerat.Requests.Models.Requests
+﻿namespace Exchangerat.Requests.Models.Models.Requests
 {
     public class CreateRequestFormModel
     {
