@@ -4,7 +4,10 @@ namespace Exchangerat.Clients
     using Exchangerat.Clients.Services.Contracts.Clients;
     using Exchangerat.Clients.Services.Implementations.Clients;
     using Exchangerat.Infrastructure;
+    using Exchangerat.Services.ExchangeAccounts;
     using Infrastructure.Extensions;
+    using MassTransit;
+    using Messages;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -33,6 +36,7 @@ namespace Exchangerat.Clients
             services.AddTransient<IClientService, ClientService>();
             services.AddTransient<IExchangeAccountService, ExchangeAccountService>();
             services.AddTransient<ITransactionService, TransactionService>();
+            services.AddTransient<IIdentityNumberGenerator, IdentityNumberGenerator>();
 
             services
                 .AddRefitClient<IIdentityService>()
@@ -40,6 +44,23 @@ namespace Exchangerat.Clients
                 {
                     builder.BaseAddress = new Uri("http://localhost:5001/api/Identity");
                 });
+
+            services
+                .AddMassTransit(mt =>
+                {
+                    mt.AddConsumer<AccountCreatedConsumer>();
+
+                    mt.AddBus(bus => Bus.Factory.CreateUsingRabbitMq(rmq =>
+                    {
+                        rmq.Host("rabbitmq://localhost");
+
+                        rmq.ReceiveEndpoint(nameof(AccountCreatedConsumer), endPoint =>
+                        {
+                            endPoint.ConfigureConsumer<AccountCreatedConsumer>(bus);
+                        });
+                    }));
+                })
+                .AddMassTransitHostedService();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

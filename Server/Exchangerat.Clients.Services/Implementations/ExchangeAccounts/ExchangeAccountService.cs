@@ -1,11 +1,14 @@
 ﻿namespace Exchangerat.Clients.Services.Implementations.ExchangeAccounts
 {
     using Data;
+    using Exchangerat.Clients.Data.Models;
     using Exchangerat.Clients.Models.ExchangeAccounts;
     using Exchangerat.Clients.Models.Transactions;
     using Exchangerat.Clients.Services.Contracts.ExchangeAccounts;
+    using Exchangerat.Services.ExchangeAccounts;
     using Infrastructure;
     using Microsoft.EntityFrameworkCore;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -14,9 +17,12 @@
     {
         private readonly ClientsDbContext dbContext;
 
-        public ExchangeAccountService(ClientsDbContext dbContext)
+        private readonly IIdentityNumberGenerator identityNumberGenerator;
+
+        public ExchangeAccountService(ClientsDbContext dbContext, IIdentityNumberGenerator identityNumberGenerator)
         {
             this.dbContext = dbContext;
+            this.identityNumberGenerator = identityNumberGenerator;
         }
 
         public async Task<Result<ICollection<ClientExchangeAccountOutputModel>>> GetMy(string userId)
@@ -149,6 +155,48 @@
             }
 
             return existingAccount.OwnerId == owner.Id;
+        }
+
+        public async Task Create(string userId)
+        {
+            var existingClient = await this.dbContext.Clients.FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (existingClient == null)
+            {
+                return;
+            }
+
+            var exchangeAccountType = await this.dbContext.ExchangeAccountTypes.FirstOrDefaultAsync(eat => eat.Name == "Standard");
+
+            if (exchangeAccountType == null)
+            {
+                return;
+            }
+
+            var exchangeAccount = new ExchangeAccount()
+            {
+                OwnerId = existingClient.Id,
+                CreatedAt = DateTime.UtcNow,
+                IsActive = true,
+                Type = exchangeAccountType
+            };
+
+            var identityNumber = this.identityNumberGenerator.Generate();
+
+            var accountExists = this.dbContext.ExchangeAccounts.Any(ea => ea.IdentityNumber == identityNumber);
+
+            while (accountExists)
+            {
+                identityNumber = this.identityNumberGenerator.Generate();
+
+                accountExists = this.dbContext.ExchangeAccounts.Any(ea => ea.IdentityNumber == identityNumber);
+            }
+
+            exchangeAccount.IdentityNumber = identityNumber;
+
+            this.dbContext.ExchangeAccounts.Add(exchangeAccount);
+
+            await this.dbContext.SaveChangesAsync();
         }
     }
 }

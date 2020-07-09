@@ -14,5 +14,7 @@
         Task<Result<ExchangeAccountInfoOutputModel>> GetAccountDetails(string userId, int accountId);
 
         Task<bool> IsOwner(int accountId, string userId);
+
+        Task Create(string userId);
     }
 }
