@@ -1,8 +1,10 @@
 ﻿namespace Exchangerat.Requests.Services.Implementations.Requests
 {
+    using Constants;
     using Contracts.ExchangeAccounts;
     using Data;
     using Data.Enums;
+    using Exchangerat.Requests.Common.Constants;
     using Exchangerat.Requests.Data.Models;
     using Exchangerat.Requests.Models.Requests;
     using Exchangerat.Requests.Services.Contracts.Requests;
@@ -51,12 +53,12 @@
 
             if (createAccountRequestType == null)
             {
-                return Result.Failure("Sorry, something went wrong.");
+                return Result.Failure(WebConstants.DefaultErrorMessage);
             }
 
             if (model.RequestTypeId != createAccountRequestType.Id && !model.AccountId.HasValue)
             {
-                return Result.Failure("Account does not exists.");
+                return Result.Failure(ServiceConstants.AccountDoesNotExist);
             }
 
             var request = new ExchangeratRequest()
@@ -73,7 +75,7 @@
 
                 if (!isAccountOwner)
                 {
-                    return Result.Failure("Account does not exists.");
+                    return Result.Failure(ServiceConstants.AccountDoesNotExist);
                 }
 
                 request.AccountId = model.AccountId;
