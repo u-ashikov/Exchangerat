@@ -93,6 +93,8 @@ export default {
     },
     methods: {
         makeRequest: function () {
+            var self = this;
+
             this.$v.$touch()
 
             if (this.$v.$invalid) {
@@ -107,10 +109,10 @@ export default {
 
             requestService.create(data)
             .then(function (response) {
-                console.log(response);
+                self.$router.push("/");
             })
             .catch(function (error) {
-                console.log(error);
+                self.errors = errorHandler.extractErrorsFromResponse(error.response);
             });
         }
     },
