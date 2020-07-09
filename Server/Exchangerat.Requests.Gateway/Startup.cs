@@ -1,10 +1,12 @@
 namespace Exchangerat.Requests.Gateway
 {
+    using Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
+    using Middlewares;
+    using Services.Identity;
 
     public class Startup
     {
@@ -18,27 +20,21 @@ namespace Exchangerat.Requests.Gateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services
+                .AddApplicationSettings(this.Configuration)
+                .AddAuthenticationWithJwtBearer(this.Configuration)
+                .AddHttpContextAccessor()
+                .AddTransient<JwtHeaderAuthenticationMiddleware>()
+                .AddScoped<ICurrentUserService, CurrentUserService>()
+                .AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app
+                .UseWebService(env)
+                .UseJwtHeaderAuthentication();
         }
     }
 }
