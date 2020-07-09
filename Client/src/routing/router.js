@@ -5,6 +5,7 @@ import Login from '../components/identity/Login'
 import MyAccounts from '../components/exchange-account/MyAccounts'
 import AccountDetails from '../components/exchange-account/AccountDetails'
 import CreateTransaction from '../components/transaction/Create'
+import RequestForm from '../components/request/RequestForm'
 
 import { store } from '../store/store.js'
 
@@ -14,7 +15,8 @@ const router = new VueRouter({
         { path: '/users/login', name: 'login', component: Login },
         { path: '/exchange-accounts/my', name: 'myAccounts', component: MyAccounts },
         { path: '/exchange-accounts/my/:accountId', name: 'accountTransactions', component: AccountDetails },
-        { path: '/transactions/create', name: 'createTransaction', component: CreateTransaction }
+        { path: '/transactions/create', name: 'createTransaction', component: CreateTransaction },
+        { path: '/exchange-accounts/request', name: 'createRequest', component: RequestForm }
     ],
     mode: "history"
 });
