@@ -47,10 +47,10 @@
         }
 
         [HttpGet]
-        [Route(nameof(GetActiveByClientForTransaction))]
-        public async Task<IActionResult> GetActiveByClientForTransaction()
+        [Route(nameof(GetActiveByClient))]
+        public async Task<IActionResult> GetActiveByClient()
         {
-            var result = await this.exchangeAccounts.GetActiveByClientForTransaction(this.currentUser.Id);
+            var result = await this.exchangeAccounts.GetActiveByClient(this.currentUser.Id);
 
             if (!result.Succeeded)
             {

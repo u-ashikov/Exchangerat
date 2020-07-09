@@ -46,7 +46,7 @@
             return Result<ICollection<ClientExchangeAccountOutputModel>>.SuccessWith(userAccounts);
         }
 
-        public async Task<Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>> GetActiveByClientForTransaction(
+        public async Task<Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>> GetActiveByClient(
             string userId)
         {
             var owner = this.dbContext.Clients.FirstOrDefault(c => c.UserId == userId);
@@ -130,6 +130,25 @@
             accountInfo.Transactions = accountInfo.Transactions.OrderByDescending(t => t.IssuedAt).ToList();
 
             return Result<ExchangeAccountInfoOutputModel>.SuccessWith(accountInfo);
+        }
+
+        public async Task<bool> IsOwner(int accountId, string userId)
+        {
+            var existingAccount = await this.dbContext.ExchangeAccounts.FirstOrDefaultAsync(ea => ea.Id == accountId);
+
+            if (existingAccount == null)
+            {
+                return false;
+            }
+
+            var owner = await this.dbContext.Clients.FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (owner == null)
+            {
+                return false;
+            }
+
+            return existingAccount.OwnerId == owner.Id;
         }
     }
 }
