@@ -198,5 +198,48 @@
 
             await this.dbContext.SaveChangesAsync();
         }
+
+        public async Task Block(string userId, int accountId)
+        {
+            var existingClient = await this.dbContext.Clients.FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (existingClient == null)
+            {
+                return;
+            }
+
+            var existingAccount = await this.dbContext.ExchangeAccounts.FirstOrDefaultAsync(ea => ea.Id == accountId && ea.OwnerId == existingClient.Id);
+
+            if (existingAccount == null)
+            {
+                return;
+            }
+
+            existingAccount.IsActive = false;
+
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task Delete(string userId, int accountId)
+        {
+            var existingClient = await this.dbContext.Clients.FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (existingClient == null)
+            {
+                return;
+            }
+
+            var existingAccount = await this.dbContext.ExchangeAccounts.FirstOrDefaultAsync(ea => ea.Id == accountId && ea.OwnerId == existingClient.Id);
+
+            if (existingAccount == null)
+            {
+                return;
+            }
+
+            existingAccount.IsActive = false;
+            existingAccount.ClosedAt = DateTime.UtcNow;
+
+            await this.dbContext.SaveChangesAsync();
+        }
     }
 }

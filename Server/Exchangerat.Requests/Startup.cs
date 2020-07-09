@@ -72,16 +72,16 @@ namespace Exchangerat.Requests
             services
                 .AddMassTransit(mt =>
                 {
-                    mt.AddConsumer<CreateAccountApprovedConsumer>();
+                    mt.AddConsumer<RequestApprovedConsumer>();
                     mt.AddConsumer<RequestCancelledConsumer>();
 
                     mt.AddBus(bus => Bus.Factory.CreateUsingRabbitMq(rmq =>
                     {
                         rmq.Host("rabbitmq://localhost");
 
-                        rmq.ReceiveEndpoint(nameof(CreateAccountApprovedConsumer), endPoint =>
+                        rmq.ReceiveEndpoint(nameof(RequestApprovedConsumer), endPoint =>
                         {
-                            endPoint.ConfigureConsumer<CreateAccountApprovedConsumer>(bus);
+                            endPoint.ConfigureConsumer<RequestApprovedConsumer>(bus);
                         });
 
                         rmq.ReceiveEndpoint(nameof(RequestCancelledConsumer), endPoint =>

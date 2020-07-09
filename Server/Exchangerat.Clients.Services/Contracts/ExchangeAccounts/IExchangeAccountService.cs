@@ -16,5 +16,9 @@
         Task<bool> IsOwner(int accountId, string userId);
 
         Task Create(string userId);
+
+        Task Block(string userId, int accountId);
+
+        Task Delete(string userId, int accountId);
     }
 }

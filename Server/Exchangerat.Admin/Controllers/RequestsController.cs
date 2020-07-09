@@ -26,11 +26,11 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Approve(int requestId, string userId, int? accountId)
+        public async Task<IActionResult> Approve(int requestId, string userId, string requestType, int? accountId)
         {
             // TODO: Should I send the token as a header?
 
-            await this.publisher.Publish(new RequestApprovedMessage() { RequestId = requestId, UserId = userId, AccountId = accountId });
+            await this.publisher.Publish(new RequestApprovedMessage() { RequestId = requestId, UserId = userId, AccountId = accountId, RequestType = requestType});
 
             return this.RedirectToAction(nameof(GetAll));
         }

@@ -49,6 +49,8 @@ namespace Exchangerat.Clients
                 .AddMassTransit(mt =>
                 {
                     mt.AddConsumer<AccountCreatedConsumer>();
+                    mt.AddConsumer<AccountBlockedConsumer>();
+                    mt.AddConsumer<AccountDeletedConsumer>();
 
                     mt.AddBus(bus => Bus.Factory.CreateUsingRabbitMq(rmq =>
                     {
@@ -57,6 +59,16 @@ namespace Exchangerat.Clients
                         rmq.ReceiveEndpoint(nameof(AccountCreatedConsumer), endPoint =>
                         {
                             endPoint.ConfigureConsumer<AccountCreatedConsumer>(bus);
+                        });
+
+                        rmq.ReceiveEndpoint(nameof(AccountBlockedConsumer), endPoint =>
+                        {
+                            endPoint.ConfigureConsumer<AccountBlockedConsumer>(bus);
+                        });
+
+                        rmq.ReceiveEndpoint(nameof(AccountDeletedConsumer), endPoint =>
+                        {
+                            endPoint.ConfigureConsumer<AccountDeletedConsumer>(bus);
                         });
                     }));
                 })
