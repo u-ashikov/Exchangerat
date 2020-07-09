@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-
-namespace Exchangerat.Clients.Controllers
+﻿namespace Exchangerat.Clients.Controllers
 {
     using Exchangerat.Controllers;
     using Exchangerat.Services.Identity;

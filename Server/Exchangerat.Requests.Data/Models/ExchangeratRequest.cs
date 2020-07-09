@@ -1,6 +1,6 @@
 ﻿namespace Exchangerat.Requests.Data.Models
 {
-    using Exchangerat.Requests.Data.Enums;
+    using Enums;
     using System;
 
     public class ExchangeratRequest

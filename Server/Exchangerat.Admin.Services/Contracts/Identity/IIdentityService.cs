@@ -1,4 +1,4 @@
-﻿namespace Exchangerat.Admin.Services.Contracts
+﻿namespace Exchangerat.Admin.Services.Contracts.Identity
 {
     using Exchangerat.Admin.Models.Models.Identity;
     using Refit;

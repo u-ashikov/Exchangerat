@@ -3,7 +3,7 @@
     using Exchangerat.Messages.Admin;
     using MassTransit;
     using Microsoft.AspNetCore.Mvc;
-    using Services.Contracts;
+    using Services.Contracts.Requests;
     using System.Threading.Tasks;
 
     public class RequestsController : AdminController

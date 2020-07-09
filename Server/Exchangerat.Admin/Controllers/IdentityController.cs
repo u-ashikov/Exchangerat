@@ -2,11 +2,11 @@
 {
     using Exchangerat.Admin.Common.Constants;
     using Exchangerat.Admin.Models.Models.Identity;
-    using Exchangerat.Admin.Services.Contracts;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Refit;
+    using Services.Contracts.Identity;
     using System;
     using System.Threading.Tasks;
 
