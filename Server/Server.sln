@@ -51,7 +51,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Admin.Models", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Admin.Services", "Exchangerat.Admin.Services\Exchangerat.Admin.Services.csproj", "{37237799-BED2-4BD3-8FD2-CC8E8C50EBD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Admin.Common", "Exchangerat.Admin.Common\Exchangerat.Admin.Common.csproj", "{44DFAC7C-EA71-4F58-91DD-E0C0C5268389}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Admin.Common", "Exchangerat.Admin.Common\Exchangerat.Admin.Common.csproj", "{44DFAC7C-EA71-4F58-91DD-E0C0C5268389}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateways", "Gateways", "{F64A22FC-23A6-4C57-A94B-FC04777DF605}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Requests", "Requests", "{A10AC7E4-CEB9-4CCC-945F-51FE0DCF062F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Requests.Gateway", "Exchangerat.Requests.Gateway\Exchangerat.Requests.Gateway.csproj", "{88DFED12-799A-42A3-9FF1-F80979E5D7A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Requests.Gateway.Models", "Exchangerat.Requests.Gateway.Models\Exchangerat.Requests.Gateway.Models.csproj", "{83BA7043-F7C8-408D-A355-5DC189915870}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Requests.Gateway.Services", "Exchangerat.Requests.Gateway.Services\Exchangerat.Requests.Gateway.Services.csproj", "{C5FDAD4D-7401-43BA-BC47-06E98A374DFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,6 +149,18 @@ Global
 		{44DFAC7C-EA71-4F58-91DD-E0C0C5268389}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44DFAC7C-EA71-4F58-91DD-E0C0C5268389}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44DFAC7C-EA71-4F58-91DD-E0C0C5268389}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88DFED12-799A-42A3-9FF1-F80979E5D7A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88DFED12-799A-42A3-9FF1-F80979E5D7A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88DFED12-799A-42A3-9FF1-F80979E5D7A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88DFED12-799A-42A3-9FF1-F80979E5D7A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83BA7043-F7C8-408D-A355-5DC189915870}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83BA7043-F7C8-408D-A355-5DC189915870}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83BA7043-F7C8-408D-A355-5DC189915870}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83BA7043-F7C8-408D-A355-5DC189915870}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5FDAD4D-7401-43BA-BC47-06E98A374DFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5FDAD4D-7401-43BA-BC47-06E98A374DFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5FDAD4D-7401-43BA-BC47-06E98A374DFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5FDAD4D-7401-43BA-BC47-06E98A374DFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -164,6 +186,10 @@ Global
 		{3EA3461F-1278-4400-A356-3F918E2FA35E} = {67335EBD-64D3-4A18-9455-9BD3116D95BD}
 		{37237799-BED2-4BD3-8FD2-CC8E8C50EBD5} = {67335EBD-64D3-4A18-9455-9BD3116D95BD}
 		{44DFAC7C-EA71-4F58-91DD-E0C0C5268389} = {67335EBD-64D3-4A18-9455-9BD3116D95BD}
+		{A10AC7E4-CEB9-4CCC-945F-51FE0DCF062F} = {F64A22FC-23A6-4C57-A94B-FC04777DF605}
+		{88DFED12-799A-42A3-9FF1-F80979E5D7A6} = {A10AC7E4-CEB9-4CCC-945F-51FE0DCF062F}
+		{83BA7043-F7C8-408D-A355-5DC189915870} = {A10AC7E4-CEB9-4CCC-945F-51FE0DCF062F}
+		{C5FDAD4D-7401-43BA-BC47-06E98A374DFF} = {A10AC7E4-CEB9-4CCC-945F-51FE0DCF062F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6AF09391-F961-452D-9163-F1A938D9CE18}
