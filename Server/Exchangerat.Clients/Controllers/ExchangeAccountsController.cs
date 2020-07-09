@@ -1,4 +1,6 @@
-﻿namespace Exchangerat.Clients.Controllers
+﻿using Microsoft.AspNetCore.Authorization;
+
+namespace Exchangerat.Clients.Controllers
 {
     using Exchangerat.Controllers;
     using Exchangerat.Services.Identity;
@@ -59,5 +61,10 @@
 
             return this.Ok(result.Data);
         }
+
+        [HttpGet]
+        [Route(nameof(IsOwner))]
+        public async Task<IActionResult> IsOwner(int accountId, string userId)
+            => this.Ok(await this.exchangeAccounts.IsOwner(accountId, userId));
     }
 }
