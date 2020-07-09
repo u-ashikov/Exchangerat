@@ -1,7 +1,8 @@
 ﻿namespace Exchangerat.Requests.Services.Contracts.RequestTypes
 {
+    using Exchangerat.Requests.Models.Models.RequestTypes;
+
     using Infrastructure;
-    using Exchangerat.Requests.Models.RequestTypes;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 

@@ -13,5 +13,7 @@
         }
 
         public string Id => this.httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        public bool IsAdmin => this.httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role) == "Administrator";
     }
 }

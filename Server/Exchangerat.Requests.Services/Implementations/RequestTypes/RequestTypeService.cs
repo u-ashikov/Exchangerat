@@ -1,7 +1,7 @@
 ﻿namespace Exchangerat.Requests.Services.Implementations.RequestTypes
 {
     using Data;
-    using Exchangerat.Requests.Models.RequestTypes;
+    using Exchangerat.Requests.Models.Models.RequestTypes;
     using Exchangerat.Requests.Services.Contracts.RequestTypes;
     using Infrastructure;
     using Microsoft.EntityFrameworkCore;

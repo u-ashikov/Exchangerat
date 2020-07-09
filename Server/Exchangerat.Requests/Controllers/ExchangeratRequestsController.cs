@@ -1,7 +1,7 @@
 ﻿namespace Exchangerat.Requests.Controllers
 {
     using Exchangerat.Controllers;
-    using Exchangerat.Requests.Models.Requests;
+    using Exchangerat.Requests.Models.Models.Requests;
     using Exchangerat.Requests.Services.Contracts.Requests;
     using Exchangerat.Services.Identity;
     using Microsoft.AspNetCore.Authorization;
