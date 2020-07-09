@@ -1,4 +1,4 @@
-﻿namespace Exchangerat.Admin.Services.Contracts
+﻿namespace Exchangerat.Services.Identity
 {
     public interface ICurrentTokenService
     {

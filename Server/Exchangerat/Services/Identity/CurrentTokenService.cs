@@ -1,7 +1,5 @@
-﻿namespace Exchangerat.Admin.Services.Implementations.Identity
+﻿namespace Exchangerat.Services.Identity
 {
-    using Exchangerat.Admin.Services.Contracts;
-
     public class CurrentTokenService : ICurrentTokenService
     {
         private string currentToken;
