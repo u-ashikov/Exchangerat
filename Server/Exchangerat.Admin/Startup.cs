@@ -1,9 +1,8 @@
 namespace Exchangerat.Admin
 {
-    using Exchangerat.Admin.Infrastructure.Middlewares;
-    using Exchangerat.Admin.Services.Contracts;
-    using Exchangerat.Admin.Services.Implementations.Identity;
     using Exchangerat.Infrastructure;
+    using Exchangerat.Services.Identity;
+    using Infrastructure.Middlewares;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -11,6 +10,7 @@ namespace Exchangerat.Admin
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Refit;
+    using Services.Contracts;
     using System;
 
     public class Startup
