@@ -1,10 +1,14 @@
 ﻿namespace Exchangerat.Requests.Services.Implementations.Requests
 {
-    using Exchangerat.Infrastructure;
-    using Exchangerat.Requests.Data;
+    using Contracts.ExchangeAccounts;
+    using Data;
+    using Data.Enums;
+    using Exchangerat.Requests.Data.Models;
     using Exchangerat.Requests.Models.Requests;
     using Exchangerat.Requests.Services.Contracts.Requests;
+    using Infrastructure;
     using Microsoft.EntityFrameworkCore;
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -12,9 +16,12 @@
     {
         private readonly RequestsDbContext dbContext;
 
-        public RequestService(RequestsDbContext dbContext)
+        private readonly IExchangeAccountService exchangeAccounts;
+
+        public RequestService(RequestsDbContext dbContext, IExchangeAccountService exchangeAccounts)
         {
             this.dbContext = dbContext;
+            this.exchangeAccounts = exchangeAccounts;
         }
 
         public async Task<Result<AllRequestsOutputModel>> GetAll()
@@ -35,6 +42,48 @@
             result.Requests = requests;
 
             return Result<AllRequestsOutputModel>.SuccessWith(result);
+        }
+
+        public async Task<Result> Create(CreateRequestFormModel model, string userId)
+        {
+            var createAccountRequestType =
+                this.dbContext.RequestTypes.FirstOrDefault(rt => rt.Type == "Create Account");
+
+            if (createAccountRequestType == null)
+            {
+                return Result.Failure("Sorry, something went wrong.");
+            }
+
+            if (model.RequestTypeId != createAccountRequestType.Id && !model.AccountId.HasValue)
+            {
+                return Result.Failure("Account does not exists.");
+            }
+
+            var request = new ExchangeratRequest()
+            {
+                RequestTypeId = model.RequestTypeId,
+                Status = Status.Pending,
+                UserId = userId,
+                IssuedAt = DateTime.UtcNow
+            };
+
+            if (model.RequestTypeId != createAccountRequestType.Id)
+            {
+                var isAccountOwner = await this.exchangeAccounts.IsOwner(model.AccountId.Value, userId);
+
+                if (!isAccountOwner)
+                {
+                    return Result.Failure("Account does not exists.");
+                }
+
+                request.AccountId = model.AccountId;
+            }
+
+            this.dbContext.ExchangeratRequests.Add(request);
+
+            await this.dbContext.SaveChangesAsync();
+
+            return Result.Success;
         }
     }
 }

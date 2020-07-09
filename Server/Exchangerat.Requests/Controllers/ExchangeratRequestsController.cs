@@ -1,7 +1,9 @@
 ﻿namespace Exchangerat.Requests.Controllers
 {
     using Exchangerat.Controllers;
+    using Exchangerat.Requests.Models.Requests;
     using Exchangerat.Requests.Services.Contracts.Requests;
+    using Exchangerat.Services.Identity;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
@@ -10,9 +12,12 @@
     {
         private readonly IRequestService requests;
 
-        public ExchangeratRequestsController(IRequestService requests)
+        private readonly ICurrentUserService currentUser;
+
+        public ExchangeratRequestsController(IRequestService requests, ICurrentUserService currentUser)
         {
             this.requests = requests;
+            this.currentUser = currentUser;
         }
 
         [HttpGet]
@@ -23,6 +28,20 @@
             var result = await this.requests.GetAll();
 
             return this.Ok(result.Data);
+        }
+
+        [HttpPost]
+        [Route(nameof(Create))]
+        public async Task<IActionResult> Create([FromBody]CreateRequestFormModel model)
+        {
+            var result = await this.requests.Create(model, this.currentUser.Id);
+
+            if (!result.Succeeded)
+            {
+                return this.BadRequest(result.Errors);
+            }
+
+            return this.Ok();
         }
     }
 }
