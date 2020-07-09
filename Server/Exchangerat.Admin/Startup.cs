@@ -1,3 +1,5 @@
+using MassTransit;
+
 namespace Exchangerat.Admin
 {
     using Exchangerat.Infrastructure;
@@ -52,6 +54,16 @@ namespace Exchangerat.Admin
 
                     builder.DefaultRequestHeaders.Add("Authorization", $"Bearer {currentTokenService.Get()}");
                 });
+
+            services
+                .AddMassTransit(mt =>
+                {
+                    mt.AddBus(bus => Bus.Factory.CreateUsingRabbitMq(rmq =>
+                    {
+                        rmq.Host("rabbitmq://localhost");
+                    }));
+                })
+                .AddMassTransitHostedService();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

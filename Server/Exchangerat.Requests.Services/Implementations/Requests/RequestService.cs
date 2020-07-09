@@ -6,7 +6,7 @@
     using Data.Enums;
     using Exchangerat.Requests.Common.Constants;
     using Exchangerat.Requests.Data.Models;
-    using Exchangerat.Requests.Models.Requests;
+    using Exchangerat.Requests.Models.Models.Requests;
     using Exchangerat.Requests.Services.Contracts.Requests;
     using Infrastructure;
     using Microsoft.EntityFrameworkCore;
@@ -35,6 +35,8 @@
                 {
                    Id = er.Id,
                    RequestType = er.RequestType.Type,
+                   UserId = er.UserId,
+                   AccountId = er.AccountId,
                    Status = er.Status.ToString(),
                    IssuedAt = er.IssuedAt
                 })
@@ -86,6 +88,20 @@
             await this.dbContext.SaveChangesAsync();
 
             return Result.Success;
+        }
+
+        public async Task Approve(int requestId)
+        {
+            var request = await this.dbContext.ExchangeratRequests.FirstOrDefaultAsync(r => r.Id == requestId);
+
+            if (request == null || request.Status != Status.Pending)
+            {
+                return;
+            }
+
+            request.Status = Status.Approved;
+
+            await this.dbContext.SaveChangesAsync();
         }
     }
 }
