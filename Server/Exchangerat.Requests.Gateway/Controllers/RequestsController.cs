@@ -27,16 +27,16 @@
         [Route(nameof(GetAll))]
         public async Task<IActionResult> GetAll()
         {
-            var requests = await this.requests.GetAll();
+            var allRequests = await this.requests.GetAll();
 
-            var userIds = new HashSet<string>(requests.Select(r => r.UserId));
-            var clients = await this.clients.GetAllByUserIds(userIds);
+            var userIds = new HashSet<string>(allRequests.Select(r => r.UserId));
+            var clientsByRequests = await this.clients.GetAllByUserIds(userIds);
 
             var result = new RequestListingOutputModel();
 
-            foreach (var request in requests)
+            foreach (var request in allRequests)
             {
-                var clientInfo = clients.FirstOrDefault(c => c.UserId == request.UserId);
+                var clientInfo = clientsByRequests.FirstOrDefault(c => c.UserId == request.UserId);
 
                 var clientRequest = new ClientRequestOutputModel()
                 {
