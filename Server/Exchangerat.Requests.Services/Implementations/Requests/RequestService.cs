@@ -11,6 +11,7 @@
     using Infrastructure;
     using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -26,10 +27,8 @@
             this.exchangeAccounts = exchangeAccounts;
         }
 
-        public async Task<Result<AllRequestsOutputModel>> GetAll()
+        public async Task<Result<IEnumerable<RequestOutputModel>>> GetAll()
         {
-            var result = new AllRequestsOutputModel();
-
             var requests = await this.dbContext.ExchangeratRequests
                 .Select(er => new RequestOutputModel() 
                 {
@@ -43,9 +42,7 @@
                 .AsNoTracking()
                 .ToListAsync();
 
-            result.Requests = requests;
-
-            return Result<AllRequestsOutputModel>.SuccessWith(result);
+            return Result<IEnumerable<RequestOutputModel>>.SuccessWith(requests);
         }
 
         public async Task<Result> Create(CreateRequestFormModel model, string userId)

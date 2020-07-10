@@ -3,11 +3,12 @@
     using Data.Enums;
     using Exchangerat.Requests.Models.Models.Requests;
     using Infrastructure;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public interface IRequestService
     {
-        Task<Result<AllRequestsOutputModel>> GetAll();
+        Task<Result<IEnumerable<RequestOutputModel>>> GetAll();
 
         Task<Result> Create(CreateRequestFormModel model, string userId);
 
