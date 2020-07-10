@@ -1,12 +1,13 @@
-﻿using System.Threading.Tasks;
-using Exchangerat.Admin.Models.Models.Requests;
-using Refit;
-
-namespace Exchangerat.Admin.Services.Contracts.Requests
+﻿namespace Exchangerat.Admin.Services.Contracts.Requests
 {
+    using Exchangerat.Admin.Models.Requests;
+    using Refit;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     public interface IRequestService
     {
-        [Get("/ExchangeratRequests/GetAll")]
-        Task<AllRequestsOutputModel> GetAll();
+        [Get("/Requests/GetAll")]
+        Task<IEnumerable<RequestViewModel>> GetAll();
     }
 }
