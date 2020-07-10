@@ -1,6 +1,6 @@
 ﻿namespace Exchangerat.Admin.Services.Contracts.Identity
 {
-    using Exchangerat.Admin.Models.Models.Identity;
+    using Exchangerat.Admin.Models.Identity;
     using Refit;
     using System.Threading.Tasks;
 

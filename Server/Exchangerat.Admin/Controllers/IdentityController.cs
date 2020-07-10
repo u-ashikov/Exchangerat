@@ -1,10 +1,10 @@
 ﻿namespace Exchangerat.Admin.Controllers
 {
     using Exchangerat.Admin.Common.Constants;
-    using Exchangerat.Admin.Models.Models.Identity;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Models.Identity;
     using Refit;
     using Services.Contracts.Identity;
     using System;
@@ -12,11 +12,11 @@
 
     public class IdentityController : AdminController
     {
-        private readonly IIdentityService identityService;
+        private readonly IIdentityService identity;
 
-        public IdentityController(IIdentityService identityService)
+        public IdentityController(IIdentityService identity)
         {
-            this.identityService = identityService;
+            this.identity = identity;
         }
 
         [AllowAnonymous]
@@ -33,7 +33,7 @@
 
             try
             {
-                var result = await this.identityService.Login(model, true);
+                var result = await this.identity.Login(model, true);
 
                 if (result != null && !string.IsNullOrEmpty(result.Token))
                 {
