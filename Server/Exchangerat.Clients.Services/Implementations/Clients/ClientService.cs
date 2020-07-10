@@ -7,6 +7,8 @@
     using Exchangerat.Services.Identity;
     using Infrastructure;
     using Microsoft.EntityFrameworkCore;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class ClientService : IClientService
@@ -52,6 +54,28 @@
             }
 
             return Result<int>.SuccessWith(client.Id);
+        }
+
+        public async Task<Result<IEnumerable<ClientOutputModel>>> GetAllByUserIds(IEnumerable<string> userIds)
+        {
+            if (userIds == null || !userIds.Any())
+            {
+                return Result<IEnumerable<ClientOutputModel>>.SuccessWith(Enumerable.Empty<ClientOutputModel>());
+            }
+
+            var allClients = await this.dbContext.Clients
+                .AsNoTracking()
+                .Where(c => userIds.Contains(c.UserId))
+                .Select(c => new ClientOutputModel()
+                {
+                    Id = c.Id,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    UserId = c.UserId
+                })
+                .ToListAsync();
+
+            return Result<IEnumerable<ClientOutputModel>>.SuccessWith(allClients);
         }
     }
 }

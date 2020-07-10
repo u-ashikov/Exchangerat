@@ -1,9 +1,12 @@
 ﻿namespace Exchangerat.Clients.Controllers
 {
+    using Constants;
     using Exchangerat.Clients.Models.Clients;
     using Exchangerat.Clients.Services.Contracts.Clients;
     using Exchangerat.Controllers;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public class ClientsController : BaseApiController
@@ -38,6 +41,21 @@
             if (!result.Succeeded)
             {
                 return this.BadRequest(result.Errors);
+            }
+
+            return this.Ok(result.Data);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        [Route(nameof(GetAllByUserIds))]
+        public async Task<IActionResult> GetAllByUserIds([FromQuery]IEnumerable<string> userIds)
+        {
+            var result = await this.clients.GetAllByUserIds(userIds);
+
+            if (!result.Succeeded)
+            {
+                return this.BadRequest(WebConstants.DefaultErrorMessage);
             }
 
             return this.Ok(result.Data);
