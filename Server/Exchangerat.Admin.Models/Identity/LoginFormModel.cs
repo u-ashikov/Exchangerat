@@ -1,4 +1,4 @@
-﻿namespace Exchangerat.Admin.Models.Models.Identity
+﻿namespace Exchangerat.Admin.Models.Identity
 {
     using System.ComponentModel.DataAnnotations;
 
