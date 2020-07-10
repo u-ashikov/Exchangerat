@@ -5,14 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Refit.HttpClientFactory" Version="5.1.67" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Exchangerat.Requests.Gateway.Services\Exchangerat.Requests.Gateway.Services.csproj" />
     <ProjectReference Include="..\Exchangerat\Exchangerat.csproj" />
   </ItemGroup>
 
