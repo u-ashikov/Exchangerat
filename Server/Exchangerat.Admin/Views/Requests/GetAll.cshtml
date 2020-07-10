@@ -1,4 +1,4 @@
-﻿@model AllRequestsOutputModel
+﻿@model Exchangerat.Admin.Models.Requests.RequestListingViewModel
 
 @{
     ViewBag.Title = "Requests";
@@ -18,6 +18,8 @@ else
         <thead>
             <tr>
                 <th scope="col">#</th>
+                <th scope="col">Client First Name</th>
+                <th scope="col">Client Last Name</th>
                 <th scope="col">Type</th>
                 <th scope="col">Status</th>
                 <th scope="col">Issued At</th>
@@ -29,6 +31,8 @@ else
             {
                 <tr>
                     <td>@request.Id</td>
+                    <td>@request.ClientFirstName</td>
+                    <td>@request.ClientLastName</td>
                     <td>@request.RequestType</td>
                     <td>@request.Status</td>
                     <td>@request.IssuedAt.ToShortDateString()</td>

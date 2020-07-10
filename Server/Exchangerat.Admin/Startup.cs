@@ -46,7 +46,7 @@ namespace Exchangerat.Admin
                 .AddRefitClient<IRequestService>()
                 .ConfigureHttpClient((serviceProvider, builder) =>
                 {
-                    builder.BaseAddress = new Uri("http://localhost:5002/api");
+                    builder.BaseAddress = new Uri("http://localhost:5004/api");
 
                     var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
 

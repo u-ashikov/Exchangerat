@@ -8,21 +8,21 @@
 
     public class RequestsController : AdminController
     {
-        private readonly IRequestService requestService;
+        private readonly IRequestService requests;
 
         private readonly IBus publisher;
 
-        public RequestsController(IRequestService requestService, IBus publisher)
+        public RequestsController(IRequestService requests, IBus publisher)
         {
-            this.requestService = requestService;
+            this.requests = requests;
             this.publisher = publisher;
         }
 
         public async Task<IActionResult> GetAll()
         {
-            var result = await this.requestService.GetAll();
+            var allRequests = await this.requests.GetAll();
 
-            return this.View(result);
+            return this.View(allRequests);
         }
 
         [HttpPost]
