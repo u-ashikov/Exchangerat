@@ -4,7 +4,6 @@
     using Exchangerat.Clients.Data.Models;
     using Exchangerat.Clients.Models.Clients;
     using Exchangerat.Clients.Services.Contracts.Clients;
-    using Exchangerat.Services.Identity;
     using Infrastructure;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
@@ -17,19 +16,21 @@
     {
         private readonly ClientsDbContext dbContext;
 
-        private readonly ICurrentUserService currentUser;
-
-        public ClientService(ClientsDbContext dbContext, ICurrentUserService currentUser)
+        public ClientService(ClientsDbContext dbContext)
         {
             this.dbContext = dbContext;
-            this.currentUser = currentUser;
         }
 
-        public async Task<Result<int>> Create(ClientInputModel model)
+        public async Task<Result<int>> Create(ClientInputModel model, string userId)
         {
-            // TODO: Check if there is already a client with the same user id.
+            var clientExists = await this.dbContext
+                .Clients
+                .AnyAsync(c => c.UserId == userId);
 
-            var userId = this.currentUser.Id;
+            if (clientExists)
+            {
+                return Result<int>.Failure(Messages.UserIsNotAClient);
+            }
 
             var client = new Client()
             {
@@ -46,11 +47,11 @@
             return Result<int>.SuccessWith(client.Id);
         }
 
-        public async Task<Result<int>> GetIdByUserId()
+        public async Task<Result<int>> GetIdByUserId(string userId)
         {
             var client = await this.dbContext
                 .Clients
-                .FirstOrDefaultAsync(c => c.UserId == this.currentUser.Id);
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
             if (client == null)
             {

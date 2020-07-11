@@ -7,9 +7,9 @@
 
     public interface IClientService
     {
-        Task<Result<int>> Create(ClientInputModel model);
+        Task<Result<int>> Create(ClientInputModel model, string userId);
 
-        Task<Result<int>> GetIdByUserId();
+        Task<Result<int>> GetIdByUserId(string userId);
 
         Task<Result<IEnumerable<ClientOutputModel>>> GetAllByUserIds(IEnumerable<string> userIds);
     }

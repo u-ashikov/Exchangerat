@@ -68,6 +68,11 @@
 
             var errors = identityResult.Errors.Select(e => e.Description);
 
+            if (identityResult.Succeeded)
+            {
+                await this.userManager.AddToRoleAsync(user, Role.User.ToString());
+            }
+
             return identityResult.Succeeded
                 ? Result<User>.SuccessWith(user)
                 : Result<User>.Failure(errors);

@@ -1,4 +1,6 @@
-﻿namespace Exchangerat.Clients.Controllers
+﻿using Exchangerat.Services.Identity;
+
+namespace Exchangerat.Clients.Controllers
 {
     using Constants;
     using Exchangerat.Clients.Models.Clients;
@@ -13,16 +15,19 @@
     {
         private readonly IClientService clients;
 
-        public ClientsController(IClientService clients)
+        private readonly ICurrentUserService currentUser;
+
+        public ClientsController(IClientService clients, ICurrentUserService currentUser)
         {
             this.clients = clients;
+            this.currentUser = currentUser;
         }
 
         [HttpPost]
         [Route(nameof(Create))]
         public async Task<IActionResult> Create([FromBody]ClientInputModel model)
         {
-            var result = await this.clients.Create(model);
+            var result = await this.clients.Create(model, this.currentUser.Id);
 
             if (!result.Succeeded)
             {
@@ -36,7 +41,7 @@
         [Route(nameof(GetClientId))]
         public async Task<IActionResult> GetClientId()
         {
-            var result = await this.clients.GetIdByUserId();
+            var result = await this.clients.GetIdByUserId(this.currentUser.Id);
 
             if (!result.Succeeded)
             {
