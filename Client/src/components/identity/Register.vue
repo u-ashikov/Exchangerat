@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-4 mx-auto">
+  <div class="col-md-3 mx-auto">
     <h1 class="text-center">Register</h1>
     <validation-error v-bind:errors="errors"></validation-error>
     <hr />
@@ -62,6 +62,9 @@
 
       <input type="submit" class="btn btn-success" value="Register" />
     </form>
+    <p class="my-3">
+      Already have an account? <router-link tag="a" :to="{ name: 'login' }">Sign in</router-link>
+    </p>
   </div>
 </template>
 

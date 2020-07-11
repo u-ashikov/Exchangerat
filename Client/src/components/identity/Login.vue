@@ -1,12 +1,6 @@
 <template>
 <div class="row">
-    <div class="col-4">
-      <img class="col-12" width="40" height="50" src="../../assets/logo.png" />
-      <p>
-        Send money easily.
-      </p>
-    </div>
-    <div class="col-md-4 mx-auto">
+    <div class="col-md-3 mx-auto">
     <h1 class="text-center">Login</h1>
     <validation-error v-bind:errors="errors"></validation-error>
     <hr />
@@ -25,6 +19,9 @@
 
       <input type="submit" class="btn btn-success" value="Login" />
     </form>
+    <p class="my-3">
+      Don't have an account? <router-link tag="a" :to="{ name: 'register' }">Sign up</router-link>
+    </p>
   </div>
 </div>
 </template>

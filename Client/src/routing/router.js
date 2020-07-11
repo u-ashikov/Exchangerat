@@ -1,5 +1,6 @@
 import VueRouter from 'vue-router'
 
+import Index from '../components/home/Index'
 import Register from '../components/identity/Register'
 import Login from '../components/identity/Login'
 import MyAccounts from '../components/exchange-account/MyAccounts'
@@ -11,6 +12,7 @@ import { store } from '../store/store.js'
 
 const router = new VueRouter({
     routes: [
+        { path: '/', name: 'home', component: Index },
         { path: '/users/register', name: 'register', component: Register },
         { path: '/users/login', name: 'login', component: Login },
         { path: '/exchange-accounts/my', name: 'myAccounts', component: MyAccounts },
