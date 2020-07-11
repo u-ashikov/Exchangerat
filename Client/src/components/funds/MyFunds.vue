@@ -21,6 +21,12 @@
             </tbody>
         </table>
       </div>
+      <div v-show="!funds || funds.length === 0 && errors.length === 0" class="container w-50 alert alert-success mx-auto my-5" role="alert" v-cloak>
+        <h4 class="alert-heading">Ooooops!</h4>
+        <p>Sorry, you don't have any funds yet. If you want you can add some by using the link bellow.</p>
+        <hr>
+        <router-link tag="a" class="btn btn-link" :to="{ name: 'add-funds' }">Add Funds</router-link>
+    </div>
       <div class="container alert alert-danger my-3" role="alert" v-show="errors.length !== 0" v-cloak>
           <p class="my-0" v-for="error in errors" v-bind:key="error">{{ error }}</p>
       </div>
