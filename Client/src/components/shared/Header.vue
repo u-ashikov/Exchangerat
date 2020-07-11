@@ -40,6 +40,9 @@
         <li class="nav-item" v-if="isAuthenticated">
             <router-link tag="a" class="nav-link" :to="{ name: 'createRequest' }">Create Request</router-link>
         </li>
+        <li class="nav-item" v-if="isAuthenticated">
+            <router-link tag="a" class="nav-link" :to="{ name: 'add-funds' }">Add Funds</router-link>
+        </li>
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item" v-if="isAuthenticated">
