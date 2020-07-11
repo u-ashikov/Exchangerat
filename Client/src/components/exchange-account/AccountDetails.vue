@@ -5,7 +5,7 @@
         <div class="container row mx-auto my-3">
             <div class="col-3 row">
                 <p class="col-12 font-weight-bold my-0">Account:</p>
-                <p class="col-12"><i class="fas fa-money-check"></i> {{ accountInfo.accountNumber }}</p>
+                <p class="col-12"><i class="fas fa-money-check"></i> {{ accountInfo.identityNumber }}</p>
             </div>
             <div class="col-3 row">
               <p class="col-12 font-weight-bold my-0">Balance</p>
@@ -29,8 +29,8 @@
                 <tr v-for="transaction in accountInfo.transactions" v-bind:key="transaction.senderAccountNumber">
                     <td>{{ transaction.senderAccountNumber}}</td>
                     <td>{{ transaction.receiverAccountNumber}}</td>
-                    <td v-if="transaction.senderAccountNumber === accountInfo.accountNumber"><i class="fas fa-arrow-alt-circle-down text-danger"></i></td>
-                    <td v-else-if="transaction.receiverAccountNumber === accountInfo.accountNumber"><i class="fas fa-arrow-alt-circle-up text-success"></i></td>
+                    <td v-if="transaction.senderAccountNumber === accountInfo.identityNumber"><i class="fas fa-arrow-alt-circle-down text-danger"></i></td>
+                    <td v-else-if="transaction.receiverAccountNumber === accountInfo.identityNumber"><i class="fas fa-arrow-alt-circle-up text-success"></i></td>
                     <td>&dollar; {{ transaction.amount | money }}</td>
                     <td>{{ transaction.description}}</td>
                     <td>{{ transaction.issuedAt | transactionDate }}</td>
@@ -65,7 +65,7 @@ export default {
   },
   filters: {
     money: function (value) {
-      if (!value) { return '';}
+      if (!value) { return 0;}
 
       return numeral(value).format('0,0');
     },

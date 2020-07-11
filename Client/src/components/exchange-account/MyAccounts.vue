@@ -23,7 +23,7 @@
         <h4 class="alert-heading">Ooooops!</h4>
         <p>Sorry, you don't have any accounts yet. If you want you can request one by using the link bellow.</p>
         <hr>
-        <router-link tag="a" class="btn btn-link" :to="{ name: 'requestAccount' }">Request Account</router-link>
+        <router-link tag="a" class="btn btn-link" :to="{ name: 'createRequest' }">Request Account</router-link>
     </div>
     </div>
 </template>
@@ -49,7 +49,7 @@ export default {
     filters: {
         money: function (value) {
             if (!value) {
-                return '';
+                return 0;
             }
 
             return numeral(value).format('0,0');
