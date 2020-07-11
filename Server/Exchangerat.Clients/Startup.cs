@@ -31,12 +31,12 @@ namespace Exchangerat.Clients
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddWebService<ClientsDbContext>(this.Configuration);
-
-            services.AddTransient<IClientService, ClientService>();
-            services.AddTransient<IExchangeAccountService, ExchangeAccountService>();
-            services.AddTransient<ITransactionService, TransactionService>();
-            services.AddTransient<IIdentityNumberGenerator, IdentityNumberGenerator>();
+            services
+                .AddWebService<ClientsDbContext>(this.Configuration)
+                .AddTransient<IClientService, ClientService>()
+                .AddTransient<IExchangeAccountService, ExchangeAccountService>()
+                .AddTransient<ITransactionService, TransactionService>()
+                .AddTransient<IIdentityNumberGenerator, IdentityNumberGenerator>();
 
             services
                 .AddRefitClient<IIdentityService>()
@@ -76,10 +76,8 @@ namespace Exchangerat.Clients
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app.UseWebService(env);
-            app.Initialize();
-            app.SeedData();
-        }
+            => app.UseWebService(env)
+                .Initialize()
+                .SeedData();
     }
 }

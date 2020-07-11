@@ -29,10 +29,8 @@ namespace Exchangerat.Identity
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app.UseWebService(env)
+            => app.UseWebService(env)
                 .Initialize()
                 .SeedData();
-        }
     }
 }

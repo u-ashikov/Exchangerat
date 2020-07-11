@@ -13,6 +13,8 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using static Exchangerat.Clients.Common.Constants.WebConstants;
+
     public class ExchangeAccountService : IExchangeAccountService
     {
         private readonly ClientsDbContext dbContext;
@@ -31,7 +33,7 @@
 
             if (owner == null)
             {
-                return Result<ICollection<ClientExchangeAccountOutputModel>>.Failure("You don't have any exchange accounts!");
+                return Result<ICollection<ClientExchangeAccountOutputModel>>.Failure(Messages.YouAreNotAClient);
             }
 
             var userAccounts = await this.dbContext
@@ -42,7 +44,7 @@
                 {
                     Id = ea.Id,
                     Balance = ea.Balance,
-                    AccountNumber = ea.IdentityNumber,
+                    IdentityNumber = ea.IdentityNumber,
                     Type = ea.Type.Name,
                     IsActive = ea.IsActive,
                     CreatedAt = ea.CreatedAt
@@ -59,7 +61,7 @@
 
             if (owner == null)
             {
-                return Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>.Failure("The are no accounts found.");
+                return Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>.Failure(Messages.NoAccountsFound);
             }
 
             var activeUserAccounts = await this.dbContext
@@ -77,13 +79,13 @@
             return Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>.SuccessWith(activeUserAccounts);
         }
 
-        public async Task<Result<ExchangeAccountInfoOutputModel>> GetAccountDetails(string userId, int accountId)
+        public async Task<Result<ExchangeAccountDetailsOutputModel>> GetAccountDetails(string userId, int accountId)
         {
             var owner = this.dbContext.Clients.FirstOrDefault(c => c.UserId == userId);
 
             if (owner == null)
             {
-                return Result<ExchangeAccountInfoOutputModel>.Failure("Exchange account not found.");
+                return Result<ExchangeAccountDetailsOutputModel>.Failure(Messages.YouAreNotAClient);
             }
 
             var exchangeAccount =
@@ -97,12 +99,12 @@
 
             if (exchangeAccount == null)
             {
-                return Result<ExchangeAccountInfoOutputModel>.Failure("Exchange account not found!");
+                return Result<ExchangeAccountDetailsOutputModel>.Failure(Messages.AccountNotFound);
             }
 
-            var accountInfo = new ExchangeAccountInfoOutputModel()
+            var accountInfo = new ExchangeAccountDetailsOutputModel()
             {
-                AccountNumber = exchangeAccount.IdentityNumber,
+                IdentityNumber = exchangeAccount.IdentityNumber,
                 AccountType = exchangeAccount.Type.Name,
                 Balance = exchangeAccount.Balance,
                 CreatedAt = exchangeAccount.CreatedAt
@@ -135,7 +137,7 @@
 
             accountInfo.Transactions = accountInfo.Transactions.OrderByDescending(t => t.IssuedAt).ToList();
 
-            return Result<ExchangeAccountInfoOutputModel>.SuccessWith(accountInfo);
+            return Result<ExchangeAccountDetailsOutputModel>.SuccessWith(accountInfo);
         }
 
         public async Task<bool> IsOwner(int accountId, string userId)
@@ -157,6 +159,7 @@
             return existingAccount.OwnerId == owner.Id;
         }
 
+        // TODO: Add exchange account type from the user selection.
         public async Task Create(string userId)
         {
             var existingClient = await this.dbContext.Clients.FirstOrDefaultAsync(c => c.UserId == userId);

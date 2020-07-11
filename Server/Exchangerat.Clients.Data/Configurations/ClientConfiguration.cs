@@ -24,8 +24,8 @@
 
             builder
                 .Property(c => c.Address)
-                .IsRequired()
-                .HasMaxLength(DataConstants.ClientAddressMaxLength);
+                .HasMaxLength(DataConstants.ClientAddressMaxLength)
+                .IsRequired();
 
             builder
                 .Property(c => c.UserId)

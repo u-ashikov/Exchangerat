@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Connections.Features;
-
-namespace Exchangerat.Clients.Services.Implementations.Transactions
+﻿namespace Exchangerat.Clients.Services.Implementations.Transactions
 {
     using Data;
     using Exchangerat.Clients.Data.Models;
     using Exchangerat.Clients.Models.Transactions;
     using Exchangerat.Clients.Services.Contracts.Transactions;
-    using Exchangerat.Services.Identity;
     using Infrastructure;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using static Exchangerat.Clients.Common.Constants.WebConstants;
 
     public class TransactionService : ITransactionService
     {
@@ -29,7 +28,7 @@ namespace Exchangerat.Clients.Services.Implementations.Transactions
 
             if (client == null)
             {
-                return Result.Failure("Transaction cannot be finished.");
+                return Result.Failure(Messages.TransactionFailure);
             }
 
             var senderAccount = await this.dbContext.ExchangeAccounts.FirstOrDefaultAsync(sa =>
@@ -39,12 +38,12 @@ namespace Exchangerat.Clients.Services.Implementations.Transactions
 
             if (senderAccount == null)
             {
-                errors.Add("The Sender Account does not exist.");
+                errors.Add(Messages.SenderAccountDoesNotExist);
             }
 
             if (senderAccount != null && senderAccount.Balance < model.Amount)
             {
-                errors.Add("Insufficient amount for this transaction.");
+                errors.Add(Messages.InsufficientAmount);
             }
 
             var receiverAccount =
@@ -53,13 +52,13 @@ namespace Exchangerat.Clients.Services.Implementations.Transactions
 
             if (receiverAccount == null)
             {
-                errors.Add("The Receiver Account does not exist.");
+                errors.Add(Messages.ReceiverAccountDoesNotExist);
             }
 
             if (senderAccount != null && receiverAccount != null &&
                 senderAccount.IdentityNumber == receiverAccount.IdentityNumber)
             {
-                errors.Add("You cannot create transaction between same accounts.");
+                errors.Add(Messages.TransactionBetweenSameAccounts);
             }
 
             if (errors.Any())

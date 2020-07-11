@@ -2,8 +2,6 @@
 {
     public static class DataConstants
     {
-        public const string DbName = "Exchangerat.ClientsDbConnection";
-
         public const int ClientFirstNameMinLength = 1;
         public const int ClientFirstNameMaxLength = 20;
         public const int ClientLastNameMinLength = 1;

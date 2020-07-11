@@ -1,13 +1,11 @@
-﻿using System.Threading.Tasks;
-using Exchangerat.Clients.Services.Contracts.Identity;
-
-namespace Exchangerat.Clients.Infrastructure.Extensions
+﻿namespace Exchangerat.Clients.Infrastructure.Extensions
 {
     using Data;
     using Data.Models;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+    using Services.Contracts.Identity;
     using System;
     using System.Collections.Generic;
     using System.Linq;

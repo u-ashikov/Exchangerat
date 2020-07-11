@@ -7,6 +7,8 @@
     using Services.Contracts.Transactions;
     using System.Threading.Tasks;
 
+    using static Exchangerat.Clients.Common.Constants.WebConstants;
+
     public class TransactionsController : BaseApiController
     {
         private readonly ITransactionService transactions;
@@ -30,7 +32,7 @@
                 return this.BadRequest(result.Errors);
             }
 
-            return this.Ok("Transaction successfully created.");
+            return this.Ok(Messages.TransactionCreated);
         }
     }
 }

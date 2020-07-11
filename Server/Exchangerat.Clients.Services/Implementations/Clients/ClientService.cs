@@ -11,6 +11,8 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using static Exchangerat.Clients.Common.Constants.WebConstants;
+
     public class ClientService : IClientService
     {
         private readonly ClientsDbContext dbContext;
@@ -25,6 +27,8 @@
 
         public async Task<Result<int>> Create(ClientInputModel model)
         {
+            // TODO: Check if there is already a client with the same user id.
+
             var userId = this.currentUser.Id;
 
             var client = new Client()
@@ -50,7 +54,7 @@
 
             if (client == null)
             {
-                return Result<int>.Failure("Sorry, this user is not a client.");
+                return Result<int>.Failure(Messages.UserIsNotAClient);
             }
 
             return Result<int>.SuccessWith(client.Id);

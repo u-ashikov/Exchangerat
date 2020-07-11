@@ -4,9 +4,9 @@
     using System.Collections.Generic;
     using Transactions;
 
-    public class ExchangeAccountInfoOutputModel
+    public class ExchangeAccountDetailsOutputModel
     {
-        public string AccountNumber { get; set; }
+        public string IdentityNumber { get; set; }
 
         public string AccountType { get; set; }
 

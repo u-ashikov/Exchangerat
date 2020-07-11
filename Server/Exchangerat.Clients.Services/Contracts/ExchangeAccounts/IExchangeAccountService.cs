@@ -11,7 +11,7 @@
 
         Task<Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>> GetActiveByClient(string userId);
 
-        Task<Result<ExchangeAccountInfoOutputModel>> GetAccountDetails(string userId, int accountId);
+        Task<Result<ExchangeAccountDetailsOutputModel>> GetAccountDetails(string userId, int accountId);
 
         Task<bool> IsOwner(int accountId, string userId);
 
