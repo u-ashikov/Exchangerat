@@ -15,5 +15,6 @@
         public string UserId { get; set; }
 
         public virtual ICollection<ExchangeAccount> ExchangeAccounts { get; set; } = new List<ExchangeAccount>();
+        public virtual ICollection<Fund> Funds { get; set; } = new List<Fund>();
     }
 }

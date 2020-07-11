@@ -17,6 +17,8 @@
 
         public DbSet<Transaction> Transactions { get; set; }
 
+        public DbSet<Fund> Funds { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
