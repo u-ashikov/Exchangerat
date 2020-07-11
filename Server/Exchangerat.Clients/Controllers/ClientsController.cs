@@ -1,11 +1,10 @@
-﻿using Exchangerat.Services.Identity;
-
-namespace Exchangerat.Clients.Controllers
+﻿namespace Exchangerat.Clients.Controllers
 {
     using Constants;
     using Exchangerat.Clients.Models.Clients;
     using Exchangerat.Clients.Services.Contracts.Clients;
     using Exchangerat.Controllers;
+    using Exchangerat.Services.Identity;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
