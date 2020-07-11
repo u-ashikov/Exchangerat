@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import userService from '../../services/userService.js'
+import identityService from '../../services/identityService.js';
 
 Vue.use(Vuex);
 
@@ -46,17 +46,18 @@ const mutations = {
 const actions = {
     login: function (context, userData) {
         return new Promise(function (resolve, reject) {
-            userService.login(userData)
+            identityService.login(userData)
                 .then(function (response) {
                     if (response && response.status == 200) {
                         context.commit('login', response.data);
                         context.dispatch('setLocalStorageUserData', response.data);
+
+                        context.dispatch('setLogoutTimer', 86400);
                     }
 
                     resolve(response);
                 })
                 .catch(function (error) {
-                    console.log(error);
                     reject(error);
                 });
         });
@@ -67,8 +68,12 @@ const actions = {
         if (!token) {
             return;
         }
+        
+        var tokenExpirationDate = localStorage.getItem('expirationDate');
 
-        // TODO: Check if the token has expired.
+        if (!tokenExpirationDate || tokenExpirationDate < new Date()) {
+            return;
+        }
 
         var username = localStorage.getItem('username');
         var clientId = localStorage.getItem('clientId');
@@ -83,11 +88,13 @@ const actions = {
     },
     register: function (context, userData) {
         return new Promise(function (resolve, reject) {
-            userService.register(userData)
+            identityService.register(userData)
                 .then(function (response) {
                     if (response && response.status == 200) {
                         context.commit('register', response.data);              
                         context.dispatch('setLocalStorageUserData', response.data);
+
+                        context.dispatch('setLogoutTimer', 86400);
                     }
                 
                     resolve(response);
@@ -108,18 +115,23 @@ const actions = {
         localStorage.clear();
     },
     setLocalStorageUserData: function (context, userData) {
-        // TODO: Set expiration date.
-        // var now = new Date();
-        // var expirationDate = new Date(now.getTime() + )
+        var now = new Date();
+        var expirationDate = new Date(now.getTime() + (86400 * 1000));
 
         localStorage.setItem('username', userData.username);
         localStorage.setItem('token', userData.token);
-
-        // TODO: Store also the expiration.
-        // localStorage.setItem('userId', response.data.id);
+        localStorage.setItem('expirationDate', expirationDate);
     },
     setLocalStorageClientData: function (context, clientId) {
         localStorage.setItem('clientId', clientId);
+    },
+    setLogoutTimer: function (context, expirationTime) {
+        setTimeout(() => {
+            context.commit('clearUserData');
+            context.commit('clearClientData');
+
+            localStorage.clear();
+        }, expirationTime * 1000);
     }
 };
 
