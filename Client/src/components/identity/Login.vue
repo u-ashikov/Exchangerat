@@ -30,6 +30,7 @@
 import ValidationError from "../shared/ValidationError"
 import errorHandler from '../../helpers/error-handler'
 import { validations } from '../../validations/identity/login'
+
 import clientService from '../../services/clientService'
 
 export default {

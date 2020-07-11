@@ -15,11 +15,6 @@ export default {
   components: {
     appHeader: Header,
     appFooter: Footer
-  },
-  data: function() {
-    return {
-      msg: "Welcome to the Exchangerat"
-    };
   }
 };
 </script>
