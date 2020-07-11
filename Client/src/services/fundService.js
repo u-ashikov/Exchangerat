@@ -6,6 +6,11 @@ function add(fundData) {
     return fundService.post('/api/funds/add', fundData);
 }
 
+function getMy() {
+    return fundService.get('/api/funds/getMy');
+}
+
 export default {
-    add
+    add,
+    getMy
 }
