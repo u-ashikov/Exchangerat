@@ -20,5 +20,7 @@
         public const double TransactionMaxAmount = 10000d;
 
         public const int CreditCardNumberLength = 12;
+        public const double FundMinAmount = 1d;
+        public const double FundMaxAmount = 10000d;
     }
 }
