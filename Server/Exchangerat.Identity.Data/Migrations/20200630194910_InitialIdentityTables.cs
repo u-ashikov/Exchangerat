@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace Exchangerat.Identity.Data.Migrations
+﻿namespace Exchangerat.Identity.Data.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class InitialIdentityTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

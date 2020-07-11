@@ -1,19 +1,19 @@
 ﻿namespace Exchangerat.Identity.Controllers
 {
     using Exchangerat.Controllers;
+    using Exchangerat.Identity.Models.Identity;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Models;
     using Services.Contracts;
     using System.Threading.Tasks;
 
     public class IdentityController : BaseApiController
     {
-        private readonly IIdentityService identityService;
+        private readonly IIdentityService identity;
 
-        public IdentityController(IIdentityService identityService)
+        public IdentityController(IIdentityService identity)
         {
-            this.identityService = identityService;
+            this.identity = identity;
         }
 
         [HttpPost]
@@ -21,7 +21,7 @@
         [Route(nameof(Login))]
         public async Task<IActionResult> Login([FromBody]LoginUserInputModel model, [FromQuery]bool adminLogin = false)
         {
-            var result = await this.identityService.Login(model, adminLogin);
+            var result = await this.identity.Login(model, adminLogin);
 
             if (!result.Succeeded)
             {
@@ -36,7 +36,7 @@
         [Route(nameof(Register))]
         public async Task<IActionResult> Register([FromBody]RegisterUserInputModel model)
         {
-            var result = await this.identityService.Register(model);
+            var result = await this.identity.Register(model);
 
             if (!result.Succeeded)
             {
@@ -52,7 +52,7 @@
         [Route(nameof(GetRegisteredUsersIds))]
         public async Task<IActionResult> GetRegisteredUsersIds()
         {
-            var userIds = await this.identityService.GetRegisterUsersIds();
+            var userIds = await this.identity.GetRegisterUsersIds();
 
             return this.Ok(userIds);
         }

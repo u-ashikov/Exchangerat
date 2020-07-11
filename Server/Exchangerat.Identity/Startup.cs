@@ -19,22 +19,20 @@ namespace Exchangerat.Identity
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddWebService<IdentityDbContext>(this.Configuration);
-            services.AddUsers();
-
-            services.AddTransient<IIdentityService, IdentityService>();
-            services.AddTransient<IJwtTokenGeneratorService, JwtTokenGeneratorService>();
+            services
+                .AddWebService<IdentityDbContext>(this.Configuration)
+                .AddUsers()
+                .AddTransient<IIdentityService, IdentityService>()
+                .AddTransient<IJwtTokenGeneratorService, JwtTokenGeneratorService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseWebService(env);
-            app.Initialize();
-            app.SeedData();
+            app.UseWebService(env)
+                .Initialize()
+                .SeedData();
         }
     }
 }

@@ -1,14 +1,17 @@
 ﻿namespace Exchangerat.Identity.Services.Implementations
 {
     using Contracts;
+    using Data.Enums;
     using Data.Models;
+    using Exchangerat.Identity.Models.Identity;
     using Infrastructure;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using Models;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using static Exchangerat.Identity.Common.Constants.WebConstants;
 
     public class IdentityService : IIdentityService
     {
@@ -31,21 +34,21 @@
 
             if (existingUser == null)
             {
-                return Result<UserOutputModel>.Failure(new List<string>() { "Incorrect username or password." });
+                return Result<UserOutputModel>.Failure(new List<string>() { Messages.IncorrectUserNameOrPassword });
             }
 
             var signInResult = await this.signInManager.PasswordSignInAsync(model.UserName, model.Password, isPersistent: true, lockoutOnFailure: false);
 
             if (!signInResult.Succeeded)
             {
-                return Result<UserOutputModel>.Failure(new List<string>() { "Incorrect username or password." });
+                return Result<UserOutputModel>.Failure(new List<string>() { Messages.IncorrectUserNameOrPassword });
             }
 
             var userRoles = await this.userManager.GetRolesAsync(existingUser);
 
-            if (adminLogin && (userRoles == null || !userRoles.Contains("Administrator")))
+            if (adminLogin && (userRoles == null || !userRoles.Contains(Role.Administrator.ToString())))
             {
-                return Result<UserOutputModel>.Failure(new List<string>() { "Incorrect username or password." });
+                return Result<UserOutputModel>.Failure(new List<string>() { Messages.IncorrectUserNameOrPassword });
             }
 
             var token = this.jwtTokenGenerator.GenerateJwtToken(existingUser, userRoles);
@@ -71,6 +74,9 @@
         }
 
         public async Task<IEnumerable<string>> GetRegisterUsersIds()
-         => await this.userManager.Users.OrderBy(u => u.UserName).Select(u => u.Id).ToListAsync();
+         => await this.userManager.Users
+             .OrderBy(u => u.UserName)
+             .Select(u => u.Id)
+             .ToListAsync();
     }
 }

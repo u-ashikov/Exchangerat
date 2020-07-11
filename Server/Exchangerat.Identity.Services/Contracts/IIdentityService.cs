@@ -1,8 +1,8 @@
 ﻿namespace Exchangerat.Identity.Services.Contracts
 {
     using Data.Models;
+    using Exchangerat.Identity.Models.Identity;
     using Infrastructure;
-    using Models;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 

@@ -1,9 +1,10 @@
-﻿namespace Exchangerat.Identity.Models
+﻿namespace Exchangerat.Identity.Models.Identity
 {
     using System.ComponentModel.DataAnnotations;
 
+    using static Common.Constants.DataConstants;
+    using static Common.Constants.WebConstants;
     using static Constants.DataConstants;
-    using static Exchangerat.Identity.Common.Constants.DataConstants;
 
     public class RegisterUserInputModel
     {
@@ -16,6 +17,8 @@
         }
 
         [Required]
+        [MinLength(UsernameMinLength)]
+        [MaxLength(UsernameMaxLength)]
         public string UserName { get; set; }
 
         [Required]
@@ -25,10 +28,12 @@
         public string Email { get; set; }
 
         [Required]
+        [MinLength(PasswordMinLength)]
+        [MaxLength(PasswordMaxLength)]
         public string Password { get; set; }
 
         [Required]
-        [Display(Name = "Confirm password")]
+        [Display(Name = ModelConstants.ConfirmPassword)]
         [Compare(nameof(Password))]
         public string ConfirmPassword { get; set; }
     }
