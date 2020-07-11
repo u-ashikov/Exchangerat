@@ -32,5 +32,19 @@
 
             return this.Ok();
         }
+
+        [HttpGet]
+        [Route(nameof(GetMy))]
+        public async Task<IActionResult> GetMy()
+        {
+            var result = await this.funds.GetMy(this.currentUser.Id);
+
+            if (!result.Succeeded)
+            {
+                return this.BadRequest(result.Errors);
+            }
+
+            return this.Ok(result.Data);
+        }
     }
 }

@@ -6,7 +6,10 @@
     using Exchangerat.Clients.Services.Contracts.Funds;
     using Infrastructure;
     using Microsoft.EntityFrameworkCore;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
+
     using static Exchangerat.Clients.Common.Constants.WebConstants;
 
     public class FundService : IFundService
@@ -49,6 +52,31 @@
             await this.dbContext.SaveChangesAsync();
 
             return Result.Success;
+        }
+
+        public async Task<Result<IEnumerable<FundOutputModel>>> GetMy(string userId)
+        {
+            var owner = await this.dbContext.Clients.FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (owner == null)
+            {
+                return Result<IEnumerable<FundOutputModel>>.Failure(Messages.YouAreNotAClient);
+            }
+
+            var funds = await this.dbContext.Funds
+                .AsNoTracking()
+                .Where(f => f.ClientId == owner.Id)
+                .Select(f => new FundOutputModel()
+                {
+                    CardIdentityNumber = f.CardIdentityNumber,
+                    Amount = f.Amount,
+                    AccountId = f.AccountId,
+                    AccountIdentityNumber = f.Account.IdentityNumber,
+                    IssuedAt = f.IssuedAt
+                })
+                .ToListAsync();
+
+            return Result<IEnumerable<FundOutputModel>>.SuccessWith(funds);
         }
     }
 }
