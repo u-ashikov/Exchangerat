@@ -9,6 +9,7 @@ import CreateTransaction from '../components/transaction/Create'
 import RequestForm from '../components/request/RequestForm'
 import AddFunds from '../components/funds/AddFunds'
 import MyFunds from '../components/funds/MyFunds'
+import MyRequests from '../components/request/MyRequests'
 
 import { store } from '../store/store.js'
 
@@ -22,7 +23,8 @@ const router = new VueRouter({
         { path: '/transactions/create', name: 'createTransaction', component: CreateTransaction },
         { path: '/exchange-accounts/request', name: 'createRequest', component: RequestForm },
         { path: '/funds/add', name: 'add-funds', component: AddFunds },
-        { path: '/funds/my', name: 'my-funds', component: MyFunds }
+        { path: '/funds/my', name: 'my-funds', component: MyFunds },
+        { path: '/requests/my', name: 'my-requests', component: MyRequests }
     ],
     mode: "history"
 });
