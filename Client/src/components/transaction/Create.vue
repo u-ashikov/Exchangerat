@@ -91,7 +91,7 @@ export default {
     mounted: function () {
         var self = this;
 
-        exchangeAccountService.getActiveByClientForTransaction()
+        exchangeAccountService.getActiveByClient()
             .then(function (response) {
                 if (response && response.data) {
                     self.userActiveAccounts = response.data;
