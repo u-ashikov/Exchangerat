@@ -1,3 +1,5 @@
+using Exchangerat.Requests.Gateway.Services.ExchangeAccounts;
+
 namespace Exchangerat.Requests.Gateway
 {
     using Constants;
@@ -60,6 +62,26 @@ namespace Exchangerat.Requests.Gateway
                 .ConfigureHttpClient((serviceProvider, builder) =>
                 {
                     builder.BaseAddress = new Uri("http://localhost:5002/api");
+
+                    var requestServices = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext?.RequestServices;
+
+                    var currentToken = requestServices?.GetService<ICurrentTokenService>()?.Get();
+
+                    if (currentToken == null)
+                    {
+                        return;
+                    }
+
+                    var authorizationHeader = new AuthenticationHeaderValue(WebConstants.AuthorizationScheme, currentToken);
+
+                    builder.DefaultRequestHeaders.Authorization = authorizationHeader;
+                });
+
+            services
+                .AddRefitClient<IExchangeAccountService>()
+                .ConfigureHttpClient((serviceProvider, builder) =>
+                {
+                    builder.BaseAddress = new Uri("http://localhost:5000/api");
 
                     var requestServices = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext?.RequestServices;
 

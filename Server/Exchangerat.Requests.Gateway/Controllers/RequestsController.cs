@@ -1,4 +1,6 @@
-﻿namespace Exchangerat.Requests.Gateway.Controllers
+﻿using Exchangerat.Requests.Gateway.Services.ExchangeAccounts;
+
+namespace Exchangerat.Requests.Gateway.Controllers
 {
     using Exchangerat.Controllers;
     using Exchangerat.Requests.Gateway.Models.Requests;
@@ -16,10 +18,13 @@
 
         private readonly IClientService clients;
 
-        public RequestsController(IRequestService requests, IClientService clients)
+        private readonly IExchangeAccountService exchangeAccounts;
+
+        public RequestsController(IRequestService requests, IClientService clients, IExchangeAccountService exchangeAccounts)
         {
             this.requests = requests;
             this.clients = clients;
+            this.exchangeAccounts = exchangeAccounts;
         }
 
         [HttpGet]
@@ -54,6 +59,31 @@
             }
 
             return this.Ok(result);
+        }
+
+        [HttpGet]
+        [Route(nameof(GetMy))]
+        public async Task<IActionResult> GetMy()
+        {
+            var requests = await this.requests.GetMy();
+
+            if (requests == null || !requests.Any())
+            {
+                return this.Ok(this.requests);
+            }
+
+            var accounts =
+                await this.exchangeAccounts.GetByIds(requests.Where(r => r.AccountId.HasValue)
+                    .Select(r => r.AccountId.Value));
+
+            var requestsWithAccountCreation = requests.Where(r => r.AccountId.HasValue).ToList();
+
+            foreach (var request in requestsWithAccountCreation)
+            {
+                request.AccountIdentityNumber = accounts.FirstOrDefault(a => a.Id == request.AccountId.Value)?.IdentityNumber;
+            }
+
+            return this.Ok(requests);
         }
     }
 }

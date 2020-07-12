@@ -9,5 +9,8 @@
     {
         [Get("/ExchangeratRequests/GetAll")]
         Task<IEnumerable<RequestOutputModel>> GetAll();
+
+        [Get("/ExchangeratRequests/GetMy")]
+        Task<IEnumerable<MyRequestOutputModel>> GetMy();
     }
 }
