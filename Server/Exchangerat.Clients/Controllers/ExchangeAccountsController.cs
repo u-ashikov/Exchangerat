@@ -4,6 +4,7 @@
     using Exchangerat.Services.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Services.Contracts.ExchangeAccounts;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public class ExchangeAccountsController : BaseApiController
@@ -64,5 +65,19 @@
         [Route(nameof(IsOwner))]
         public async Task<IActionResult> IsOwner(int accountId, string userId)
             => this.Ok(await this.exchangeAccounts.IsOwner(accountId, userId));
+
+        [HttpGet]
+        [Route(nameof(GetByIds))]
+        public async Task<IActionResult> GetByIds([FromQuery]IEnumerable<int> ids)
+        {
+            var result = await this.exchangeAccounts.GetByIds(ids);
+
+            if (!result.Succeeded)
+            {
+                return this.BadRequest(result.Errors);
+            }
+
+            return this.Ok(result.Data);
+        }
     }
 }

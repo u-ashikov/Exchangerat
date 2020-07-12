@@ -79,6 +79,26 @@
             return Result<ICollection<ClientExchangeAccountBaseInfoOutputModel>>.SuccessWith(activeUserAccounts);
         }
 
+        public async Task<Result<ICollection<ExchangeAccountBaseInfoModel>>> GetByIds(IEnumerable<int> ids)
+        {
+            if (ids == null || !ids.Any())
+            {
+                return Result<ICollection<ExchangeAccountBaseInfoModel>>.SuccessWith(new List<ExchangeAccountBaseInfoModel>());
+            }
+
+            var accounts = await this.dbContext.ExchangeAccounts
+                .Where(ea => ids.Contains(ea.Id))
+                .AsNoTracking()
+                .Select(ea => new ExchangeAccountBaseInfoModel()
+                {
+                    Id = ea.Id,
+                    IdentityNumber = ea.IdentityNumber
+                })
+                .ToListAsync();
+
+            return Result<ICollection<ExchangeAccountBaseInfoModel>>.SuccessWith(accounts);
+        }
+
         public async Task<Result<ExchangeAccountDetailsOutputModel>> GetAccountDetails(string userId, int accountId)
         {
             var owner = this.dbContext.Clients.FirstOrDefault(c => c.UserId == userId);
