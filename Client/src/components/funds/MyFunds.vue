@@ -26,6 +26,9 @@
                 </table>
               </div>
           </template>
+          <template #create-button>
+            <router-link tag="a" class="btn btn-primary btn-sm ml-sm-3 ml-2" :to="{ name: 'add-funds' }">Create</router-link>
+          </template>
       </pagination>
       <div v-show="!funds || funds.length === 0 && errors.length === 0" class="container w-50 alert alert-success mx-auto my-5" role="alert" v-cloak>
         <h4 class="alert-heading">Ooooops!</h4>

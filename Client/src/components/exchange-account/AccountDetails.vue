@@ -55,6 +55,9 @@
             </table>
           </div>
         </template>
+        <template #create-button>
+          <router-link tag="a" class="btn btn-primary btn-sm ml-sm-3 ml-2" :to="{ name: 'createTransaction' }">Create</router-link>
+        </template>
       </pagination>
     </div>
     <div

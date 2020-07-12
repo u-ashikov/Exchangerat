@@ -9,6 +9,7 @@
             <option value="50" selected>50 items per page</option>
             <option value="100" selected>100 items per page</option>
         </select>
+        <slot name="create-button"></slot>
     </div>
     <slot name="data" :paginatedData="paginatedData"></slot>
   </div>

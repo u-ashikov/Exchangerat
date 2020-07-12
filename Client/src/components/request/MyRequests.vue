@@ -31,6 +31,9 @@
           </table>
         </div>
       </template>
+      <template #create-button>
+        <router-link tag="a" class="btn btn-primary btn-sm ml-sm-3 ml-2" :to="{ name: 'createRequest' }">Create</router-link>
+      </template>
     </pagination>
     <div
       v-show="!requests || requests.length === 0 && errors.length === 0"
