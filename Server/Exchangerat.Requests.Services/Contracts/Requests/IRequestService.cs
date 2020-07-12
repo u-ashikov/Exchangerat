@@ -10,6 +10,8 @@
     {
         Task<Result<IEnumerable<RequestOutputModel>>> GetAll();
 
+        Task<Result<IEnumerable<RequestOutputModel>>> GetMy(string userId);
+
         Task<Result> Create(CreateRequestFormModel model, string userId);
 
         Task UpdateStatus(int requestId, Status status);

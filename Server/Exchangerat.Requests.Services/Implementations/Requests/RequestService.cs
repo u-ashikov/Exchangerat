@@ -45,6 +45,25 @@
             return Result<IEnumerable<RequestOutputModel>>.SuccessWith(requests);
         }
 
+        public async Task<Result<IEnumerable<RequestOutputModel>>> GetMy(string userId)
+        {
+            var requests = await this.dbContext.ExchangeratRequests
+                .Where(r => r.UserId == userId)
+                .AsNoTracking()
+                .Select(r => new RequestOutputModel()
+                {
+                    Id = r.Id,
+                    AccountId = r.AccountId,
+                    RequestType = r.RequestType.Type,
+                    Status = r.Status.ToString(),
+                    UserId = r.UserId,
+                    IssuedAt = r.IssuedAt
+                })
+                .ToListAsync();
+
+            return Result<IEnumerable<RequestOutputModel>>.SuccessWith(requests);
+        }
+
         public async Task<Result> Create(CreateRequestFormModel model, string userId)
         {
             var createAccountRequestType =
