@@ -69,7 +69,7 @@ namespace Exchangerat.Requests.Gateway.Controllers
 
             if (requests == null || !requests.Any())
             {
-                return this.Ok(this.requests);
+                return this.Ok(requests);
             }
 
             var accounts =
