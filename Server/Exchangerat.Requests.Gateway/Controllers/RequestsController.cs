@@ -1,6 +1,4 @@
-﻿using Exchangerat.Requests.Gateway.Services.ExchangeAccounts;
-
-namespace Exchangerat.Requests.Gateway.Controllers
+﻿namespace Exchangerat.Requests.Gateway.Controllers
 {
     using Exchangerat.Controllers;
     using Exchangerat.Requests.Gateway.Models.Requests;
@@ -8,6 +6,7 @@ namespace Exchangerat.Requests.Gateway.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Services.Clients;
+    using Services.ExchangeAccounts;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;

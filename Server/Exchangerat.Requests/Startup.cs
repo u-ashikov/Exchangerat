@@ -6,7 +6,6 @@ namespace Exchangerat.Requests
     using Exchangerat.Requests.Services.Contracts.Requests;
     using Exchangerat.Requests.Services.Implementations.Requests;
     using Exchangerat.Services.Identity;
-    using MassTransit;
     using Messages;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -52,27 +51,7 @@ namespace Exchangerat.Requests
                 .WithConfiguration(serviceEndpoints.Clients);
 
             services
-                .AddMassTransit(mt =>
-                {
-                    mt.AddConsumer<RequestApprovedConsumer>();
-                    mt.AddConsumer<RequestCancelledConsumer>();
-
-                    mt.AddBus(bus => Bus.Factory.CreateUsingRabbitMq(rmq =>
-                    {
-                        rmq.Host("rabbitmq://localhost");
-
-                        rmq.ReceiveEndpoint(nameof(RequestApprovedConsumer), endPoint =>
-                        {
-                            endPoint.ConfigureConsumer<RequestApprovedConsumer>(bus);
-                        });
-
-                        rmq.ReceiveEndpoint(nameof(RequestCancelledConsumer), endPoint =>
-                        {
-                            endPoint.ConfigureConsumer<RequestCancelledConsumer>(bus);
-                        });
-                    }));
-                })
-                .AddMassTransitHostedService();
+                .AddMessaging(typeof(RequestApprovedConsumer), typeof(RequestCancelledConsumer));
 
             services.AddTransient<IRequestService, RequestService>();
             services.AddTransient<IRequestTypeService, RequestTypeService>();
