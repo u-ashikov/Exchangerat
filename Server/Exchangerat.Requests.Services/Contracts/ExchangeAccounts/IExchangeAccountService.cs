@@ -5,7 +5,7 @@
 
     public interface IExchangeAccountService
     {
-        [Get("/ExchangeAccounts/IsOwner")]
+        [Get("/api/ExchangeAccounts/IsOwner")]
         Task<bool> IsOwner([Query] int accountId, [Query] string userId);
     }
 }

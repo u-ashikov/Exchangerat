@@ -1,6 +1,6 @@
 namespace Exchangerat.Requests
 {
-    using Constants;
+    using Common;
     using Data;
     using Exchangerat.Infrastructure;
     using Exchangerat.Requests.Services.Contracts.Requests;
@@ -10,7 +10,6 @@ namespace Exchangerat.Requests
     using Messages;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Middlewares;
@@ -19,8 +18,6 @@ namespace Exchangerat.Requests
     using Services.Contracts.Identity;
     using Services.Contracts.RequestTypes;
     using Services.Implementations.RequestTypes;
-    using System;
-    using System.Net.Http.Headers;
 
     public class Startup
     {
@@ -34,6 +31,10 @@ namespace Exchangerat.Requests
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var serviceEndpoints = this.Configuration
+                .GetSection(nameof(ServiceEndpoints))
+                .Get<ServiceEndpoints>(config => config.BindNonPublicProperties = true);
+
             services
                 .AddApplicationSettings(this.Configuration)
                 .AddDataStore<RequestsDbContext>(this.Configuration)
@@ -44,30 +45,11 @@ namespace Exchangerat.Requests
 
             services
                 .AddRefitClient<IIdentityService>()
-                .ConfigureHttpClient(builder =>
-                {
-                    builder.BaseAddress = new Uri("http://localhost:5001/api/Identity");
-                });
+                .WithConfiguration(serviceEndpoints.Identity);
 
             services
                 .AddRefitClient<IExchangeAccountService>()
-                .ConfigureHttpClient((serviceProvider, builder) =>
-                {
-                    builder.BaseAddress = new Uri("http://localhost:5000/api");
-
-                    var requestServices = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext?.RequestServices;
-
-                    var currentToken = requestServices?.GetService<ICurrentTokenService>()?.Get();
-
-                    if (currentToken == null)
-                    {
-                        return;
-                    }
-
-                    var authorizationHeader = new AuthenticationHeaderValue(WebConstants.AuthorizationScheme, currentToken);
-
-                    builder.DefaultRequestHeaders.Authorization = authorizationHeader;
-                });
+                .WithConfiguration(serviceEndpoints.Clients);
 
             services
                 .AddMassTransit(mt =>
