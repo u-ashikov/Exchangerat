@@ -4,7 +4,6 @@ namespace Exchangerat.Admin
     using Exchangerat.Infrastructure;
     using Exchangerat.Services.Identity;
     using Infrastructure.Middlewares;
-    using MassTransit;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -47,14 +46,7 @@ namespace Exchangerat.Admin
                 .WithConfiguration(serviceEndpoints.Requests);
 
             services
-                .AddMassTransit(mt =>
-                {
-                    mt.AddBus(bus => Bus.Factory.CreateUsingRabbitMq(rmq =>
-                    {
-                        rmq.Host("rabbitmq://localhost");
-                    }));
-                })
-                .AddMassTransitHostedService();
+                .AddMessaging();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

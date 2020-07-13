@@ -50,33 +50,39 @@ namespace Exchangerat.Clients
                 .WithConfiguration(serviceEndpoints.Identity);
 
             services
-                .AddMassTransit(mt =>
-                {
-                    mt.AddConsumer<AccountCreatedConsumer>();
-                    mt.AddConsumer<AccountBlockedConsumer>();
-                    mt.AddConsumer<AccountDeletedConsumer>();
+                .AddMessaging(
+                    typeof(AccountCreatedConsumer),
+                    typeof(AccountBlockedConsumer),
+                    typeof(AccountDeletedConsumer));
 
-                    mt.AddBus(bus => Bus.Factory.CreateUsingRabbitMq(rmq =>
-                    {
-                        rmq.Host("rabbitmq://localhost");
+            //services
+            //    .AddMassTransit(mt =>
+            //    {
+            //        mt.AddConsumer<AccountCreatedConsumer>();
+            //        mt.AddConsumer<AccountBlockedConsumer>();
+            //        mt.AddConsumer<AccountDeletedConsumer>();
 
-                        rmq.ReceiveEndpoint(nameof(AccountCreatedConsumer), endPoint =>
-                        {
-                            endPoint.ConfigureConsumer<AccountCreatedConsumer>(bus);
-                        });
+            //        mt.AddBus(bus => Bus.Factory.CreateUsingRabbitMq(rmq =>
+            //        {
+            //            rmq.Host("rabbitmq://localhost");
 
-                        rmq.ReceiveEndpoint(nameof(AccountBlockedConsumer), endPoint =>
-                        {
-                            endPoint.ConfigureConsumer<AccountBlockedConsumer>(bus);
-                        });
+            //            rmq.ReceiveEndpoint(nameof(AccountCreatedConsumer), endPoint =>
+            //            {
+            //                endPoint.ConfigureConsumer<AccountCreatedConsumer>(bus);
+            //            });
 
-                        rmq.ReceiveEndpoint(nameof(AccountDeletedConsumer), endPoint =>
-                        {
-                            endPoint.ConfigureConsumer<AccountDeletedConsumer>(bus);
-                        });
-                    }));
-                })
-                .AddMassTransitHostedService();
+            //            rmq.ReceiveEndpoint(nameof(AccountBlockedConsumer), endPoint =>
+            //            {
+            //                endPoint.ConfigureConsumer<AccountBlockedConsumer>(bus);
+            //            });
+
+            //            rmq.ReceiveEndpoint(nameof(AccountDeletedConsumer), endPoint =>
+            //            {
+            //                endPoint.ConfigureConsumer<AccountDeletedConsumer>(bus);
+            //            });
+            //        }));
+            //    })
+            //    .AddMassTransitHostedService();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

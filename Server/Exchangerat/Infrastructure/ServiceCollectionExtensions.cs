@@ -1,13 +1,14 @@
-﻿using System;
-
-namespace Exchangerat.Infrastructure
+﻿namespace Exchangerat.Infrastructure
 {
+    using GreenPipes;
+    using MassTransit;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using Services.Identity;
+    using System;
     using System.Text;
 
     public static class ServiceCollectionExtensions
@@ -79,5 +80,31 @@ namespace Exchangerat.Infrastructure
             return services;
         }
 
+        public static IServiceCollection AddMessaging(
+            this IServiceCollection services,
+            params Type[] consumers)
+        {
+            services
+                .AddMassTransit(mt =>
+                {
+                    consumers.ForEach(consumer => mt.AddConsumer(consumer));
+
+                    mt.AddBus(context => Bus.Factory.CreateUsingRabbitMq(rmq =>
+                    {
+                        rmq.Host("rabbitmq://localhost");
+
+                        consumers.ForEach(consumer => rmq.ReceiveEndpoint(consumer.FullName, endpoint =>
+                        {
+                            endpoint.PrefetchCount = 6;
+                            endpoint.UseMessageRetry(retry => retry.Interval(10, 1000));
+
+                            endpoint.ConfigureConsumer(context, consumer);
+                        }));
+                    }));
+                })
+                .AddMassTransitHostedService();
+
+            return services;
+        }
     }
 }
