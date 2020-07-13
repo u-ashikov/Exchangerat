@@ -7,7 +7,7 @@
 
     public interface IExchangeAccountService
     {
-        [Get("/ExchangeAccounts/GetByIds")]
+        [Get("/api/ExchangeAccounts/GetByIds")]
         Task<IEnumerable<ExchangeAccountBaseInfoOutputModel>> GetByIds([Query(CollectionFormat.Multi)] IEnumerable<int> ids);
     }
 }

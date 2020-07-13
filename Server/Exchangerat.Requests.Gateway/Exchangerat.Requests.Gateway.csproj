@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Exchangerat.Requests.Gateway.Common\Exchangerat.Requests.Gateway.Common.csproj" />
     <ProjectReference Include="..\Exchangerat.Requests.Gateway.Services\Exchangerat.Requests.Gateway.Services.csproj" />
     <ProjectReference Include="..\Exchangerat\Exchangerat.csproj" />
   </ItemGroup>

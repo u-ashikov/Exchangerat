@@ -7,10 +7,10 @@
 
     public interface IRequestService
     {
-        [Get("/ExchangeratRequests/GetAll")]
+        [Get("/api/ExchangeratRequests/GetAll")]
         Task<IEnumerable<RequestOutputModel>> GetAll();
 
-        [Get("/ExchangeratRequests/GetMy")]
+        [Get("/api/ExchangeratRequests/GetMy")]
         Task<IEnumerable<MyRequestOutputModel>> GetMy();
     }
 }

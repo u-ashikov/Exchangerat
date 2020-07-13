@@ -1,21 +1,17 @@
-using Exchangerat.Requests.Gateway.Services.ExchangeAccounts;
-
 namespace Exchangerat.Requests.Gateway
 {
-    using Constants;
+    using Common;
     using Exchangerat.Requests.Gateway.Services.Requests;
     using Exchangerat.Services.Identity;
     using Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Middlewares;
     using Refit;
     using Services.Clients;
-    using System;
-    using System.Net.Http.Headers;
+    using Services.ExchangeAccounts;
 
     public class Startup
     {
@@ -29,6 +25,10 @@ namespace Exchangerat.Requests.Gateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var serviceEndpoints = this.Configuration
+                .GetSection(nameof(ServiceEndpoints))
+                .Get<ServiceEndpoints>(config => config.BindNonPublicProperties = true);
+
             services
                 .AddApplicationSettings(this.Configuration)
                 .AddAuthenticationWithJwtBearer(this.Configuration)
@@ -39,63 +39,15 @@ namespace Exchangerat.Requests.Gateway
 
             services
                 .AddRefitClient<IClientService>()
-                .ConfigureHttpClient((serviceProvider, builder) =>
-                {
-                    builder.BaseAddress = new Uri("http://localhost:5000/api");
-
-                    var requestServices = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext?.RequestServices;
-
-                    var currentToken = requestServices?.GetService<ICurrentTokenService>()?.Get();
-
-                    if (currentToken == null)
-                    {
-                        return;
-                    }
-
-                    var authorizationHeader = new AuthenticationHeaderValue(WebConstants.AuthorizationScheme, currentToken);
-
-                    builder.DefaultRequestHeaders.Authorization = authorizationHeader;
-                });
+                .WithConfiguration(serviceEndpoints.Clients);
 
             services
                 .AddRefitClient<IRequestService>()
-                .ConfigureHttpClient((serviceProvider, builder) =>
-                {
-                    builder.BaseAddress = new Uri("http://localhost:5002/api");
-
-                    var requestServices = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext?.RequestServices;
-
-                    var currentToken = requestServices?.GetService<ICurrentTokenService>()?.Get();
-
-                    if (currentToken == null)
-                    {
-                        return;
-                    }
-
-                    var authorizationHeader = new AuthenticationHeaderValue(WebConstants.AuthorizationScheme, currentToken);
-
-                    builder.DefaultRequestHeaders.Authorization = authorizationHeader;
-                });
+                .WithConfiguration(serviceEndpoints.Requests);
 
             services
                 .AddRefitClient<IExchangeAccountService>()
-                .ConfigureHttpClient((serviceProvider, builder) =>
-                {
-                    builder.BaseAddress = new Uri("http://localhost:5000/api");
-
-                    var requestServices = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext?.RequestServices;
-
-                    var currentToken = requestServices?.GetService<ICurrentTokenService>()?.Get();
-
-                    if (currentToken == null)
-                    {
-                        return;
-                    }
-
-                    var authorizationHeader = new AuthenticationHeaderValue(WebConstants.AuthorizationScheme, currentToken);
-
-                    builder.DefaultRequestHeaders.Authorization = authorizationHeader;
-                });
+                .WithConfiguration(serviceEndpoints.Clients);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

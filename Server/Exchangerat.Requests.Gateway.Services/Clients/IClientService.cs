@@ -7,7 +7,7 @@
 
     public interface IClientService
     {
-        [Get("/Clients/GetAllByUserIds")]
+        [Get("/api/Clients/GetAllByUserIds")]
         Task<IEnumerable<ClientOutputModel>> GetAllByUserIds([Query(CollectionFormat.Multi)] IEnumerable<string> userIds);
     }
 }
