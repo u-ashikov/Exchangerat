@@ -1,4 +1,6 @@
-﻿namespace Exchangerat.Infrastructure
+﻿using System;
+
+namespace Exchangerat.Infrastructure
 {
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.EntityFrameworkCore;
@@ -54,7 +56,14 @@
             => services
                 .AddScoped<DbContext, TDbContext>()
                 .AddDbContext<TDbContext>(options => options
-                    .UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                    .UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
+                        sqlServerOptions =>
+                        {
+                            sqlServerOptions.EnableRetryOnFailure(
+                                maxRetryCount: 10,
+                                maxRetryDelay: TimeSpan.FromSeconds(30), 
+                                errorNumbersToAdd: null);
+                        }));
 
         public static IServiceCollection AddWebService<TDbContext>(this IServiceCollection services, IConfiguration configuration)
             where TDbContext : DbContext
