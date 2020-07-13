@@ -6,7 +6,7 @@
 
     public interface IRequestService
     {
-        [Get("/Requests/GetAll")]
+        [Get("/api/Requests/GetAll")]
         Task<RequestListingViewModel> GetAll();
     }
 }
