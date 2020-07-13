@@ -6,7 +6,7 @@
 
     public interface IIdentityService
     {
-        [Get("/GetRegisteredUsersIds")]
+        [Get("/api/Identity/GetRegisteredUsersIds")]
         Task<ICollection<string>> GetRegisteredUserIds();
     }
 }

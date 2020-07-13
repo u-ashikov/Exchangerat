@@ -1,5 +1,6 @@
 namespace Exchangerat.Clients
 {
+    using Common;
     using Data;
     using Exchangerat.Clients.Services.Contracts.Clients;
     using Exchangerat.Clients.Services.Implementations.Clients;
@@ -20,7 +21,6 @@ namespace Exchangerat.Clients
     using Services.Implementations.ExchangeAccounts;
     using Services.Implementations.Funds;
     using Services.Implementations.Transactions;
-    using System;
 
     public class Startup
     {
@@ -33,6 +33,10 @@ namespace Exchangerat.Clients
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var serviceEndpoints = this.Configuration
+                .GetSection(nameof(ServiceEndpoints))
+                .Get<ServiceEndpoints>(config => config.BindNonPublicProperties = true);
+
             services
                 .AddWebService<ClientsDbContext>(this.Configuration)
                 .AddTransient<IClientService, ClientService>()
@@ -43,10 +47,7 @@ namespace Exchangerat.Clients
 
             services
                 .AddRefitClient<IIdentityService>()
-                .ConfigureHttpClient(builder =>
-                {
-                    builder.BaseAddress = new Uri("http://localhost:5001/api/Identity");
-                });
+                .WithConfiguration(serviceEndpoints.Identity);
 
             services
                 .AddMassTransit(mt =>
