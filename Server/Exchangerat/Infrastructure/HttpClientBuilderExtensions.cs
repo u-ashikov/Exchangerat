@@ -3,8 +3,10 @@
     using Constants;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
+    using Polly;
     using Services.Identity;
     using System;
+    using System.Net;
 
     public static class HttpClientBuilderExtensions
     {
@@ -30,7 +32,12 @@
                     }
 
                     builder.DefaultRequestHeaders.Add(WebConstants.AuthorizationHeaderName, $"{WebConstants.AuthorizationScheme} {currentTokenService.Get()}");
-                });
+                })
+                .AddTransientHttpErrorPolicy(policy => policy
+                    .OrResult(result => result.StatusCode == HttpStatusCode.NotFound)
+                    .WaitAndRetryAsync(5, retry => TimeSpan.FromSeconds(Math.Pow(2, retry))))
+                .AddTransientHttpErrorPolicy(policy => policy
+                    .CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
         }
     }
 }
