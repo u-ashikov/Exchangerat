@@ -92,6 +92,14 @@
                     mt.AddBus(context => Bus.Factory.CreateUsingRabbitMq(rmq =>
                     {
                         rmq.Host("rabbitmq://localhost");
+
+                        consumers.ForEach(consumer => rmq.ReceiveEndpoint(consumer.FullName, endpoint =>
+                        {
+                            endpoint.PrefetchCount = 6;
+                            endpoint.UseMessageRetry(retry => retry.Interval(10, 1000));
+
+                            endpoint.ConfigureConsumer(context, consumer);
+                        }));
                     }));
                 })
                 .AddMassTransitHostedService();
