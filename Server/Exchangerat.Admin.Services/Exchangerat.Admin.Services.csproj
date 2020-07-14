@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Exchangerat.Admin.Common\Exchangerat.Admin.Common.csproj" />
     <ProjectReference Include="..\Exchangerat.Admin.Models\Exchangerat.Admin.Models.csproj" />
+    <ProjectReference Include="..\Exchangerat\Exchangerat.csproj" />
   </ItemGroup>
 
   <ItemGroup>

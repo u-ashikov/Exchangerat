@@ -1,7 +1,9 @@
 namespace Exchangerat.Admin
 {
     using Common;
+    using Data;
     using Exchangerat.Infrastructure;
+    using Exchangerat.Services.Common;
     using Exchangerat.Services.Identity;
     using Infrastructure.Middlewares;
     using Microsoft.AspNetCore.Builder;
@@ -30,12 +32,14 @@ namespace Exchangerat.Admin
                 .Get<ServiceEndpoints>(config => config.BindNonPublicProperties = true);
 
             services
+                .AddDataStore<AdminDbContext>(this.Configuration)
                 .AddAuthenticationWithJwtBearer(this.Configuration)
                 .AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
 
             services.AddTransient<JwtCookieAuthenticationMiddleware>();
             services.AddScoped<ICurrentTokenService, CurrentTokenService>();
+            services.AddTransient<IMessageService, MessageService>();
 
             services
                 .AddRefitClient<IIdentityService>()
@@ -77,6 +81,8 @@ namespace Exchangerat.Admin
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.Initialize();
         }
     }
 }
