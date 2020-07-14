@@ -1,6 +1,8 @@
 ﻿namespace Exchangerat.Infrastructure
 {
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
     public static class ApplicationBuilderExtensions
@@ -22,6 +24,19 @@
                 .UseAuthorization()
                 .UseEndpoints(endpoints => endpoints
                     .MapControllers());
+
+            return app;
+        }
+
+        public static IApplicationBuilder Initialize(
+            this IApplicationBuilder app)
+        {
+            using var serviceScope = app.ApplicationServices.CreateScope();
+            var serviceProvider = serviceScope.ServiceProvider;
+
+            var db = serviceProvider.GetRequiredService<DbContext>();
+
+            db.Database.Migrate();
 
             return app;
         }
