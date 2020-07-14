@@ -4,7 +4,6 @@
     using Exchangerat.Identity.Data.Models;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using System;
     using System.Collections.Generic;
@@ -15,14 +14,12 @@
 
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder Initialize(this IApplicationBuilder app)
+        public static IApplicationBuilder SeedData(this IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices.CreateScope();
             var serviceProvider = serviceScope.ServiceProvider;
 
-            var db = serviceProvider.GetRequiredService<Data.IdentityDbContext>();
-
-            db.Database.Migrate();
+            var db = serviceProvider.GetRequiredService<IdentityDbContext>();
 
             if (db.Roles.Any() && db.Users.Any(u => u.Email == AdminEmail))
             {
@@ -33,47 +30,35 @@
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
             Task.Run(async () =>
-            {
-                foreach (var role in Enum.GetNames(typeof(Role)))
                 {
-                    var roleExists = await roleManager.RoleExistsAsync(role);
-
-                    if (!roleExists)
+                    foreach (var role in Enum.GetNames(typeof(Role)))
                     {
-                        await roleManager.CreateAsync(new IdentityRole(role));
+                        var roleExists = await roleManager.RoleExistsAsync(role);
+
+                        if (!roleExists)
+                        {
+                            await roleManager.CreateAsync(new IdentityRole(role));
+                        }
                     }
-                }
 
-                var adminRole = Role.Administrator.ToString();
-                var adminUser = await userManager.FindByEmailAsync(AdminEmail);
+                    var adminRole = Role.Administrator.ToString();
+                    var adminUser = await userManager.FindByEmailAsync(AdminEmail);
 
-                if (adminUser == null)
-                {
-                    adminUser = new User()
+                    if (adminUser == null)
                     {
-                        Email = AdminEmail,
-                        UserName = AdminUserName
-                    };
+                        adminUser = new User()
+                        {
+                            Email = AdminEmail,
+                            UserName = AdminUserName
+                        };
 
-                    await userManager.CreateAsync(adminUser,AdminPass);
+                        await userManager.CreateAsync(adminUser, AdminPass);
 
-                    await userManager.AddToRoleAsync(adminUser, adminRole);
-                }
-            })
-            .GetAwaiter()
-            .GetResult();
-
-            return app;
-        }
-
-        public static IApplicationBuilder SeedData(this IApplicationBuilder app)
-        {
-            using var serviceScope = app.ApplicationServices.CreateScope();
-            var serviceProvider = serviceScope.ServiceProvider;
-
-            var db = serviceProvider.GetRequiredService<IdentityDbContext>();
-
-            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+                        await userManager.AddToRoleAsync(adminUser, adminRole);
+                    }
+                })
+                .GetAwaiter()
+                .GetResult();
 
             SeedUsers(db, userManager);
 

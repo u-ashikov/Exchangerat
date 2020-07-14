@@ -3,7 +3,6 @@
     using Data;
     using Data.Models;
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Services.Contracts.Identity;
     using System;
@@ -12,18 +11,6 @@
 
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder Initialize(this IApplicationBuilder app)
-        {
-            using var serviceScope = app.ApplicationServices.CreateScope();
-            var serviceProvider = serviceScope.ServiceProvider;
-
-            var db = serviceProvider.GetRequiredService<ClientsDbContext>();
-
-            db.Database.Migrate();
-
-            return app;
-        }
-
         public static IApplicationBuilder SeedData(this IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices.CreateScope();
