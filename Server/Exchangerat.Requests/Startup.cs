@@ -78,6 +78,8 @@ namespace Exchangerat.Requests
             {
                 endpoints.MapControllers();
             });
+
+            app.Initialize();
         }
     }
 }
