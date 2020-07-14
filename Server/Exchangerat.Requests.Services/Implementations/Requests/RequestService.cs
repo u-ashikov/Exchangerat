@@ -1,35 +1,42 @@
-﻿namespace Exchangerat.Requests.Services.Implementations.Requests
+﻿using Exchangerat.Requests.Services.Contracts.RequestTypes;
+
+namespace Exchangerat.Requests.Services.Implementations.Requests
 {
     using Constants;
     using Contracts.ExchangeAccounts;
     using Data;
     using Data.Enums;
+    using Exchangerat.Data.Models;
     using Exchangerat.Requests.Common.Constants;
     using Exchangerat.Requests.Data.Models;
     using Exchangerat.Requests.Models.Models.Requests;
     using Exchangerat.Requests.Services.Contracts.Requests;
+    using Exchangerat.Services.Common;
     using Infrastructure;
+    using MassTransit;
+    using Messages.Admin;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class RequestService : IRequestService
+    public class RequestService : DataService<ExchangeratRequest>, IRequestService
     {
-        private readonly RequestsDbContext dbContext;
-
         private readonly IExchangeAccountService exchangeAccounts;
 
-        public RequestService(RequestsDbContext dbContext, IExchangeAccountService exchangeAccounts)
+        private readonly IBus publisher;
+
+        public RequestService(RequestsDbContext dbContext, IExchangeAccountService exchangeAccounts, IBus publisher) 
+            : base(dbContext)
         {
-            this.dbContext = dbContext;
             this.exchangeAccounts = exchangeAccounts;
+            this.publisher = publisher;
         }
 
         public async Task<Result<IEnumerable<RequestOutputModel>>> GetAll()
         {
-            var requests = await this.dbContext.ExchangeratRequests
+            var requests = await this.All()
                 .Select(er => new RequestOutputModel() 
                 {
                    Id = er.Id,
@@ -47,7 +54,7 @@
 
         public async Task<Result<IEnumerable<RequestOutputModel>>> GetMy(string userId)
         {
-            var requests = await this.dbContext.ExchangeratRequests
+            var requests = await this.All()
                 .Where(r => r.UserId == userId)
                 .AsNoTracking()
                 .Select(r => new RequestOutputModel()
@@ -67,7 +74,7 @@
         public async Task<Result> Create(CreateRequestFormModel model, string userId)
         {
             var createAccountRequestType =
-                this.dbContext.RequestTypes.FirstOrDefault(rt => rt.Type == "Create Account");
+                this.dbContext.Set<RequestType>().FirstOrDefault(rt => rt.Type == "Create Account");
 
             if (createAccountRequestType == null)
             {
@@ -99,16 +106,16 @@
                 request.AccountId = model.AccountId;
             }
 
-            this.dbContext.ExchangeratRequests.Add(request);
+            this.dbContext.Add(request);
 
             await this.dbContext.SaveChangesAsync();
 
             return Result.Success;
         }
 
-        public async Task UpdateStatus(int requestId, Status status)
+        public async Task UpdateStatus(RequestApprovedMessage message, Status status)
         {
-            var request = await this.dbContext.ExchangeratRequests.FirstOrDefaultAsync(r => r.Id == requestId);
+            var request = await this.All().FirstOrDefaultAsync(r => r.Id == message.RequestId);
 
             if (request == null || request.Status != Status.Pending)
             {
@@ -116,8 +123,39 @@
             }
 
             request.Status = status;
+            object messageData = null;
 
-            await this.dbContext.SaveChangesAsync();
+            if (message.RequestType == "Create Account")
+            {
+                messageData = new AccountCreatedMessage()
+                {
+                    UserId = message.UserId
+                };
+            }
+            else if (message.RequestType == "Block Account")
+            {
+                messageData = new AccountBlockedMessage()
+                {
+                    UserId = message.UserId,
+                    AccountId = message.AccountId.Value
+                };
+            }
+            else if (message.RequestType == "Delete Account")
+            {
+                messageData = new AccountDeletedMessage()
+                {
+                    UserId = message.UserId,
+                    AccountId = message.AccountId.Value
+                };
+            }
+
+            var messageToStore = new Message(messageData);
+
+            await this.Save(request, messageToStore);
+
+            await this.publisher.Publish(messageData);
+
+            await this.MarkMessageAsPublished(messageToStore.Id);
         }
     }
 }

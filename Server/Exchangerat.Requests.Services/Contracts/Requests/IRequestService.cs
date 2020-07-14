@@ -1,12 +1,15 @@
 ﻿namespace Exchangerat.Requests.Services.Contracts.Requests
 {
     using Data.Enums;
+    using Exchangerat.Requests.Data.Models;
     using Exchangerat.Requests.Models.Models.Requests;
+    using Exchangerat.Services.Common;
     using Infrastructure;
+    using Messages.Admin;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IRequestService
+    public interface IRequestService : IDataService<ExchangeratRequest>
     {
         Task<Result<IEnumerable<RequestOutputModel>>> GetAll();
 
@@ -14,6 +17,6 @@
 
         Task<Result> Create(CreateRequestFormModel model, string userId);
 
-        Task UpdateStatus(int requestId, Status status);
+        Task UpdateStatus(RequestApprovedMessage message, Status status);
     }
 }
