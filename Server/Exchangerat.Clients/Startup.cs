@@ -7,7 +7,6 @@ namespace Exchangerat.Clients
     using Exchangerat.Infrastructure;
     using Exchangerat.Services.ExchangeAccounts;
     using Infrastructure.Extensions;
-    using MassTransit;
     using Messages;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -54,35 +53,6 @@ namespace Exchangerat.Clients
                     typeof(AccountCreatedConsumer),
                     typeof(AccountBlockedConsumer),
                     typeof(AccountDeletedConsumer));
-
-            //services
-            //    .AddMassTransit(mt =>
-            //    {
-            //        mt.AddConsumer<AccountCreatedConsumer>();
-            //        mt.AddConsumer<AccountBlockedConsumer>();
-            //        mt.AddConsumer<AccountDeletedConsumer>();
-
-            //        mt.AddBus(bus => Bus.Factory.CreateUsingRabbitMq(rmq =>
-            //        {
-            //            rmq.Host("rabbitmq://localhost");
-
-            //            rmq.ReceiveEndpoint(nameof(AccountCreatedConsumer), endPoint =>
-            //            {
-            //                endPoint.ConfigureConsumer<AccountCreatedConsumer>(bus);
-            //            });
-
-            //            rmq.ReceiveEndpoint(nameof(AccountBlockedConsumer), endPoint =>
-            //            {
-            //                endPoint.ConfigureConsumer<AccountBlockedConsumer>(bus);
-            //            });
-
-            //            rmq.ReceiveEndpoint(nameof(AccountDeletedConsumer), endPoint =>
-            //            {
-            //                endPoint.ConfigureConsumer<AccountDeletedConsumer>(bus);
-            //            });
-            //        }));
-            //    })
-            //    .AddMassTransitHostedService();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
