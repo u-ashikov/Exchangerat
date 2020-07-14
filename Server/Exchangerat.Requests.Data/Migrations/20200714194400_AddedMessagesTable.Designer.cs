@@ -4,14 +4,16 @@ using Exchangerat.Requests.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Exchangerat.Requests.Data.Migrations
 {
     [DbContext(typeof(RequestsDbContext))]
-    partial class RequestsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200714194400_AddedMessagesTable")]
+    partial class AddedMessagesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
