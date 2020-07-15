@@ -21,33 +21,42 @@
           <router-link tag="a" class="nav-link" to="/">Home</router-link>
         </li>
 
+        <li class="nav-item dropdown" v-if="isAuthenticated">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Accounts
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <router-link tag="a" class="dropdown-item" :to="{ name: 'myAccounts' }">My Accounts</router-link>
+            <router-link tag="a" class="dropdown-item" :to="{ name: 'createTransaction' }">Create Transaction</router-link>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown" v-if="isAuthenticated">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Requests
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <router-link tag="a" class="dropdown-item" :to="{ name: 'createRequest' }">Create</router-link>
+            <router-link tag="a" class="dropdown-item" :to="{ name: 'my-requests' }">My Requests</router-link>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown" v-if="isAuthenticated">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Funds
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <router-link tag="a" class="dropdown-item" :to="{ name: 'add-funds' }">Add</router-link>
+            <router-link tag="a" class="dropdown-item" :to="{ name: 'my-funds' }">My Funds</router-link>
+          </div>
+        </li>
+
         <li class="nav-item" v-if="!isAuthenticated">
           <router-link tag="a" class="nav-link" :to="{ name: 'login' }">Login</router-link>
         </li>
 
         <li class="nav-item" v-if="!isAuthenticated">
           <router-link tag="a" class="nav-link" :to="{ name: 'register' }">Register</router-link>
-        </li>
-
-        <li class="nav-item" v-if="isAuthenticated">
-            <router-link tag="a" class="nav-link" :to="{ name: 'myAccounts' }">My Accounts</router-link>
-        </li>
-
-        <li class="nav-item" v-if="isAuthenticated">
-            <router-link tag="a" class="nav-link" :to="{ name: 'createTransaction' }">Create Transaction</router-link>
-        </li>
-
-        <li class="nav-item" v-if="isAuthenticated">
-            <router-link tag="a" class="nav-link" :to="{ name: 'createRequest' }">Create Request</router-link>
-        </li>
-        <li class="nav-item" v-if="isAuthenticated">
-            <router-link tag="a" class="nav-link" :to="{ name: 'add-funds' }">Add Funds</router-link>
-        </li>
-        <li class="nav-item" v-if="isAuthenticated">
-            <router-link tag="a" class="nav-link" :to="{ name: 'my-funds' }">My Funds</router-link>
-        </li>
-        <li class="nav-item" v-if="isAuthenticated">
-            <router-link tag="a" class="nav-link" :to="{ name: 'my-requests' }">My Requests</router-link>
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
