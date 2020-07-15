@@ -1,9 +1,9 @@
 ﻿namespace Exchangerat.Requests.Data.Configurations
 {
     using Exchangerat.Requests.Common.Constants;
-    using Exchangerat.Requests.Data.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using Models;
 
     public class RequestTypeConfiguration : IEntityTypeConfiguration<RequestType>
     {

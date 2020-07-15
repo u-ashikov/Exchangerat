@@ -23,11 +23,6 @@
                 .IsUnique();
 
             builder
-                .Property(ea => ea.IsActive)
-                .HasDefaultValue(true)
-                .IsRequired();
-
-            builder
                 .HasOne(ea => ea.Owner)
                 .WithMany(o => o.ExchangeAccounts)
                 .HasForeignKey(ea => ea.OwnerId)
@@ -45,6 +40,11 @@
                 .HasForeignKey(ea => ea.TypeId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Property(ea => ea.IsActive)
+                .HasDefaultValue(true)
+                .IsRequired();
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿namespace Exchangerat.Requests.Data.Configurations
 {
-    using Exchangerat.Constants;
-    using Exchangerat.Requests.Data.Models;
+    using Constants;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using Models;
 
     public class ExchangeratRequestConfiguration : IEntityTypeConfiguration<ExchangeratRequest>
     {
@@ -13,7 +13,9 @@
                 .HasKey(er => er.Id);
 
             builder
-                .Property(er => er.Status)
+                .HasOne(er => er.RequestType)
+                .WithMany(rt => rt.Requests)
+                .HasForeignKey(er => er.RequestTypeId)
                 .IsRequired();
 
             builder
@@ -21,9 +23,7 @@
                 .IsRequired(required: false);
 
             builder
-                .HasOne(er => er.RequestType)
-                .WithMany(rt => rt.Requests)
-                .HasForeignKey(er => er.RequestTypeId)
+                .Property(er => er.Status)
                 .IsRequired();
 
             builder

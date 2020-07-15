@@ -140,7 +140,7 @@ namespace Exchangerat.Requests.Services.Implementations.Requests
                     AccountId = message.AccountId.Value
                 };
             }
-            else if (message.RequestType == "Delete Account")
+            else if (message.RequestType == "Close Account")
             {
                 messageData = new AccountDeletedMessage()
                 {

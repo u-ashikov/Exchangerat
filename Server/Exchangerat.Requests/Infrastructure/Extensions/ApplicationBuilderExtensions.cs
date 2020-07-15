@@ -1,11 +1,10 @@
 ﻿namespace Exchangerat.Requests.Infrastructure.Extensions
 {
-    using Exchangerat.Requests.Data;
+    using Data;
     using Exchangerat.Requests.Data.Models;
-    using Exchangerat.Requests.Services.Contracts.Identity;
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+    using Services.Contracts.Identity;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -13,19 +12,6 @@
 
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder Initialize(this IApplicationBuilder app)
-        {
-            using var serviceScope = app.ApplicationServices.CreateScope();
-
-            var serviceProvider = serviceScope.ServiceProvider;
-
-            var db = serviceProvider.GetRequiredService<RequestsDbContext>();
-
-            db.Database.Migrate();
-
-            return app;
-        }
-
         public static IApplicationBuilder SeedData(this IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices.CreateScope();
@@ -34,7 +20,7 @@
 
             var db = serviceProvider.GetRequiredService<RequestsDbContext>();
 
-            SeedRequesTypes(db);
+            SeedRequestTypes(db);
 
             var identityService = serviceProvider.GetRequiredService<IIdentityService>();
 
@@ -83,7 +69,7 @@
             .GetResult();
         }
 
-        private static void SeedRequesTypes(RequestsDbContext db)
+        private static void SeedRequestTypes(RequestsDbContext db)
         {
             if (db.RequestTypes.Any())
             {
@@ -94,7 +80,7 @@
             {
                 new RequestType() { Type = "Create Account" },
                 new RequestType() { Type = "Block Account" },
-                new RequestType() { Type = "Delete Account" }
+                new RequestType() { Type = "Close Account" }
             };
 
             db.RequestTypes.AddRange(requestTypes);
