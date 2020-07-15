@@ -1,7 +1,9 @@
 ﻿namespace Exchangerat.Infrastructure
 {
     using GreenPipes;
+    using Hangfire;
     using MassTransit;
+    using Messages;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -57,7 +59,7 @@
             => services
                 .AddScoped<DbContext, TDbContext>()
                 .AddDbContext<TDbContext>(options => options
-                    .UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
+                    .UseSqlServer(configuration.GetDefaultConnectionString(), 
                         sqlServerOptions =>
                         {
                             sqlServerOptions.EnableRetryOnFailure(
@@ -75,6 +77,7 @@
                 .AddAuthenticationWithJwtBearer(configuration)
                 .AddHttpContextAccessor()
                 .AddScoped<ICurrentUserService, CurrentUserService>()
+                .AddHealth(configuration)
                 .AddControllers();
 
             return services;
@@ -93,6 +96,8 @@
                     {
                         rmq.Host("rabbitmq://localhost");
 
+                        rmq.UseHealthCheck(context);
+
                         consumers.ForEach(consumer => rmq.ReceiveEndpoint(consumer.FullName, endpoint =>
                         {
                             endpoint.PrefetchCount = 6;
@@ -103,6 +108,47 @@
                     }));
                 })
                 .AddMassTransitHostedService();
+
+            return services;
+        }
+
+        public static IServiceCollection AddHangFire(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services
+                .AddHangfire(config => config
+                    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                    .UseSimpleAssemblyNameTypeSerializer()
+                    .UseRecommendedSerializerSettings()
+                    .UseSqlServerStorage(configuration.GetDefaultConnectionString()));
+
+            services.AddHangfireServer();
+
+            services.AddHostedService<MessagesHostedService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddHealth(
+            this IServiceCollection services, 
+            IConfiguration configuration,
+            bool includeSqlServer = true,
+            bool includeMessaging = true)
+        {
+            var healthChecks = services.AddHealthChecks();
+
+            if (includeSqlServer)
+            {
+                healthChecks
+                    .AddSqlServer(configuration.GetDefaultConnectionString());
+            }
+
+            if (includeMessaging)
+            {
+                healthChecks
+                    .AddRabbitMQ(rabbitConnectionString: "amqp://");
+            }
 
             return services;
         }

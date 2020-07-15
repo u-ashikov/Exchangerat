@@ -5,8 +5,10 @@ namespace Exchangerat.Admin
     using Exchangerat.Infrastructure;
     using Exchangerat.Services.Common;
     using Exchangerat.Services.Identity;
+    using HealthChecks.UI.Client;
     using Infrastructure.Middlewares;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Diagnostics.HealthChecks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -50,7 +52,8 @@ namespace Exchangerat.Admin
                 .WithConfiguration(serviceEndpoints.Requests);
 
             services
-                .AddMessaging();
+                .AddMessaging()
+                .AddHangFire(this.Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,24 +66,23 @@ namespace Exchangerat.Admin
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                //app.UseHsts();
             }
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
-            app.UseRouting();
+            app
+                .UseHttpsRedirection()
+                .UseStaticFiles()
+                .UseRouting()
+                .UseJwtCookieAuthentication()
+                .UseAuthorization()
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapHealthChecks("/health", new HealthCheckOptions
+                    {
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    });
 
-            app.UseJwtCookieAuthentication();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+                    endpoints.MapDefaultControllerRoute();
+                });
 
             app.Initialize();
         }

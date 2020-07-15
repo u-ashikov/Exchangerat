@@ -1,3 +1,5 @@
+using Exchangerat.Requests.Infrastructure.Extensions;
+
 namespace Exchangerat.Requests
 {
     using Common;
@@ -51,7 +53,10 @@ namespace Exchangerat.Requests
                 .WithConfiguration(serviceEndpoints.Clients);
 
             services
-                .AddMessaging(typeof(RequestApprovedConsumer), typeof(RequestCancelledConsumer));
+                .AddMessaging(
+                    typeof(RequestApprovedConsumer),
+                    typeof(RequestCancelledConsumer))
+                .AddHangFire(this.Configuration);
 
             services.AddTransient<IRequestService, RequestService>();
             services.AddTransient<IRequestTypeService, RequestTypeService>();
@@ -61,25 +66,10 @@ namespace Exchangerat.Requests
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors(options =>
-            {
-                options.AllowAnyOrigin();
-                options.AllowAnyMethod();
-                options.AllowAnyHeader();
-            });
-
-            app.UseRouting();
-
-            app.UseJwtHeaderAuthentication();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-            app.Initialize();
+            app
+                .UseWebService(env)
+                .Initialize()
+                .SeedData();
         }
     }
 }

@@ -1,3 +1,6 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+
 namespace Exchangerat.Requests.Gateway
 {
     using Common;
@@ -32,6 +35,7 @@ namespace Exchangerat.Requests.Gateway
             services
                 .AddApplicationSettings(this.Configuration)
                 .AddAuthenticationWithJwtBearer(this.Configuration)
+                .AddHealth(this.Configuration, includeSqlServer: false, includeMessaging: false)
                 .AddHttpContextAccessor()
                 .AddTransient<JwtHeaderAuthenticationMiddleware>()
                 .AddScoped<ICurrentTokenService, CurrentTokenService>()
@@ -60,16 +64,19 @@ namespace Exchangerat.Requests.Gateway
                 options.AllowAnyHeader();
             });
 
-            app.UseRouting();
+            app
+                .UseRouting()
+                .UseJwtHeaderAuthentication()
+                .UseAuthorization()
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapHealthChecks("/health", new HealthCheckOptions
+                    {
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    });
 
-            app.UseJwtHeaderAuthentication();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+                    endpoints.MapControllers();
+                });
         }
     }
 }
