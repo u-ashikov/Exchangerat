@@ -93,29 +93,20 @@
                 {
                     consumers.ForEach(consumer => mt.AddConsumer(consumer));
 
-                    mt.AddBus(context =>
+                     mt.AddBus(context => Bus.Factory.CreateUsingRabbitMq(rmq =>
                     {
-                        var bus = Bus.Factory.CreateUsingRabbitMq(rmq =>
+                        rmq.Host("rabbitmq://localhost");
+
+                        rmq.UseHealthCheck(context);
+
+                        consumers.ForEach(consumer => rmq.ReceiveEndpoint(consumer.FullName, endpoint =>
                         {
-                            rmq.Host("rabbitmq", host =>
-                            {
-                                host.Username("rabbitmq");
-                                host.Password("rabbitmq");
-                            });
+                            endpoint.PrefetchCount = 6;
+                            endpoint.UseMessageRetry(retry => retry.Interval(10, 1000));
 
-                            rmq.UseHealthCheck(context);
-
-                            consumers.ForEach(consumer => rmq.ReceiveEndpoint(consumer.FullName, endpoint =>
-                            {
-                                endpoint.PrefetchCount = 6;
-                                endpoint.UseMessageRetry(retry => retry.Interval(10, 1000));
-
-                                endpoint.ConfigureConsumer(context, consumer);
-                            }));
-                        });
-
-                        return bus;
-                    });
+                            endpoint.ConfigureConsumer(context, consumer);
+                        }));
+                    }));
                 })
                 .AddMassTransitHostedService();
 

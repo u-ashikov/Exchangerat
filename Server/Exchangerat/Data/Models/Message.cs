@@ -25,9 +25,10 @@
 
         [NotMapped]
         public object Data
-        { // Make sure you ignore null values!
+        {
             get => JsonConvert.DeserializeObject(this.serializedData, this.Type, 
                 new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+
             set
             {
                 this.Type = value.GetType();
