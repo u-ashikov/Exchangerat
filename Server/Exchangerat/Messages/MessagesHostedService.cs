@@ -1,11 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace Exchangerat.Messages
+﻿namespace Exchangerat.Messages
 {
     using Data.Models;
     using Hangfire;
     using MassTransit;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using System.Linq;
     using System.Threading;
@@ -31,7 +30,7 @@ namespace Exchangerat.Messages
             this.recurringJob
                 .AddOrUpdate(nameof(MessagesHostedService),
                     () => this.ProcessPendingMessages(),
-                    "*/5 * * * * *");
+                    "*/30 * * * * *");
 
             return Task.CompletedTask;
         }
