@@ -8,6 +8,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
     using Services.Identity;
     using System;
@@ -59,12 +60,12 @@
             => services
                 .AddScoped<DbContext, TDbContext>()
                 .AddDbContext<TDbContext>(options => options
-                    .UseSqlServer(configuration.GetDefaultConnectionString(), 
+                    .UseSqlServer(configuration.GetDefaultConnectionString(),
                         sqlServerOptions =>
                         {
                             sqlServerOptions.EnableRetryOnFailure(
                                 maxRetryCount: 10,
-                                maxRetryDelay: TimeSpan.FromSeconds(30), 
+                                maxRetryDelay: TimeSpan.FromSeconds(30),
                                 errorNumbersToAdd: null);
                         }));
 
@@ -92,20 +93,29 @@
                 {
                     consumers.ForEach(consumer => mt.AddConsumer(consumer));
 
-                    mt.AddBus(context => Bus.Factory.CreateUsingRabbitMq(rmq =>
+                    mt.AddBus(context =>
                     {
-                        rmq.Host("rabbitmq://localhost");
-
-                        rmq.UseHealthCheck(context);
-
-                        consumers.ForEach(consumer => rmq.ReceiveEndpoint(consumer.FullName, endpoint =>
+                        var bus = Bus.Factory.CreateUsingRabbitMq(rmq =>
                         {
-                            endpoint.PrefetchCount = 6;
-                            endpoint.UseMessageRetry(retry => retry.Interval(10, 1000));
+                            rmq.Host("rabbitmq", host =>
+                            {
+                                host.Username("rabbitmq");
+                                host.Password("rabbitmq");
+                            });
 
-                            endpoint.ConfigureConsumer(context, consumer);
-                        }));
-                    }));
+                            rmq.UseHealthCheck(context);
+
+                            consumers.ForEach(consumer => rmq.ReceiveEndpoint(consumer.FullName, endpoint =>
+                            {
+                                endpoint.PrefetchCount = 6;
+                                endpoint.UseMessageRetry(retry => retry.Interval(10, 1000));
+
+                                endpoint.ConfigureConsumer(context, consumer);
+                            }));
+                        });
+
+                        return bus;
+                    });
                 })
                 .AddMassTransitHostedService();
 
@@ -125,7 +135,7 @@
 
             services.AddHangfireServer();
 
-            services.AddHostedService<MessagesHostedService>();
+            services.AddSingleton<IHostedService, MessagesHostedService>();
 
             return services;
         }

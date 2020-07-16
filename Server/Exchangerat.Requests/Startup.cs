@@ -1,5 +1,3 @@
-using Exchangerat.Requests.Infrastructure.Extensions;
-
 namespace Exchangerat.Requests
 {
     using Common;
@@ -8,6 +6,7 @@ namespace Exchangerat.Requests
     using Exchangerat.Requests.Services.Contracts.Requests;
     using Exchangerat.Requests.Services.Implementations.Requests;
     using Exchangerat.Services.Identity;
+    using Infrastructure.Extensions;
     using Messages;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -38,6 +37,7 @@ namespace Exchangerat.Requests
 
             services
                 .AddApplicationSettings(this.Configuration)
+                .AddHealth(this.Configuration)
                 .AddDataStore<RequestsDbContext>(this.Configuration)
                 .AddAuthenticationWithJwtBearer(this.Configuration)
                 .AddHttpContextAccessor()
