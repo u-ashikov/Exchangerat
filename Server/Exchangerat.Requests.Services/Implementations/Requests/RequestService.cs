@@ -27,7 +27,7 @@ namespace Exchangerat.Requests.Services.Implementations.Requests
 
         private readonly IBus publisher;
 
-        public RequestService(RequestsDbContext dbContext, IExchangeAccountService exchangeAccounts, IBus publisher) 
+        public RequestService(RequestsDbContext dbContext, IExchangeAccountService exchangeAccounts, IBus publisher)
             : base(dbContext)
         {
             this.exchangeAccounts = exchangeAccounts;
@@ -113,7 +113,8 @@ namespace Exchangerat.Requests.Services.Implementations.Requests
             return Result.Success;
         }
 
-        public async Task UpdateStatus(RequestApprovedMessage message, Status status)
+        public async Task UpdateStatus<TMessage>(TMessage message, Status status)
+            where TMessage : BaseRequestStatusUpdatedMessage
         {
             var request = await this.All().FirstOrDefaultAsync(r => r.Id == message.RequestId);
 
@@ -122,7 +123,24 @@ namespace Exchangerat.Requests.Services.Implementations.Requests
                 return;
             }
 
-            request.Status = status;
+            if (status == Status.Approved)
+            {
+                await this.Approve(message, request);
+            }
+            else if (status == Status.Cancelled)
+            {
+                await this.Cancel(request);
+            }
+        }
+
+        private async Task Approve(BaseRequestStatusUpdatedMessage message, ExchangeratRequest request)
+        {
+            if (message == null || request == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            request.Status = Status.Approved;
             object messageData = null;
 
             if (message.RequestType == "Create Account")
@@ -156,6 +174,18 @@ namespace Exchangerat.Requests.Services.Implementations.Requests
             await this.publisher.Publish(messageData);
 
             await this.MarkMessageAsPublished(messageToStore.Id);
+        }
+
+        private async Task Cancel(ExchangeratRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            request.Status = Status.Cancelled;
+
+            await this.Save(request);
         }
     }
 }

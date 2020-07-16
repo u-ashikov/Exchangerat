@@ -17,9 +17,7 @@
 
         public async Task Consume(ConsumeContext<RequestCancelledMessage> context)
         {
-            var message = context.Message;
-
-            await this.requests.UpdateStatus(message.RequestId, Status.Cancelled);
+            await this.requests.UpdateStatus(context.Message, Status.Cancelled);
         }
     }
 }

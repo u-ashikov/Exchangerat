@@ -33,8 +33,6 @@
         [HttpPost]
         public async Task<IActionResult> Approve(int requestId, string userId, string requestType, int? accountId)
         {
-            // TODO: Should I send the token as a header?
-
             var messageData = new RequestApprovedMessage()
             {
                 RequestId = requestId,
@@ -57,7 +55,18 @@
         [HttpPost]
         public async Task<IActionResult> Cancel(int requestId)
         {
-            await this.publisher.Publish(new RequestCancelledMessage() { RequestId = requestId });
+            var messageData = new RequestCancelledMessage()
+            {
+                RequestId = requestId
+            };
+
+            var message = new Message(messageData);
+
+            await this.messages.SaveMessage(message);
+
+            await this.publisher.Publish(messageData);
+
+            await this.messages.MarkMessageAsPublished(message.Id);
 
             return this.RedirectToAction(nameof(GetAll));
         }

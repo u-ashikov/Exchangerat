@@ -17,6 +17,7 @@
 
         Task<Result> Create(CreateRequestFormModel model, string userId);
 
-        Task UpdateStatus(RequestApprovedMessage message, Status status);
+        Task UpdateStatus<TMessage>(TMessage message, Status status)
+            where TMessage : BaseRequestStatusUpdatedMessage;
     }
 }
