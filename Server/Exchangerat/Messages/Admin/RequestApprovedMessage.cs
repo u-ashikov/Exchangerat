@@ -2,6 +2,5 @@
 {
     public class RequestApprovedMessage : BaseRequestStatusUpdatedMessage
     {
-        public int? AccountId { get; set; }
     }
 }
