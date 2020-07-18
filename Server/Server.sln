@@ -69,7 +69,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Admin.Data", "E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Health", "Health", "{CCC80BDE-795B-4A09-B0F4-50AEFD966D43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exchangerat.Watchdog", "Exchangerat.Watchdog\Exchangerat.Watchdog.csproj", "{33C6F2E0-94E0-4D70-9048-FFD3229E5748}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchangerat.Watchdog", "Exchangerat.Watchdog\Exchangerat.Watchdog.csproj", "{33C6F2E0-94E0-4D70-9048-FFD3229E5748}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

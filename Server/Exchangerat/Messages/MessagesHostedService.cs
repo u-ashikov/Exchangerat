@@ -37,7 +37,7 @@
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        public void ProcessPendingMessages()
+        public async Task ProcessPendingMessages()
         {
             using var scope = this.scopeFactory.CreateScope();
 
@@ -51,7 +51,7 @@
 
             foreach (var message in messages)
             {
-                this.publisher.Publish(message.Data, message.Type);
+                await this.publisher.Publish(message.Data, message.Type);
 
                 message.MarkAsPublished();
 

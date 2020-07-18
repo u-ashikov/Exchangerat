@@ -95,7 +95,11 @@
 
                      mt.AddBus(context => Bus.Factory.CreateUsingRabbitMq(rmq =>
                     {
-                        rmq.Host("rabbitmq://localhost");
+                        rmq.Host("rabbitmq", host =>
+                        {
+                            host.Username("rabbitmq");
+                            host.Password("rabbitmq");
+                        });
 
                         rmq.UseHealthCheck(context);
 
@@ -124,7 +128,7 @@
                     .UseRecommendedSerializerSettings()
                     .UseSqlServerStorage(configuration.GetDefaultConnectionString()));
 
-            services.AddHangfireServer();
+            services.AddHangfireServer(options => options.WorkerCount = 1);
 
             services.AddSingleton<IHostedService, MessagesHostedService>();
 
@@ -148,7 +152,7 @@
             if (includeMessaging)
             {
                 healthChecks
-                    .AddRabbitMQ(rabbitConnectionString: "amqp://");
+                    .AddRabbitMQ(rabbitConnectionString: "amqp://rabbitmq:rabbitmq@rabbitmq/");
             }
 
             return services;

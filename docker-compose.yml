@@ -1,0 +1,156 @@
+version: "3.8"
+
+services:
+
+    data:
+        container_name: sqlserver
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports:
+            - "1433:1433"
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=yourStrongPassword12!@
+        volumes:
+            - sqldata:/var/opt/mssql
+        networks:
+            - exchangerat-network
+            
+    messages:
+        container_name: rabbitmq
+        image: rabbitmq:3-management
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+        hostname: "rabbitmq"
+        environment:
+            - RABBITMQ_ERLANG_COOKIE=Rand0mR4bbitMqCo0k1e
+            - RABBITMQ_DEFAULT_USER=rabbitmq
+            - RABBITMQ_DEFAULT_PASS=rabbitmq
+        networks:
+            - exchangerat-network
+            
+    identity:
+        container_name: identity
+        build:
+            context: ./Server
+            dockerfile: ./Exchangerat.Identity/Dockerfile   
+        ports:
+            - "5001:80"
+        env_file: Server/Exchangerat/Common.env
+        environment:
+            - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Exchangerat.IdentityDb;User Id=sa; Password=yourStrongPassword12!@;MultipleActiveResultSets=true
+        restart: on-failure
+        volumes:
+            - ./.aspnet/identity/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks:
+            - exchangerat-network
+        depends_on:
+            - data
+            
+    clients:
+        container_name: clients
+        build:
+            context: ./Server
+            dockerfile: ./Exchangerat.Clients/Dockerfile   
+        ports:
+            - "5000:80"
+        env_file: Server/Exchangerat/Common.env
+        environment:
+            - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Exchangerat.ClientsDb;User Id=sa; Password=yourStrongPassword12!@;MultipleActiveResultSets=true
+            - ServiceEndpoints__Identity=http://identity
+        restart: on-failure
+        volumes:
+            - ./.aspnet/clients/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks:
+            - exchangerat-network
+        depends_on:
+            - data
+            - identity
+    
+    requests:
+        container_name: requests
+        build:
+            context: ./Server
+            dockerfile: ./Exchangerat.Requests/Dockerfile   
+        ports:
+            - "5002:80"
+        env_file: Server/Exchangerat/Common.env
+        environment:
+            - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Exchangerat.RequestsDb;User Id=sa; Password=yourStrongPassword12!@;MultipleActiveResultSets=true
+            - ServiceEndpoints__Identity=http://identity
+            - ServiceEndpoints__Clients=http://clients
+        restart: on-failure
+        volumes:
+            - ./.aspnet/requests/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks:
+            - exchangerat-network
+        depends_on:
+            - data
+            - identity
+            
+    admin:
+        container_name: admin
+        build:
+            context: ./Server
+            dockerfile: ./Exchangerat.Admin/Dockerfile   
+        ports:
+            - "5010:80"
+        env_file: Server/Exchangerat/Common.env
+        environment:
+            - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Exchangerat.AdminDb;User Id=sa; Password=yourStrongPassword12!@;MultipleActiveResultSets=true
+            - ServiceEndpoints__Identity=http://identity
+            - ServiceEndpoints__Requests=http://gateway
+        restart: on-failure
+        volumes:
+            - ./.aspnet/admin/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks:
+            - exchangerat-network
+        depends_on:
+            - data
+            
+    gateway:
+        container_name: gateway
+        build:
+            context: ./Server
+            dockerfile: ./Exchangerat.Requests.Gateway/Dockerfile   
+        ports:
+            - "5004:80"
+        env_file: Server/Exchangerat/Common.env
+        environment:
+            - ServiceEndpoints__Clients=http://clients
+            - ServiceEndpoints__Requests=http://requests
+        restart: on-failure
+        volumes:
+            - ./.aspnet/gateway/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks:
+            - exchangerat-network
+        depends_on:
+            - identity
+            
+    watchdog:
+        container_name: watchdog
+        build:
+            context: ./Server
+            dockerfile: ./Exchangerat.Watchdog/Dockerfile   
+        ports:
+            - "51484:80"
+        restart: on-failure
+        networks:
+            - exchangerat-network
+            
+    frontend:
+        container_name: frontend
+        build:
+            context: ./Client
+            dockerfile: ./Dockerfile   
+        ports:
+            - "8080:8080"
+        restart: on-failure
+        networks:
+            - exchangerat-network
+            
+networks:
+    exchangerat-network:
+
+volumes:
+    sqldata:
