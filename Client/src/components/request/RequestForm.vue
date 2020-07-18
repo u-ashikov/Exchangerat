@@ -108,7 +108,7 @@ export default {
             }
 
             requestService.create(data)
-            .then(function (response) {
+            .then(function () {
                 self.$router.push("/");
             })
             .catch(function (error) {
