@@ -37,6 +37,11 @@
                 return Result.Failure(Messages.AccountNotFound);
             }
 
+            if (!account.IsActive)
+            {
+                return Result.Failure(Messages.ReceiverAccountIsNotActive);
+            }
+
             var fund = new Fund()
             {
                 AccountId = account.Id,

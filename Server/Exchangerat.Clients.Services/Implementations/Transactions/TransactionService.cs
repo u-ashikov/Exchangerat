@@ -41,6 +41,11 @@
                 errors.Add(Messages.SenderAccountDoesNotExist);
             }
 
+            if (senderAccount != null && !senderAccount.IsActive)
+            {
+                errors.Add(Messages.SenderAccountIsNotActive);
+            }
+
             if (senderAccount != null && senderAccount.Balance < model.Amount)
             {
                 errors.Add(Messages.InsufficientAmount);
@@ -51,6 +56,11 @@
                     ra.IdentityNumber == model.ReceiverAccount);
 
             if (receiverAccount == null)
+            {
+                errors.Add(Messages.ReceiverAccountDoesNotExist);
+            }
+
+            if (receiverAccount != null && !receiverAccount.IsActive)
             {
                 errors.Add(Messages.ReceiverAccountDoesNotExist);
             }
