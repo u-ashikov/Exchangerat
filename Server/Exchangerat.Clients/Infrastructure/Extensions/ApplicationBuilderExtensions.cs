@@ -70,6 +70,11 @@
 
             var userIds = identityService.GetRegisteredUserIds().GetAwaiter().GetResult();
 
+            if (userIds == null || !userIds.Any())
+            {
+                return;
+            }
+
             var clients = new List<Client>()
             {
                 new Client()
@@ -121,12 +126,13 @@
 
         private static void SeedExchangeAccounts(ClientsDbContext db)
         {
-            if (db.ExchangeAccounts.Any())
+            if (db.ExchangeAccounts.Any() || !db.Clients.Any() || !db.ExchangeAccountTypes.Any())
             {
                 return;
             }
 
             var clientIds = db.Clients.Select(c => c.Id).ToList();
+
             var exchangeAccountTypeIds = db.ExchangeAccountTypes.Select(t => t.Id).ToList();
 
             var random = new Random();
@@ -164,7 +170,7 @@
 
         private static void SeedTransactions(ClientsDbContext db)
         {
-            if (db.Transactions.Any())
+            if (db.Transactions.Any() || !db.ExchangeAccounts.Any())
             {
                 return;
             }
