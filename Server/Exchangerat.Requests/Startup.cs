@@ -6,9 +6,11 @@ namespace Exchangerat.Requests
     using Exchangerat.Requests.Services.Contracts.Requests;
     using Exchangerat.Requests.Services.Implementations.Requests;
     using Exchangerat.Services.Identity;
+    using HealthChecks.UI.Client;
     using Infrastructure.Extensions;
     using Messages;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Diagnostics.HealthChecks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -67,7 +69,25 @@ namespace Exchangerat.Requests
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app
-                .UseWebService(env)
+                 .UseCors(options =>
+                 {
+                     options.AllowAnyOrigin();
+                     options.AllowAnyMethod();
+                     options.AllowAnyHeader();
+                 })
+                 .UseRouting()
+                 .UseJwtHeaderAuthentication()
+                 .UseAuthorization()
+                 .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapHealthChecks("/health", new HealthCheckOptions
+                    {
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    });
+
+                    endpoints
+                        .MapControllers();
+                })
                 .Initialize()
                 .SeedData();
         }
