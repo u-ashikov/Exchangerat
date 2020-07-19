@@ -1,4 +1,5 @@
 import axios from 'axios'
+import NProgress from 'nprogress'
 
 function getInstance(instanceConfig) {
     if (!instanceConfig || !instanceConfig.baseURL) {
@@ -10,6 +11,8 @@ function getInstance(instanceConfig) {
     });
 
     instance.interceptors.request.use(function (config) {
+        NProgress.start();
+
         const token = localStorage.getItem('token');
 
         if (token) {
@@ -19,6 +22,13 @@ function getInstance(instanceConfig) {
         }
     
         return config;
+    });
+
+    // before a response is returned stop nprogress
+    instance.interceptors.response.use(response => {
+        NProgress.done();
+        
+        return response;
     });
 
     return instance;

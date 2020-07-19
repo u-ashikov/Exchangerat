@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading ">
     <pagination v-bind:list-data="requests">
       <template #heading>
         <h1 class="display-4 text-center mt-3 mb-5">My Requests</h1>
@@ -36,7 +36,7 @@
       </template>
     </pagination>
     <div
-      v-show="!requests || requests.length === 0 && errors.length === 0"
+      v-show="!requests || (requests.length === 0 && errors.length === 0)"
       class="container w-50 alert alert-success mx-auto my-5"
       role="alert"
       v-cloak
@@ -74,7 +74,8 @@ export default {
   data: function() {
     return {
       requests: [],
-      errors: []
+      errors: [],
+      loading: true
     };
   },
   filters: {
@@ -94,9 +95,11 @@ export default {
       .then(function(response) {
         if (response && response.data) {
           self.requests = response.data;
+          self.loading = false;
         }
       })
       .catch(function(error) {
+        self.loading = false;
         self.errors = errorHandler.extractErrorsFromResponse(error.response);
       });
   },

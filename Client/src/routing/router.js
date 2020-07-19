@@ -1,4 +1,5 @@
 import VueRouter from 'vue-router'
+import NProgress from 'nprogress'
 
 import Index from '../components/home/Index'
 import Register from '../components/identity/Register'
@@ -45,6 +46,17 @@ router.beforeEach(function (to, from, next) {
             next();
         }
     }
+})
+  
+router.afterEach((to, from) => {
+    NProgress.done();
+})
+
+router.beforeResolve((to, from, next) => {
+    if (to.name) {
+        NProgress.start()
+    }
+    next();
 })
 
 export { router }
