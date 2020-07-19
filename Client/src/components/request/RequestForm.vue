@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-4 mx-auto">
+    <div class="col-sm-6 col-md-5 col-xl-3 mx-auto">
         <h1 class="text-center my-3">Create New Request</h1>
         <hr>
         <form method="post">

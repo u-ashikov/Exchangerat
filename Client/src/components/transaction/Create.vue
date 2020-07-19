@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1 class="text-center dispay-4 mt-3 mb-5">Create Transaction</h1>
-        <form method="post" class="col-4 mx-auto" v-on:submit.prevent="sendTransaction">
+        <form method="post" class="col-sm-6 col-md-5 col-xl-3 mx-auto" v-on:submit.prevent="sendTransaction">
             <validation-error v-bind:errors="errors"></validation-error>
             <div class="form-group">
                 <label class="h6" for="sender-account">Sender Account</label>
