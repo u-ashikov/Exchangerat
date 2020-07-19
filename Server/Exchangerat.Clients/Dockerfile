@@ -15,10 +15,10 @@ RUN dotnet restore "Exchangerat.Clients/Exchangerat.Clients.csproj"
 
 COPY . .
 WORKDIR "/src/Exchangerat.Clients"
-RUN dotnet build "Exchangerat.Clients.csproj" -c Debug -o /app/build
+RUN dotnet build "Exchangerat.Clients.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Exchangerat.Clients.csproj" -c Debug -o /app/publish
+RUN dotnet publish "Exchangerat.Clients.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app

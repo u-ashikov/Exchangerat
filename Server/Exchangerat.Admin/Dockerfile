@@ -16,10 +16,10 @@ COPY ["Exchangerat.Admin.Models/Exchangerat.Admin.Models.csproj", "Exchangerat.A
 RUN dotnet restore "Exchangerat.Admin/Exchangerat.Admin.csproj"
 COPY . .
 WORKDIR "/src/Exchangerat.Admin"
-RUN dotnet build "Exchangerat.Admin.csproj" -c Debug -o /app/build
+RUN dotnet build "Exchangerat.Admin.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Exchangerat.Admin.csproj" -c Debug -o /app/publish
+RUN dotnet publish "Exchangerat.Admin.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
