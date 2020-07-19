@@ -4,7 +4,8 @@ Simple payments platform, that allows the users to transfer money between their 
 
 ### The application consists of the following features:
 **1. Administration (admin docker container)**
- - The administrator can login from the admin client and can Approve/Cance clients' requests.
+ - The administrator can login from the admin client and can Approve/Cancel clients' requests.
+ 
 **2. Client (frontend docker container)**
  - Annonymous users can login or register in the platform.
  - Authenticated users can send requests for new accounts, for blocking and closing existing account.
