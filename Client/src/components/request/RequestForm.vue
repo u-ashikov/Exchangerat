@@ -118,7 +118,9 @@ export default {
     },
     filters: {
         money: function (value) {
-            if (!value) { return ''; }
+            if (!value) {
+                return 0;
+            }
 
             return numeral(value).format('0,0');
         }
