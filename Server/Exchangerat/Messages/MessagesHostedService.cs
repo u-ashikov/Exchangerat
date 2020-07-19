@@ -27,6 +27,19 @@
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            using (var scope = this.scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<DbContext>();
+
+                var dbContextIsUp = dbContext.Database.CanConnect();
+
+                if (!dbContextIsUp)
+                {
+                    dbContext.Database
+                        .Migrate();
+                }
+            }
+
             this.recurringJob
                 .AddOrUpdate(nameof(MessagesHostedService),
                     () => this.ProcessPendingMessages(),
@@ -49,13 +62,16 @@
                 .OrderBy(m => m.Id)
                 .ToList();
 
-            foreach (var message in messages)
+            if (messages.Any())
             {
-                await this.publisher.Publish(message.Data, message.Type);
+                foreach (var message in messages)
+                {
+                    await this.publisher.Publish(message.Data, message.Type);
 
-                message.MarkAsPublished();
+                    message.MarkAsPublished();
 
-                dbContext.SaveChanges();
+                    dbContext.SaveChanges();
+                }
             }
         }
     }

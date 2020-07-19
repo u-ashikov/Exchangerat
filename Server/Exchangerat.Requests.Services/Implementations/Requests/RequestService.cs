@@ -1,6 +1,4 @@
-﻿using Exchangerat.Requests.Services.Contracts.RequestTypes;
-
-namespace Exchangerat.Requests.Services.Implementations.Requests
+﻿namespace Exchangerat.Requests.Services.Implementations.Requests
 {
     using Constants;
     using Contracts.ExchangeAccounts;

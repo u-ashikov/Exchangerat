@@ -2,6 +2,7 @@
 {
     using GreenPipes;
     using Hangfire;
+    using Hangfire.SqlServer;
     using MassTransit;
     using Messages;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -122,15 +123,32 @@
             IConfiguration configuration)
         {
             services
-                .AddHangfire(config => config
-                    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .AddHangfire((provider, config) =>
+                {
+                    config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
-                    .UseSqlServerStorage(configuration.GetDefaultConnectionString()));
+                    .UseSqlServerStorage(configuration.GetDefaultConnectionString(), new SqlServerStorageOptions()
+                    {
+                        PrepareSchemaIfNecessary = true,
+                        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                        QueuePollInterval = TimeSpan.FromMinutes(1)
+                    });
 
-            services.AddHangfireServer(options => options.WorkerCount = 1);
+                    config.UseFilter(new AutomaticRetryAttribute() { Attempts = 10 });
+                });
 
-            services.AddSingleton<IHostedService, MessagesHostedService>();
+            using (var serviceScope = services.BuildServiceProvider().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetService<DbContext>().Database.Migrate();
+            }
+
+            services.AddHangfireServer(options =>
+            {
+                options.WorkerCount = 1;
+            });
+
+            services.AddHostedService<MessagesHostedService>();
 
             return services;
         }
