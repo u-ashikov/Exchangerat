@@ -69,7 +69,6 @@ namespace Exchangerat.Admin
             }
 
             app
-                .UseHttpsRedirection()
                 .UseStaticFiles()
                 .UseRouting()
                 .UseJwtCookieAuthentication()
