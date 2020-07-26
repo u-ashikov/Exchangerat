@@ -26,7 +26,7 @@
         </div>
       </div>
 
-      <form class="container form-inline my-4">
+      <form v-show="transactions.length !== 0" class="container form-inline my-4">
         <div class="form-group">
             <label for="start-date" class="h6">Start Date</label>
             <input type="date" id="start-date" class="form-control form-control-sm mx-sm-3" v-model="search.startDate">
@@ -89,7 +89,7 @@
       <p class="my-0" v-for="error in errors" v-bind:key="error">{{ error }}</p>
     </div>
 
-    <div class="container alert alert-warning" v-if="!filteredItems || filteredItems.length == 0" role="alert">
+    <div v-if="transactions.length !== 0 && (!filteredItems || filteredItems.length == 0)" class="container alert alert-warning" role="alert">
       No transactions found!
     </div>
 
