@@ -25,7 +25,27 @@
           </p>
         </div>
       </div>
-      <pagination v-bind:list-data="transactions">
+
+      <form class="container form-inline my-4">
+        <div class="form-group">
+            <label for="start-date" class="h6">Start Date</label>
+            <input type="date" id="start-date" class="form-control form-control-sm mx-sm-3" v-model="search.startDate">
+        </div>
+        <div class="form-group">
+            <label for="end-date" class="h6">End Date</label>
+            <input type="date" id="end-date" class="form-control form-control-sm mx-sm-3" v-model="search.endDate">
+        </div>
+        <div class="form-group">
+            <label for="transactionType" class="h6">Type</label>
+            <select name="transactionType" id="transactionType" v-model="search.transactionType" class="form-control form-control-sm mx-sm-3">
+              <option value="in">In</option>
+              <option value="out">Out</option>
+            </select>
+        </div>
+        <input type="button" class="btn btn-primary btn-sm" value="Reset" v-on:click="resetForm" />
+    </form>
+
+      <pagination v-bind:list-data="filteredItems">
         <template #data="{ paginatedData }">
           <div v-show="paginatedData && paginatedData.length > 0">
             <table class="container table table-striped">
@@ -38,7 +58,7 @@
                 <th>Issued At</th>
               </thead>
               <tbody>
-                <tr v-for="transaction in paginatedData" v-bind:key="transaction.issuedAt">
+                <tr v-for="(transaction, index) in paginatedData" v-bind:key="index">
                   <td>{{ transaction.senderAccountNumber}}</td>
                   <td>{{ transaction.receiverAccountNumber}}</td>
                   <td v-if="transaction.senderAccountNumber === accountInfo.identityNumber">
@@ -68,6 +88,11 @@
     >
       <p class="my-0" v-for="error in errors" v-bind:key="error">{{ error }}</p>
     </div>
+
+    <div class="container alert alert-warning" v-if="!filteredItems || filteredItems.length == 0" role="alert">
+      No transactions found!
+    </div>
+
     <div
       v-show="!accountInfo || transactions.length === 0 && errors.length === 0"
       class="container w-50 alert alert-success mx-auto my-5"
@@ -79,18 +104,22 @@
       <hr />
       <router-link tag="a" class="btn btn-link" :to="{ name: 'createTransaction' }">Create Transaction</router-link>
     </div>
+
   </div>
 </template>
 
 <script>
-import ValidationError from "../../components/shared/ValidationError";
-import Pagination from "../../components/shared/Pagination";
+import ValidationError from "../../components/shared/ValidationError"
+import Pagination from "../../components/shared/Pagination"
 
-import exchangeAccountService from "../../services/exchangeAccountService";
-import errorHandler from "../../helpers/error-handler";
+import exchangeAccountService from "../../services/exchangeAccountService"
+import errorHandler from "../../helpers/error-handler"
 
-import moment from "moment";
-import numeral from "numeral";
+import moment from "moment"
+import numeral from "numeral"
+
+import flatpickr from 'flatpickr'
+import "flatpickr/dist/flatpickr.css"
 
 export default {
   components: {
@@ -101,8 +130,20 @@ export default {
     return {
       accountInfo: {},
       transactions: [],
-      errors: []
+      errors: [],
+      search: {
+        startDate: moment().startOf('month').format('YYYY-MM-DD'),
+        endDate: moment().endOf('month').format('YYYY-MM-DD'),
+        transactionType: ''
+      }
     };
+  },
+  methods: {
+    resetForm: function () {
+      this.search.startDate = moment().startOf('month').format('YYYY-MM-DD');
+      this.search.endDate = moment().endOf('month').format('YYYY-MM-DD');
+      this.search.transactionType = '';
+    }
   },
   filters: {
     money: function(value) {
@@ -121,6 +162,9 @@ export default {
     }
   },
   mounted: function() {
+    flatpickr("#start-date");
+    flatpickr("#end-date");
+
     var self = this;
 
     exchangeAccountService
@@ -140,6 +184,41 @@ export default {
       .catch(function(error) {
         self.errors = errorHandler.extractErrorsFromResponse(error.response);
       });
+  },
+  computed: {
+    filteredItems: function () {
+      var self = this;
+
+      var filteredTransactions = self.transactions;
+
+      if (!self.search.startDate && !self.search.endDate) {
+        return filteredTransactions;
+      }
+
+      if (self.search.transactionType === 'in') {
+        filteredTransactions = filteredTransactions.filter(function (transaction) {
+          return transaction.receiverAccountNumber === self.accountInfo.identityNumber;
+        });
+      }
+
+      if (self.search.transactionType === 'out') {
+        filteredTransactions = filteredTransactions.filter(function (transaction) {
+          return transaction.senderAccountNumber === self.accountInfo.identityNumber;
+        });
+      }
+
+      return filteredTransactions.filter(function (transaction) {
+        if (self.search.startDate && !self.search.endDate) {
+          return transaction.issuedAt >= self.search.startDate;
+        }
+
+        if (self.search.endDate && !self.search.startDate) {
+          return transaction.issuedAt <= self.search.endDate;
+        }
+
+        return transaction.issuedAt >= self.search.startDate && transaction.issuedAt <= self.search.endDate;
+      });
+    }
   }
 };
 </script>
