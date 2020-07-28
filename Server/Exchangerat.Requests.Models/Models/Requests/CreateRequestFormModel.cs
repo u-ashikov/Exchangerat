@@ -5,5 +5,7 @@
         public int RequestTypeId { get; set; }
 
         public int? AccountId { get; set; }
+
+        public int? AccountTypeId { get; set; }
     }
 }

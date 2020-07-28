@@ -1,5 +1,7 @@
 ﻿namespace Exchangerat.Requests.Controllers
 {
+    using Constants;
+    using Data.Enums;
     using Exchangerat.Controllers;
     using Exchangerat.Requests.Models.Models.Requests;
     using Exchangerat.Requests.Services.Contracts.Requests;
@@ -23,9 +25,9 @@
         [HttpGet]
         [Authorize(Roles = "Administrator")]
         [Route(nameof(GetAll))]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]Status? status, [FromQuery]int page = WebConstants.FirstPage)
         {
-            var result = await this.requests.GetAll();
+            var result = await this.requests.GetAll(status, page);
 
             return this.Ok(result.Data);
         }

@@ -32,7 +32,7 @@
             this.publisher = publisher;
         }
 
-        public async Task<Result<IEnumerable<RequestOutputModel>>> GetAll()
+        public async Task<Result<AllRequestsOutputModel>> GetAll(Status? status, int page = WebConstants.FirstPage)
         {
             var requests = await this.All()
                 .Select(er => new RequestOutputModel() 
@@ -41,13 +41,42 @@
                    RequestType = er.RequestType.Type,
                    UserId = er.UserId,
                    AccountId = er.AccountId,
+                   AccountTypeId = er.AccountTypeId,
                    Status = er.Status.ToString(),
                    IssuedAt = er.IssuedAt
                 })
                 .AsNoTracking()
                 .ToListAsync();
 
-            return Result<IEnumerable<RequestOutputModel>>.SuccessWith(requests);
+            var totalItems = await this.TotalRequests(status);
+            var totalPages = (int) Math.Ceiling(totalItems / (double)WebConstants.ItemsPerPage);
+
+            if (page < WebConstants.FirstPage)
+            {
+                page = WebConstants.FirstPage;
+            }
+
+            if (page > totalPages)
+            {
+                page = totalPages;
+            }
+
+            if (status.HasValue)
+            {
+                requests = requests
+                    .Where(er => er.Status == status.Value.ToString())
+                    .ToList();
+            }
+
+            var result = new AllRequestsOutputModel()
+            {
+                Requests = requests.Skip((page - WebConstants.FirstPage) * WebConstants.ItemsPerPage)
+                    .Take(WebConstants.ItemsPerPage)
+                    .ToList(),
+                TotalItems = totalItems
+            };
+
+            return Result<AllRequestsOutputModel>.SuccessWith(result);
         }
 
         public async Task<Result<IEnumerable<RequestOutputModel>>> GetMy(string userId)
@@ -71,8 +100,7 @@
 
         public async Task<Result> Create(CreateRequestFormModel model, string userId)
         {
-            var createAccountRequestType =
-                this.dbContext.Set<RequestType>().FirstOrDefault(rt => rt.Type == "Create Account");
+            var createAccountRequestType = this.dbContext.Set<RequestType>().FirstOrDefault(rt => rt.Type == "Create Account");
 
             if (createAccountRequestType == null)
             {
@@ -89,6 +117,7 @@
                 RequestTypeId = model.RequestTypeId,
                 Status = Status.Pending,
                 UserId = userId,
+                AccountTypeId = model.AccountTypeId,
                 IssuedAt = DateTime.UtcNow
             };
 
@@ -131,6 +160,16 @@
             }
         }
 
+        public async Task<int> TotalRequests(Status? status)
+        {
+            if (status.HasValue)
+            {
+                return await this.All().CountAsync(er => er.Status == status);
+            }
+
+            return await this.All().CountAsync();
+        }
+
         private async Task Approve(BaseRequestStatusUpdatedMessage message, ExchangeratRequest request)
         {
             if (message == null || request == null)
@@ -145,7 +184,8 @@
             {
                 messageData = new AccountCreatedMessage()
                 {
-                    UserId = message.UserId
+                    UserId = message.UserId,
+                    AccountTypeId = message.AccountTypeId.Value
                 };
             }
             else if (message.RequestType == "Block Account")
