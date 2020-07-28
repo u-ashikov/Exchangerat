@@ -7,5 +7,9 @@
         public const string AuthorizationHeaderName = "Authorization";
 
         public const string AuthorizationScheme = "Bearer";
+
+        public const int FirstPage = 1;
+
+        public const int ItemsPerPage = 10;
     }
 }
