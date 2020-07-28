@@ -14,10 +14,12 @@ namespace Exchangerat.Clients
     using Microsoft.Extensions.DependencyInjection;
     using Refit;
     using Services.Contracts.ExchangeAccounts;
+    using Services.Contracts.ExchangeAccountTypes;
     using Services.Contracts.Funds;
     using Services.Contracts.Identity;
     using Services.Contracts.Transactions;
     using Services.Implementations.ExchangeAccounts;
+    using Services.Implementations.ExchangeAccountTypes;
     using Services.Implementations.Funds;
     using Services.Implementations.Transactions;
 
@@ -42,7 +44,8 @@ namespace Exchangerat.Clients
                 .AddTransient<IExchangeAccountService, ExchangeAccountService>()
                 .AddTransient<ITransactionService, TransactionService>()
                 .AddTransient<IIdentityNumberGenerator, IdentityNumberGenerator>()
-                .AddTransient<IFundService, FundService>();
+                .AddTransient<IFundService, FundService>()
+                .AddTransient<IExchangeAccountTypeService, ExchangeAccountTypeService>();
 
             services
                 .AddRefitClient<IIdentityService>()
