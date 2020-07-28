@@ -9,5 +9,7 @@
         public string RequestType { get; set; }
 
         public int? AccountId { get; set; }
+
+        public int? AccountTypeId { get; set; }
     }
 }
