@@ -53,7 +53,7 @@
             }
             catch (ApiException ex)
             {
-                this.ModelState.AddModelError(string.Empty, string.Join(Environment.NewLine, ex.Content.Split(",", StringSplitOptions.RemoveEmptyEntries)));
+                this.ModelState.AddModelError(string.Empty, string.Join(Environment.NewLine, ex.Content.Split(new string[] { ",", "\"", "[", "]"}, StringSplitOptions.RemoveEmptyEntries)));
 
                 return this.View(model);
             }
