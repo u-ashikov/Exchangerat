@@ -1,5 +1,6 @@
 ﻿namespace Exchangerat.Requests.Gateway.Controllers
 {
+    using Constants;
     using Exchangerat.Controllers;
     using Exchangerat.Requests.Gateway.Models.Requests;
     using Exchangerat.Requests.Gateway.Services.Requests;
@@ -29,16 +30,20 @@
         [HttpGet]
         [Authorize(Roles = "Administrator")]
         [Route(nameof(GetAll))]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]int? status, [FromQuery]int page = WebConstants.FirstPage)
         {
-            var allRequests = await this.requests.GetAll();
+            var allRequests = await this.requests.GetAll(status, page);
 
-            var userIds = new HashSet<string>(allRequests.Select(r => r.UserId));
+            var userIds = new HashSet<string>(allRequests.Requests.Select(r => r.UserId));
             var clientsByRequests = await this.clients.GetAllByUserIds(userIds);
 
-            var result = new RequestListingOutputModel();
+            var result = new RequestListingOutputModel()
+            {
+                TotalItems = allRequests.TotalItems,
+                Requests = new List<ClientRequestOutputModel>()
+            };
 
-            foreach (var request in allRequests)
+            foreach (var request in allRequests.Requests)
             {
                 var clientInfo = clientsByRequests.FirstOrDefault(c => c.UserId == request.UserId);
 
@@ -50,6 +55,7 @@
                     AccountId = request.AccountId,
                     RequestType = request.RequestType,
                     Status = request.Status,
+                    AccountTypeId = request.AccountTypeId,
                     ClientFirstName = clientInfo?.FirstName,
                     ClientLastName = clientInfo?.LastName
                 };

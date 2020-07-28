@@ -1,5 +1,6 @@
 ﻿namespace Exchangerat.Requests.Gateway.Services.Requests
 {
+    using Constants;
     using Exchangerat.Requests.Gateway.Models.Requests;
     using Refit;
     using System.Collections.Generic;
@@ -8,7 +9,7 @@
     public interface IRequestService
     {
         [Get("/api/ExchangeratRequests/GetAll")]
-        Task<IEnumerable<RequestOutputModel>> GetAll();
+        Task<RequestListingOutputModel> GetAll([Query]int? status, [Query]int page = WebConstants.FirstPage);
 
         [Get("/api/ExchangeratRequests/GetMy")]
         Task<IEnumerable<MyRequestOutputModel>> GetMy();

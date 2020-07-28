@@ -1,13 +1,12 @@
-using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-
 namespace Exchangerat.Requests.Gateway
 {
     using Common;
     using Exchangerat.Requests.Gateway.Services.Requests;
     using Exchangerat.Services.Identity;
+    using HealthChecks.UI.Client;
     using Infrastructure;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Diagnostics.HealthChecks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;

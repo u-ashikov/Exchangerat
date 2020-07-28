@@ -5,5 +5,7 @@
     public class RequestListingOutputModel
     {
         public List<ClientRequestOutputModel> Requests { get; set; } = new List<ClientRequestOutputModel>();
+
+        public int TotalItems { get; set; }
     }
 }
