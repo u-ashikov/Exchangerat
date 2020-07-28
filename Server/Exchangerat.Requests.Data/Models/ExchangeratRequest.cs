@@ -12,6 +12,8 @@
 
         public int? AccountId { get; set; }
 
+        public int? AccountTypeId { get; set; }
+
         public Status Status { get; set; }
 
         public string UserId { get; set; }
