@@ -6,7 +6,7 @@
             <validation-error v-bind:errors="errors"></validation-error>
             <div class="form-group">
                 <label class="h6">Request Type</label>
-                <select v-model="requestTypeId" name="request-type" id="request-type" class="form-control" v-bind:class="{ invalid: $v.requestTypeId.$error }" v-on:blur="$v.requestTypeId.$touch()">
+                <select v-model="requestTypeId" v-on:change="loadAccountTypes" name="request-type" id="request-type" class="form-control" v-bind:class="{ invalid: $v.requestTypeId.$error }" v-on:blur="$v.requestTypeId.$touch()">
                      <option selected="selected">
                         -- Select Request Type --
                     </option>
@@ -15,6 +15,16 @@
                     </option>
                 </select>
                 <p class="text-danger" v-if="$v.requestTypeId.$error && !$v.requestTypeId.required">The Request Type field is required.</p>
+            </div>
+
+            <div class="form-group" v-if="isCreateRequest">
+                <label for="accountType" class="h6">Account Type</label>
+                <select class="form-control" v-model="accountTypeId">
+                    <option v-for="(accountType, index) in accountTypes" v-bind:key="index" v-bind:value="accountType.id" name="accountTypeId" v-bind:class="{ invalid: $v.accountTypeId.$error }" v-on:blur="$v.accountTypeId.$touch()">
+                        {{ accountType.name }}
+                    </option>
+                </select>
+                <p class="text-danger" v-if="$v.accountTypeId.$error && !$v.accountTypeId.required">The Account Type field is required.</p>
             </div>
 
             <div class="form-group" v-if="!isCreateRequest">
@@ -35,11 +45,14 @@
 <script>
 import requestTypeService from '../../services/requestTypeService'
 import exchangeAccountService from '../../services/exchangeAccountService'
+import requestService from '../../services/requestService'
+import exchangeAccountTypeService from '../../services/exchangeAccountTypeService'
+
 import errorHandler from '../../helpers/error-handler'
 import ValidationError from '../../components/shared/ValidationError'
-import numeral from 'numeral'
+import money from '../../filters/money'
+
 import { validations } from '../../validations/requests/create'
-import requestService from '../../services/requestService'
 
 export default {
     components: {
@@ -49,13 +62,18 @@ export default {
         return {
             requestTypeId: null,
             accountId: null,
+            accountTypeId: null,
             requestTypes: [],
+            accountTypes: [],
             createRequestType: null,
             accounts: [],
             errors: []
         }
     },
     validations: validations,
+    filters: {
+        money
+    },
     mounted: function () {
         var self = this;
 
@@ -105,6 +123,8 @@ export default {
 
             if (!this.isCreateRequest) {
                 data.accountId = this.accountId;
+            } else {
+                data.accountTypeId = this.accountTypeId;
             }
 
             requestService.create(data)
@@ -114,15 +134,24 @@ export default {
             .catch(function (error) {
                 self.errors = errorHandler.extractErrorsFromResponse(error.response);
             });
-        }
-    },
-    filters: {
-        money: function (value) {
-            if (!value) {
-                return 0;
-            }
+        },
+        loadAccountTypes: function () {
+            var self = this;
 
-            return numeral(value).format('0,0');
+            if (this.isCreateRequest) {
+                exchangeAccountTypeService
+                    .getAll()
+                    .then(function (response) {
+                        if (response && response.status == 200) {
+                            self.accountTypes = response.data;
+                        }
+                    })
+                    .catch(function (error) {
+                        self.errors = errorHandler.extractErrorsFromResponse(error.response);
+                    });
+            } else {
+                self.accountTypeId = null;
+            }
         }
     }
 }

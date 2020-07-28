@@ -8,5 +8,10 @@ export const validations = {
         required: requiredIf(function () {
             return !this.isCreateRequest;
         })
+    },
+    accountTypeId: {
+        requried: requiredIf(function () {
+            return this.isCreateRequest;
+        })
     }
 }
