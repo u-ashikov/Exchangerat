@@ -32,7 +32,8 @@
 <script>
 import fundService from '../../services/fundService'
 import exchangeAccountService from '../../services/exchangeAccountService'
-import numeral from 'numeral'
+
+import money from '../../filters/money'
 
 import ValidationError from "../shared/ValidationError"
 import { validations } from '../../validations/funds/add'
@@ -53,6 +54,9 @@ export default {
         }
     },
     validations: validations,
+    filters: {
+       money
+    },
     mounted: function () {
         var self = this;
 
@@ -92,15 +96,6 @@ export default {
                 self.errors = errorHandler.extractErrorsFromResponse(error.response);
             })
         }
-    },
-    filters: {
-       money: function (value) {
-            if (!value) {
-                return 0;
-            }
-
-            return numeral(value).format('0,0');
-        },
     }
 }
 </script>

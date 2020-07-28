@@ -38,9 +38,11 @@
 <script>
 import exchangeAccountService from '../../services/exchangeAccountService'
 import transactionService from '../../services/transactionService'
+
 import { validations } from '../../validations/transactions/create'
 import errorHandler from '../../helpers/error-handler'
-import numeral from 'numeral'
+
+import money from '../../filters/money'
 import ValidationError from '../../components/shared/ValidationError'
 
 export default {
@@ -58,6 +60,9 @@ export default {
         }
     },
     validations: validations,
+    filters: {
+        money
+    },
     methods: {
         sendTransaction: function () {
             var self = this;
@@ -79,15 +84,6 @@ export default {
                 .catch(function (error) {
                     self.errors = errorHandler.extractErrorsFromResponse(error.response);
                 });
-        }
-    },
-    filters: {
-        money: function (value) {
-            if (!value) {
-                return 0;
-            }
-
-            return numeral(value).format('0,0');
         }
     },
     mounted: function () {

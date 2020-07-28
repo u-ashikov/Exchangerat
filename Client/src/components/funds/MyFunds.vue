@@ -30,7 +30,7 @@
                                 <router-link tag="a" :to="{ name: 'accountTransactions', params: { accountId: fund.accountId }}">{{ fund.accountIdentityNumber }}</router-link>
                             </td>
                             <td>&dollar; {{ fund.amount | money }}</td>
-                            <td>{{ fund.issuedAt | transactionDate }}</td>
+                            <td>{{ fund.issuedAt | date }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -65,8 +65,10 @@ import Pagination from '../../components/shared/Pagination'
 import fundService from "../../services/fundService"
 import errorHandler from "../../helpers/error-handler"
 
+import money from '../../filters/money'
+import date from '../../filters/date'
+
 import moment from 'moment'
-import numeral from 'numeral'
 
 import flatpickr from 'flatpickr'
 import "flatpickr/dist/flatpickr.css"
@@ -87,18 +89,8 @@ export default {
     };
   },
   filters: {
-    money: function (value) {
-      if (!value) {
-        return 0;
-      }
-
-      return numeral(value).format('0,0');
-    },
-    transactionDate: function (value) {
-      if (!value) { return ''; }
-
-      return moment(value).format("MMM Do YYYY"); 
-    }
+    money,
+    date
   },
   mounted: function() {
     flatpickr("#start-date");

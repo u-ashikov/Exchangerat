@@ -33,8 +33,8 @@ import ValidationError from '../../components/shared/ValidationError'
 import exchangeAccountService from '../../services/exchangeAccountService'
 import errorHandler from '../../helpers/error-handler'
 
-import moment from 'moment'
-import numeral from 'numeral'
+import money from '../../filters/money'
+import date from '../../filters/date'
 
 export default {
     components: {
@@ -47,18 +47,8 @@ export default {
         }
     },
     filters: {
-        money: function (value) {
-            if (!value) {
-                return 0;
-            }
-
-            return numeral(value).format('0,0');
-        },
-        date: function (value) {
-            if (!value) { return ''; }
-
-            return moment(value).format("MMM Do YYYY"); 
-        }
+        money,
+        date
     },
     mounted: function() {
         var self = this;

@@ -42,7 +42,7 @@
                     :to="{ name: 'accountTransactions', params: { accountId: request.accountId }}"
                   >{{ request.accountIdentityNumber }}</router-link>
                 </td>
-                <td>{{ request.issuedAt | transactionDate }}</td>
+                <td>{{ request.issuedAt | date }}</td>
               </tr>
             </tbody>
           </table>
@@ -88,7 +88,7 @@ import requestGatewayService from "../../services/requestGatewayService"
 import requestTypeService from '../../services/requestTypeService'
 import errorHandler from "../../helpers/error-handler"
 
-import moment from "moment"
+import date from '../../filters/date'
 
 export default {
   components: {
@@ -108,13 +108,7 @@ export default {
     };
   },
   filters: {
-    transactionDate: function(value) {
-      if (!value) {
-        return "";
-      }
-
-      return moment(value).format("MMM Do YYYY");
-    }
+    date
   },
   mounted: function() {
     var self = this;

@@ -115,8 +115,10 @@ import Pagination from "../../components/shared/Pagination"
 import exchangeAccountService from "../../services/exchangeAccountService"
 import errorHandler from "../../helpers/error-handler"
 
+import money from '../../filters/money'
+import transactionDate from '../../filters/date'
+
 import moment from "moment"
-import numeral from "numeral"
 
 import flatpickr from 'flatpickr'
 import "flatpickr/dist/flatpickr.css"
@@ -146,20 +148,8 @@ export default {
     }
   },
   filters: {
-    money: function(value) {
-      if (!value) {
-        return 0;
-      }
-
-      return numeral(value).format("0,0");
-    },
-    transactionDate: function(value) {
-      if (!value) {
-        return "";
-      }
-
-      return moment(value).format("MMM Do YYYY");
-    }
+    money,
+    transactionDate
   },
   mounted: function() {
     flatpickr("#start-date");
