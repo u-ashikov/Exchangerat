@@ -180,7 +180,7 @@
         }
 
         // TODO: Add exchange account type from the user selection.
-        public async Task Create(string userId)
+        public async Task Create(string userId, int accountTypeId)
         {
             var existingClient = await this.dbContext.Clients.FirstOrDefaultAsync(c => c.UserId == userId);
 
@@ -189,7 +189,7 @@
                 return;
             }
 
-            var exchangeAccountType = await this.dbContext.ExchangeAccountTypes.FirstOrDefaultAsync(eat => eat.Name == "Standard");
+            var exchangeAccountType = await this.dbContext.ExchangeAccountTypes.FirstOrDefaultAsync(eat => eat.Id == accountTypeId);
 
             if (exchangeAccountType == null)
             {

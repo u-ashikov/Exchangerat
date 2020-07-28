@@ -18,7 +18,7 @@
         {
             var message = context.Message;
 
-            await this.exchangeAccounts.Create(message.UserId);
+            await this.exchangeAccounts.Create(message.UserId, message.AccountTypeId);
         }
     }
 }
