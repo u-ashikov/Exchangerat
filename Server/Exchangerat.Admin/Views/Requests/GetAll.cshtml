@@ -1,12 +1,16 @@
 ﻿@model Exchangerat.Admin.Models.Requests.RequestListingViewModel
+@using Exchangerat.Admin.Common.Enums
 
 @{
-    ViewBag.Title = "Requests";
+    ViewBag.Title = $"{(Model.Search.Status.HasValue ? Enum.GetName(typeof(Status), Model.Search.Status) : string.Empty)} Requests";
+    ViewData[nameof(Status).ToLower()] = Model.Search.Status;
 }
 
-<h1 class="text-center my-5">Requests</h1>
+<h1 class="display-4 text-center my-5">@ViewBag.Title</h1>
 
-@if (Model?.Requests?.Count == null)
+<partial name="SearchForm" model="Model.Search" />
+
+@if (Model?.Requests?.Count == null || Model.Requests.Count == default)
 {
     <div class="alert alert-warning" role="alert">
         Sorry, there are no requests found.
@@ -14,6 +18,8 @@
 }
 else
 {
+    <partial name="_PaginationPartial" model="Model.Pagination" view-data="ViewData" />
+
     <table class="table table-striped table-sm">
         <thead>
             <tr>
@@ -45,14 +51,15 @@ else
                                     <input type="hidden" name="userId" value="@request.UserId" />
                                     <input type="hidden" name="accountId" value="@request.AccountId" />
                                     <input type="hidden" name="requestType" value="@request.RequestType" />
+                                    <input type="hidden" name="accountTypeId" value="@request.AccountTypeId" />
 
                                     <input type="submit" value="Approve" class="btn btn-sm btn-info" />
                                 </form>
 
                                 <form method="post" asp-controller="Requests" asp-action="Cancel" class="col-md-3">
-                                    <input type="hidden" name="requestId" value="@request.Id"/>
+                                    <input type="hidden" name="requestId" value="@request.Id" />
 
-                                    <input type="submit" value="Cancel" class="btn btn-sm btn-danger"/>
+                                    <input type="submit" value="Cancel" class="btn btn-sm btn-danger" />
                                 </form>
                             </div>
                         }

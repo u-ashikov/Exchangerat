@@ -1,0 +1,15 @@
+﻿@model SearchFormModel
+@using Exchangerat.Admin.Data.Enums
+
+
+<form method="get" asp-controller="Requests" asp-action="GetAll" class="form-inline my-4">
+    <div class="form-group mr-2">
+        <label asp-for="Status" class="h6 mr-2">Status</label>
+        <select asp-for="Status" asp-items="Html.GetEnumSelectList<RequestStatus>()" class="form-control">
+            <option selected="selected" value="">Show All</option>
+        </select>
+    </div>
+    
+    <input type="submit" value="Search" class="btn btn-info mr-2" />
+    <a class="btn btn-primary" asp-controller="Requests" asp-action="GetAll">Reset</a>
+</form>

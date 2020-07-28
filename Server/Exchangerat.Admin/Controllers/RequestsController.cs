@@ -1,10 +1,13 @@
 ﻿namespace Exchangerat.Admin.Controllers
 {
+    using Constants;
     using Exchangerat.Data.Models;
     using Exchangerat.Messages.Admin;
+    using Exchangerat.Models.Pagination;
     using Exchangerat.Services.Common;
     using MassTransit;
     using Microsoft.AspNetCore.Mvc;
+    using Models.Requests;
     using Services.Contracts.Requests;
     using System.Threading.Tasks;
 
@@ -23,22 +26,47 @@
             this.messages = messages;
         }
 
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(SearchFormModel searchForm, int page = WebConstants.FirstPage)
         {
-            var allRequests = await this.requests.GetAll();
+            if (page < WebConstants.FirstPage)
+            {
+                page = WebConstants.FirstPage;
+            }
 
-            return this.View(allRequests);
+            var allRequests = await this.requests.GetAll(searchForm.Status, page);
+
+            var pagination = new PaginationViewModel()
+            {
+                PageSize = WebConstants.ItemsPerPage,
+                TotalElements = allRequests.TotalItems,
+                CurrentPage = page
+            };
+
+            if (page > pagination.TotalPages)
+            {
+                pagination.CurrentPage = pagination.TotalPages;
+            }
+
+            var result = new RequestListingViewModel()
+            {
+                Requests = allRequests.Requests,
+                Pagination = pagination,
+                Search = searchForm
+            };
+
+            return this.View(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Approve(int requestId, string userId, string requestType, int? accountId)
+        public async Task<IActionResult> Approve(int requestId, string userId, string requestType, int? accountId, int? accountTypeId)
         {
             var messageData = new RequestApprovedMessage()
             {
                 RequestId = requestId,
                 UserId = userId,
                 AccountId = accountId,
-                RequestType = requestType
+                RequestType = requestType,
+                AccountTypeId = accountTypeId
             };
 
             var message = new Message(messageData);
