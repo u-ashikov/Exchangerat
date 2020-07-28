@@ -1,6 +1,11 @@
-﻿<nav class="navbar navbar-expand-lg navbar-light bg-light">
+﻿@using Exchangerat.Admin.Common.Enums
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Exchangerat Administration</a>
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+            <img width="45" height="30" class="d-inline-block align-top" alt="" loading="lazy" src="~/images/only-logo.png" />
+            Exchangerat Administration
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -21,7 +26,7 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <li class="nav-item float-right">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Requests" asp-action="GetAll">Requests</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Requests" asp-action="GetAll" asp-route-status="@((int)Status.Pending)">Requests</a>
                     </li>
                 }
             </ul>

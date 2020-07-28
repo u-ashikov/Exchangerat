@@ -2,6 +2,6 @@
 {
     public class SearchFormModel
     {
-        public int? Status { get; set; } = (int)Common.Enums.Status.Pending;
+        public int? Status { get; set; }
     }
 }

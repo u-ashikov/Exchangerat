@@ -36,17 +36,17 @@ else
             @foreach (var request in Model.Requests)
             {
                 <tr>
-                    <td>@request.Id</td>
-                    <td>@request.ClientFirstName</td>
-                    <td>@request.ClientLastName</td>
-                    <td>@request.RequestType</td>
-                    <td>@request.Status</td>
-                    <td>@request.IssuedAt.ToShortDateString()</td>
-                    <td>
+                    <td class="align-middle">@request.Id</td>
+                    <td class="align-middle">@request.ClientFirstName</td>
+                    <td class="align-middle">@request.ClientLastName</td>
+                    <td class="align-middle">@request.RequestType</td>
+                    <td class="align-middle">@request.Status</td>
+                    <td class="align-middle">@request.IssuedAt.ToShortDateString()</td>
+                    <td class="align-middle">
                         @if (request.Status == "Pending")
                         {
                             <div class="row">
-                                <form method="post" asp-controller="Requests" asp-action="Approve" class="col-md-3 mr-2">
+                                <form method="post" asp-controller="Requests" asp-action="Approve" class="col-12 col-md-6 col-lg-3 mr-lg-3">
                                     <input type="hidden" name="requestId" value="@request.Id" />
                                     <input type="hidden" name="userId" value="@request.UserId" />
                                     <input type="hidden" name="accountId" value="@request.AccountId" />
@@ -56,7 +56,7 @@ else
                                     <input type="submit" value="Approve" class="btn btn-sm btn-info" />
                                 </form>
 
-                                <form method="post" asp-controller="Requests" asp-action="Cancel" class="col-md-3">
+                                <form method="post" asp-controller="Requests" asp-action="Cancel" class="col-12 col-md-6 col-lg-3">
                                     <input type="hidden" name="requestId" value="@request.Id" />
 
                                     <input type="submit" value="Cancel" class="btn btn-sm btn-danger" />
