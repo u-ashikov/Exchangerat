@@ -46,7 +46,10 @@
 
             var db = serviceProvider.GetRequiredService<DbContext>();
 
-            db.Database.Migrate();
+            if (db.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+            {
+                db.Database.Migrate();
+            }
 
             return app;
         }
