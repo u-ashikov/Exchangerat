@@ -47,7 +47,33 @@
                 db.Database.EnsureCreated();
 
                 this.SeedClients(db);
+                this.SeedExchangeAccountTypes(db);
             });
+        }
+
+        private void SeedExchangeAccountTypes(ClientsDbContext db)
+        {
+            if (!db.ExchangeAccountTypes.Any())
+            {
+                var exchangeAccountTypes = new List<ExchangeAccountType>()
+                {
+                    new ExchangeAccountType()
+                    {
+                        Id = 1,
+                        Description = "Test Type",
+                        Name = "Test"
+                    },
+                    new ExchangeAccountType()
+                    {
+                        Id = 2,
+                        Description = "Another Test Type",
+                        Name = "Another Test"
+                    }
+                };
+
+                db.ExchangeAccountTypes.AddRange(exchangeAccountTypes);
+                db.SaveChanges();
+            }
         }
 
         private void SeedClients(ClientsDbContext db)
