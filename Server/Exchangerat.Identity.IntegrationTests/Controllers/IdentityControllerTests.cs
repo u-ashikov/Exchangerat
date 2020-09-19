@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Exchangerat.Identity.Data;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-
-namespace Exchangerat.Identity.IntegrationTests.Controllers
+﻿namespace Exchangerat.Identity.IntegrationTests.Controllers
 {
     using Models;
+    using System.Collections.Generic;
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Json;
@@ -149,7 +140,7 @@ namespace Exchangerat.Identity.IntegrationTests.Controllers
             Assert.NotNull(result.Token);
         }
 
-        // TODO: Create extensions for empty databasee, with database, seedded database and so on like in the Tennis project.
+        // TODO: Create extensions for empty database, with database, seeded database and so on like in the Tennis project.
 
         [Fact]
         public async Task Get_RegisteredUserIdsShouldReturnStatusOkWithIds()

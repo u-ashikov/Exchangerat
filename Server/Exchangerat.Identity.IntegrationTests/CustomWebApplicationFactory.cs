@@ -13,7 +13,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Startup>
+    public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup>
         where TStartup : class
     {
         private readonly InMemoryDatabaseRoot _dbRoot = new InMemoryDatabaseRoot();

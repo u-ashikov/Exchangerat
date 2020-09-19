@@ -1,4 +1,4 @@
-﻿namespace Exchangerat.Identity.IntegrationTests.Models
+﻿namespace Exchangerat.IntegrationTests.Common.Models
 {
     using System.Collections.Generic;
 
