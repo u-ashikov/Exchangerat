@@ -7,12 +7,12 @@
 
     public static class WebHostBuilderExtensions
     {
-        public static HttpClient CreateClientWithJwtAuthentication<T>(this WebApplicationFactory<T> factory)
+        public static HttpClient CreateClientWithJwtAuthentication<T>(this WebApplicationFactory<T> factory, string[] roles = null)
             where T : class
         {
             var client = factory.CreateClient();
 
-            var token = JwtTokenGeneratorService.GenerateJwtToken();
+            var token = JwtTokenGeneratorService.GenerateJwtToken(roles);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
