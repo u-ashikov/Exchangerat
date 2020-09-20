@@ -1,4 +1,4 @@
-﻿namespace Exchangerat.Clients.IntegrationTests.Models
+﻿namespace Exchangerat.Clients.IntegrationTests.Models.ExchangeAccountTypes
 {
     public class TestExchangeAccountTypeOutputModel
     {

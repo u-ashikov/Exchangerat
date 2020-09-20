@@ -1,7 +1,7 @@
 ﻿namespace Exchangerat.Clients.IntegrationTests.Controllers
 {
     using Exchangerat.IntegrationTests.Common.Extensions;
-    using Models;
+    using Models.ExchangeAccountTypes;
     using System.Collections.Generic;
     using System.Net;
     using System.Net.Http.Json;
