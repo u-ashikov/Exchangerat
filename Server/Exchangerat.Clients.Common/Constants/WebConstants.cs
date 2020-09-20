@@ -15,7 +15,7 @@
             public const string ReceiverAccountDoesNotExist = "The Receiver Account does not exist.";
             public const string TransactionBetweenSameAccounts = "You cannot create transaction between same accounts.";
             public const string SenderAccountIsNotActive = "Your account is inacive.";
-            public const string ReceiverAccountIsNotActive = "The receiver account is inacive.";
+            public const string ReceiverAccountIsNotActive = "The receiver account is inactive.";
         }
     }
 }
