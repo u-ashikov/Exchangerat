@@ -48,32 +48,9 @@
 
                 this.SeedClients(db);
                 this.SeedExchangeAccountTypes(db);
+                this.SeedExchangeAccounts(db);
+                this.SeedFunds(db);
             });
-        }
-
-        private void SeedExchangeAccountTypes(ClientsDbContext db)
-        {
-            if (!db.ExchangeAccountTypes.Any())
-            {
-                var exchangeAccountTypes = new List<ExchangeAccountType>()
-                {
-                    new ExchangeAccountType()
-                    {
-                        Id = 1,
-                        Description = "Test Type",
-                        Name = "Test"
-                    },
-                    new ExchangeAccountType()
-                    {
-                        Id = 2,
-                        Description = "Another Test Type",
-                        Name = "Another Test"
-                    }
-                };
-
-                db.ExchangeAccountTypes.AddRange(exchangeAccountTypes);
-                db.SaveChanges();
-            }
         }
 
         private void SeedClients(ClientsDbContext db)
@@ -115,6 +92,91 @@
                 };
 
                 db.Clients.AddRange(clients);
+                db.SaveChanges();
+            }
+        }
+
+        private void SeedExchangeAccountTypes(ClientsDbContext db)
+        {
+            if (!db.ExchangeAccountTypes.Any())
+            {
+                var exchangeAccountTypes = new List<ExchangeAccountType>()
+                {
+                    new ExchangeAccountType()
+                    {
+                        Id = 1,
+                        Description = "Test Type",
+                        Name = "Test"
+                    },
+                    new ExchangeAccountType()
+                    {
+                        Id = 2,
+                        Description = "Another Test Type",
+                        Name = "Another Test"
+                    }
+                };
+
+                db.ExchangeAccountTypes.AddRange(exchangeAccountTypes);
+                db.SaveChanges();
+            }
+        }
+
+        private void SeedExchangeAccounts(ClientsDbContext db)
+        {
+            if (!db.ExchangeAccounts.Any())
+            {
+                var client = db.Clients.FirstOrDefault(c => c.Id == 2);
+
+                var exchangeAccounts = new List<ExchangeAccount>()
+                {
+                    new ExchangeAccount()
+                    {
+                        Id = 1,
+                        Balance = 100,
+                        IdentityNumber = "123456789101",
+                        CreatedAt = DateTime.UtcNow,
+                        IsActive = true,
+                        OwnerId = client.Id,
+                        TypeId = 1
+                    },
+                    new ExchangeAccount()
+                    {
+                        Id = 2,
+                        Balance = 200,
+                        IdentityNumber = "123456789109",
+                        CreatedAt = DateTime.UtcNow,
+                        IsActive = false,
+                        ClosedAt = DateTime.UtcNow,
+                        OwnerId = client.Id,
+                        TypeId = 1
+                    }
+                };
+
+                db.ExchangeAccounts.AddRange(exchangeAccounts);
+                db.SaveChanges();
+            }
+        }
+
+        private void SeedFunds(ClientsDbContext db)
+        {
+            if (!db.Funds.Any())
+            {
+                var client = db.Clients.FirstOrDefault(c => c.Id == 2);
+                var account = db.ExchangeAccounts.FirstOrDefault(a => a.OwnerId == client.Id && a.IsActive);
+
+                var funds = new List<Fund>()
+                {
+                    new Fund()
+                    {
+                        Id = 1,
+                        Amount = 100,
+                        AccountId = account.Id,
+                        ClientId = client.Id,
+                        IssuedAt = DateTime.UtcNow
+                    }
+                };
+
+                db.Funds.AddRange(funds);
                 db.SaveChanges();
             }
         }

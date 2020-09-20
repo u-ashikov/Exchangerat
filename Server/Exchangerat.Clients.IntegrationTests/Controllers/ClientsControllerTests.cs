@@ -1,11 +1,11 @@
 ﻿namespace Exchangerat.Clients.IntegrationTests.Controllers
 {
+    using Exchangerat.Clients.IntegrationTests.Models.Clients;
     using Exchangerat.IntegrationTests.Common.Extensions;
     using Exchangerat.Services.Identity;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.DependencyInjection;
     using Mocks;
-    using Models;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
